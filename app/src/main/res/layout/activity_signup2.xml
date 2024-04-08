@@ -1,0 +1,143 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/mechu">
+
+
+        <!-- 뒤로 가기 버튼 -->
+        <ImageView
+            android:id="@+id/backButton"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.025" />
+
+        <!-- 로고 이미지 -->
+        <ImageView
+            android:id="@+id/logoImage"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
+            android:src="@drawable/mechulogo"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <!-- 로고 밑 바 -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            app:layout_constraintTop_toBottomOf="@+id/logoImage"
+            android:background="@android:color/black"/>
+
+        <!-- 아이디 입력 필드 -->
+        <EditText
+            android:id="@+id/editTextId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="75dp"
+            android:hint="ID"
+            app:layout_constraintEnd_toStartOf="@+id/buttonIdCheck"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logoImage" />
+
+        <!-- 아이디 확인 버튼 -->
+        <android.widget.Button
+            android:id="@+id/buttonIdCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="중복확인"
+            android:textStyle="bold"
+            android:background="@drawable/basic_button"
+            android:textColor="#FF000000"
+            app:layout_constraintStart_toEndOf="@+id/editTextId"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/editTextId" />
+
+        <!-- 비밀번호 입력 필드 -->
+        <EditText
+            android:id="@+id/editPasswd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:hint="Password"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextId" />
+
+        <!-- 이메일 입력 필드 -->
+        <EditText
+            android:id="@+id/editEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:hint="Email"
+            app:layout_constraintEnd_toStartOf="@+id/buttonEmailCheck"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editPasswd" />
+
+        <!-- 이메일 확인 버튼 -->
+        <android.widget.Button
+            android:id="@+id/buttonEmailCheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="이메일 인증"
+            android:textStyle="bold"
+            android:background="@drawable/basic_button"
+            android:textColor="#FF000000"
+            app:layout_constraintStart_toEndOf="@+id/editEmail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/editEmail" />
+
+        <!-- 인증번호 입력 필드 -->
+        <EditText
+            android:id="@+id/validEmail"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:hint="인증번호"
+            app:layout_constraintEnd_toStartOf="@+id/buttonValidEmail"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editEmail" />
+
+        <!-- 인증번호 확인 버튼 -->
+        <android.widget.Button
+            android:id="@+id/buttonValidEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="인증 확인"
+            android:textStyle="bold"
+            android:background="@drawable/basic_button"
+            android:textColor="#FF000000"
+            app:layout_constraintStart_toEndOf="@+id/validEmail"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/validEmail" />
+
+
+        <!-- 다음단계 버튼 -->
+        <android.widget.Button
+            android:id="@+id/signupNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="다음"
+            android:textStyle="bold"
+            android:background="@drawable/basic_button"
+            android:textColor="#FF000000"
+            android:textSize="18sp"
+            android:layout_marginBottom="150dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

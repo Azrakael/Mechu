@@ -1,0 +1,213 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/mechu">
+
+
+    <!-- 뒤로 가기 버튼 -->
+
+    <!-- 로고 이미지 -->
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.025" />
+
+    <ImageView
+        android:id="@+id/logoImage"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:src="@drawable/mechulogo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <!-- 로고 밑 바 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        app:layout_constraintTop_toBottomOf="@+id/logoImage"
+        android:background="@android:color/black"/>
+
+    <!-- 제목 -->
+    <TextView
+        android:id="@+id/agreeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="다음 내용에 동의해주세요"
+        android:layout_marginTop="15dp"
+        android:textStyle="bold"
+        android:textSize="23sp"
+        app:layout_constraintTop_toBottomOf="@+id/logoImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- 모두 동의 영역 -->
+    <LinearLayout
+        android:id="@+id/agreeAll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/checkbox_background"
+        app:layout_constraintTop_toBottomOf="@+id/agreeTitle"
+        android:layout_marginTop="15dp"
+        android:padding="8dp"
+        android:gravity="center_vertical">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="모두 동의"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:drawablePadding="8dp"
+            android:paddingEnd="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="필수 및 선택 항목 동의 포함"
+            android:textSize="12sp"
+            android:textColor="#BDBDBD" />
+
+    </LinearLayout>
+
+
+    <!-- 체크박스1 영역 -->
+    <LinearLayout
+        android:id="@+id/checkbox1Area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/agreeAll"
+        android:orientation="vertical"
+        android:layout_marginTop="-17dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:text="필수"
+            android:textColor="#FF0000"
+            android:layout_marginLeft="4dp"
+            android:textSize="12sp"/>
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-8dp"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:text="메츄 통합 서비스 이용약관 동의" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/darker_gray"/>
+    </LinearLayout>
+
+    <!-- 체크박스2 영역 -->
+    <LinearLayout
+        android:id="@+id/checkbox2Area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/checkbox1Area"
+        android:orientation="vertical"
+        android:layout_marginTop="-17dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="45dp"
+            android:text="필수"
+            android:textColor="#FF0000"
+            android:layout_marginLeft="4dp"
+            android:textSize="12sp"/>
+
+        <CheckBox
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-8dp"
+            android:textSize="15dp"
+            android:textStyle="bold"
+            android:text="개인정보 수집 및 이용동의" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@android:color/darker_gray"/>
+    </LinearLayout>
+
+    <!-- 체크박스3 영역 -->
+    <LinearLayout
+        android:id="@+id/checkbox3Area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/checkbox2Area"
+        android:orientation="vertical"
+        android:layout_marginTop="18dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="선택"
+            android:textColor="#FF0000"
+            android:layout_marginLeft="4dp"
+            android:textSize="12sp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-8dp"
+                android:text="메츄 서비스의 유용한 소식 받기"
+                android:textSize="15dp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="선택하지 않아도 서비스는 이용할 수 있어요!"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="-10dp"
+                android:textColor="#BDBDBD"
+                android:textSize="12sp"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray"
+            android:layout_marginTop="6dp"/>
+    </LinearLayout>
+
+    <!-- 다음단계 버튼 -->
+    <android.widget.Button
+        android:id="@+id/signupNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="다음"
+        android:textStyle="bold"
+        android:background="@drawable/basic_button"
+        android:textColor="#FF000000"
+        android:textSize="18sp"
+        android:layout_marginBottom="150dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

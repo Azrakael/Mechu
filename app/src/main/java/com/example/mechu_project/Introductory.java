@@ -4,33 +4,38 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.content.Intent;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.airbnb.lottie.LottieAnimationView;
 
-public class IntroductoryActivity extends AppCompatActivity {
+public class Introductory extends AppCompatActivity {
 
-    ImageView logo,app_name,bar;
+    ImageView miniLogo,app_name,bar;
     LottieAnimationView lottie;
     LinearLayout login_layout;
+
+    Button sign_up_button;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_introductory);
 
-        logo = findViewById(R.id.logo);
-        app_name = findViewById(R.id.app_name);
+        miniLogo = findViewById(R.id.miniLogo);
+        app_name = findViewById(R.id.appName);
         bar = findViewById(R.id.bar);
         lottie = findViewById(R.id.lottie);
-        login_layout = findViewById(R.id.login_layout);
-        //로그인창 초기투명도
+        login_layout = findViewById(R.id.loginLayout);
+        //로그인창 초기투명도설정
         login_layout.setAlpha(0f);
 
         bar.animate().translationY(-1100).setDuration(700).setStartDelay(2800);
         app_name.animate().translationY(-1100).setDuration(700).setStartDelay(2800);
-        logo.animate().translationY(-1100).setDuration(700).setStartDelay(2800);
+        miniLogo.animate().translationY(-1100).setDuration(700).setStartDelay(2800);
         lottie.animate().translationY(3000).setDuration(700).setStartDelay(2500);
 
         login_layout.postDelayed(new Runnable() {
@@ -41,5 +46,18 @@ public class IntroductoryActivity extends AppCompatActivity {
             }
         }, 3400); // 3.4초 후에 실행
 
+        Button signUpButton = findViewById(R.id.signupButton);
+
+        // Sign Up 버튼에 클릭 리스너 설정
+        if (signUpButton != null) {
+            signUpButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // SignUp1로
+                    Intent intent = new Intent(Introductory.this, SignUp1.class);
+                    startActivity(intent);
+                }
+            });
+        }
     }
 }

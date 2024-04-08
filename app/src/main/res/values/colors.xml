@@ -3,4 +3,5 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="mechu">#EBE5D9</color>
+    <color name="mechu_dark">#400702</color>
 </resources>

@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">MechuProject</string>
+    <string name="app_name">메츄</string>
+    <string-array name="goal_options">
+        <item>다이어트</item>
+        <item>벌크업</item>
+        <item>일반</item>
+    </string-array>
 </resources>
