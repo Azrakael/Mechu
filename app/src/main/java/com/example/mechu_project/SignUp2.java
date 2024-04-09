@@ -21,6 +21,9 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Random;
 
+
+
+//이메일 인증부분
 public class SignUp2 extends AppCompatActivity {
 
     Button signupNext;
