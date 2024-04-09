@@ -108,12 +108,13 @@ public class SignUp2 extends AppCompatActivity {
             final String password = "Guseotla12@!@"; // 이메일 계정의 비밀번호
 
             Properties props = new Properties();
-            props.put("mail.smtp.host", "smtp.naver.com");
-            props.put("mail.smtp.socketFactory.port", "465");
-            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-            props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.port", "465");
+            props.put("mail.smtp.host", "smtp.naver.com");      //이메일 서버 호스트 설정
+            props.put("mail.smtp.socketFactory.port", "465");       //smtp서버에서 사용할 소켓 팩토리 포트
+            props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); //소켓 팩토리 클래스 설정
+            props.put("mail.smtp.auth", "true");     //smtp인증
+            props.put("mail.smtp.port", "465");         //smtp 서버 포트 설정
 
+            //이메일 전송에 사용되는 세션 생성
             Session session = Session.getDefaultInstance(props,
                     new javax.mail.Authenticator() {
                         protected PasswordAuthentication getPasswordAuthentication() {
@@ -123,8 +124,8 @@ public class SignUp2 extends AppCompatActivity {
 
             try {
                 MimeMessage message = new MimeMessage(session);
-                message.setFrom(new InternetAddress(username, "MECHU Company"));
-                message.addRecipient(Message.RecipientType.TO, new InternetAddress(params[0]));
+                message.setFrom(new InternetAddress(username, "MECHU Company")); //발신자이름 설정
+                message.addRecipient(Message.RecipientType.TO, new InternetAddress(params[0])); //수신자 설정
                 message.setSubject("인증번호");
                 message.setText("해당 인증번호는 " + params[1] + "입니다.");
 

@@ -46,7 +46,7 @@ public class SignUp1 extends AppCompatActivity {
                     startActivity(intent);
                 } else {
                     // 두 체크박스 중 하나라도 체크되지 않은 경우 메시지 표시
-                    showMessage("필수동의를 모두 체크해주세요.");ㅇ
+                    showMessage("필수동의를 모두 체크해주세요.");
                 }
             }
         });
