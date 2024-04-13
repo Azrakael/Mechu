@@ -4,4 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="mechu">#EBE5D9</color>
     <color name="mechu_dark">#400702</color>
+    <color name="mechu_chat_m">#D9CAB3</color>
+    <color name="mechu_chat_u">#B3C9D9</color>
 </resources>

@@ -8,8 +8,6 @@
 
 
     <!-- 뒤로 가기 버튼 -->
-
-    <!-- 로고 이미지 -->
     <ImageView
         android:id="@+id/backButton"
         android:layout_width="25dp"
@@ -20,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.025" />
 
+    <!-- 로고 이미지 -->
     <ImageView
         android:id="@+id/logoImage"
         android:layout_width="150dp"
