@@ -45,7 +45,7 @@ public class Chatting extends AppCompatActivity {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     OkHttpClient client;
 
-
+    private static final String MY_SECRET_KEY = "sss";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
