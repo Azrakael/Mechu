@@ -47,7 +47,7 @@ public class Introductory extends AppCompatActivity {
         }, 3400); // 3.4초 후에 실행
 
         Button signUpButton = findViewById(R.id.signupButton);
-
+        Button loginButton  = findViewById(R.id.loginButton);
         // Sign Up 버튼에 클릭 리스너 설정
         if (signUpButton != null) {
             signUpButton.setOnClickListener(new View.OnClickListener() {

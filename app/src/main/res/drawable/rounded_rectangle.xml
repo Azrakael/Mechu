@@ -1,0 +1,5 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <corners android:radius="20dp" /> <!-- 반지름 값에 따라 모서리가 둥글어집니다. -->
+    <solid android:color="@android:color/white" /> <!-- 배경 색상 지정 -->
+</shape>
