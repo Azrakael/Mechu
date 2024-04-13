@@ -106,7 +106,6 @@ public class Chatting extends AppCompatActivity {
 
         List<String> menuList = new ArrayList<>(Arrays.asList(
                 "치킨", "피자", "초콜렛", "커피", "샐러드", "김치찌개", "청국장", "된장찌개",
-                // 여기에 추가할 나머지 메뉴 항목들을 넣으세요
                 "라면", "불고기", "비빔밥", "갈비", "떡볶이", "잡채", "파스타", "리조또",
                 "스테이크", "햄버거", "샌드위치", "카레", "타코", "부리토", "스시", "돈가스",
                 "치즈케이크", "애플파이", "와플", "펜케이크", "브라우니", "마카롱",
@@ -119,8 +118,8 @@ public class Chatting extends AppCompatActivity {
         JSONObject baseAi = new JSONObject();
         JSONObject userMsg = new JSONObject();
         JSONArray arr = new JSONArray();
-
-        // Adding context for AI to understand the task
+        
+        //프롬프트
         String prompt = "Based on the user's mood or situation, recommend a menu item from the list: " +
                 String.join(", ", menuList) + ". Please format the recommendation by enclosing the menu item in asterisks, like so: **menu item**. Provide a reason for your recommendation.";
 

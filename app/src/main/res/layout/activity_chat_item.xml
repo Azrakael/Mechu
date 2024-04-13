@@ -77,7 +77,6 @@
 
         </LinearLayout>
 
-        <!-- Chat text below -->
         <TextView
             android:id="@+id/rightChatTv"
             android:layout_width="wrap_content"
