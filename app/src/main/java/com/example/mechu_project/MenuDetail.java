@@ -1,14 +1,14 @@
 package com.example.mechu_project;
 
-import android.os.Bundle;
-
 import androidx.appcompat.app.AppCompatActivity;
 
-public class SignUp99 extends AppCompatActivity {
+import android.os.Bundle;
+
+public class MenuDetail extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup3);
+        setContentView(R.layout.activity_menu_detail);
     }
 }
