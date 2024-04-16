@@ -45,8 +45,12 @@ public class Chatting extends AppCompatActivity {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     OkHttpClient client;
 
+<<<<<<< HEAD
     private static final String MY_SECRET_KEY = "sk-sss";
     @Override
+=======
+    private static final String MY_SECRET_KEY = "sss";    @Override
+>>>>>>> 5f8cb1719ec6c478e07e1bedb04549f15847d036
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);

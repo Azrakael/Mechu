@@ -106,7 +106,11 @@ public class SignUp2 extends AppCompatActivity {
     private void sendEmail(String recipient, String verificationCode) {
         emailExecutor.submit(() -> {
             final String username = "hdidvrnd@naver.com"; // 이메일 계정
+<<<<<<< HEAD
             final String password = "ss"; // 이메일 계정의 비밀번호
+=======
+            final String password = "sss"; // 이메일 계정의 비밀번호
+>>>>>>> 5f8cb1719ec6c478e07e1bedb04549f15847d036
 
             Properties props = new Properties();
             props.put("mail.smtp.host", "smtp.naver.com");
