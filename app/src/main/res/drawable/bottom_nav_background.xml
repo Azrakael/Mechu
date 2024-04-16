@@ -1,6 +1,0 @@
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <solid android:color="@color/mechu" /> <!-- 배경 색상 -->
-    <stroke
-        android:width="0dp" />
-</shape>
