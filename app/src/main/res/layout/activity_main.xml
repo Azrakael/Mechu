@@ -31,144 +31,274 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.01" />
 
-    <!-- 프로그레스 바 아직 구현 안됨-->
-    <ImageView
-        android:id="@+id/semiCircleProgressBar"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_centerInParent="true"
-        app:backgroundColor="#853333"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.195" />
-
-    <TextView
-        android:id="@+id/text1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:text="오늘은 이런 메뉴 어때요?"
-        android:textSize="20dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/semiCircleProgressBar" />
-
-
-
-    <!--추천 음식들 -->
-    <LinearLayout
-        android:id="@+id/foodCart"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/checkbox_background"
-        app:layout_constraintTop_toBottomOf="@+id/text1"
-        android:layout_marginTop="15dp"
-        android:padding="8dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <!-- 음식 사진 -->
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/logoImage"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:orientation="vertical"
-            >
-            <ImageView
-                android:id="@+id/foodImage1"
-                android:layout_width="150dp"
-                android:layout_height="150dp"/>
-
-        </LinearLayout>
-
-
-        <!--음식 이름 칼로리 하트 -->
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- 프로그레스 바 아직 구현 안됨-->
 
-        <LinearLayout
-            android:layout_width="249dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="50dp"
-                android:layout_marginBottom="90dp"
-                android:text="더 담은 도시락"
-                android:textColor="#000000"
-                android:textSize="13sp"
-                android:textStyle="bold" />
+            <ImageView
+                android:id="@+id/semiCircleProgressBar"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_centerInParent="true"
+                app:backgroundColor="#853333"
+                android:layout_gravity="center"/>
 
             <TextView
+                android:id="@+id/text1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="150kcal"
-                android:textColor="#000000"
-                android:textSize="12sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="20dp"
+                android:text="오늘은 이런 메뉴 어때요?"
+                android:textSize="20dp" />
 
-
-            <ToggleButton
-                android:id="@+id/buttonFavorite"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:background="@drawable/button_favorite"
-                android:checked="false"
-                android:text=""
-                android:textOff=""
-                android:textOn=""
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginLeft="23dp"/>
-
-
-             </LinearLayout>
-
-            <!--음식 설명 -->
-
+            <!--추천 음식들 -->
             <LinearLayout
+                android:id="@+id/foodCart1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/checkbox_background"
+                android:layout_marginTop="15dp"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                <!-- 음식 사진 -->
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:orientation="vertical">
 
-                <TextView
+                    <ImageView
+                        android:id="@+id/foodImage1"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp" />
+                </LinearLayout>
+
+                <!-- 음식 이름, 칼로리, 하트 -->
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="이 음식은 100퍼센트 유기농으로 만든 도시락이며 정말 배고플때 마음껏 드실 수 있어요 살이 찌지 않기 때문이거든요"
-                    android:textAlignment="center"
-                    android:textStyle="bold"
-                    android:textColor="#000000"/>
+                    android:orientation="vertical">
 
+                    <!--음식 설명 -->
+                    <LinearLayout
+                        android:layout_width="249dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="50dp"
+                            android:text="더 담은 도시락"
+                            android:textColor="#000000"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="150kcal"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
 
+                        <ToggleButton
+                            android:id="@+id/buttonFavorite1"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:layout_marginLeft="20dp"
+                            android:background="@drawable/button_favorite"
+                            android:checked="false"
+                            android:onClick="onFavoriteButtonClick"
+                            android:text=""
+                            android:textOff=""
+                            android:textOn="" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="이 음식은 100퍼센트 유기농으로 만든 도시락이며 정말 배고플때 마음껏 드실 수 있어요 살이 찌지 않기 때문이거든요"
+                        android:textAlignment="center"
+                        android:textStyle="bold"
+                        android:textColor="#000000"/>
+                </LinearLayout>
             </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/foodCart2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/checkbox_background"
+                android:layout_marginTop="15dp"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- 음식 사진 -->
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/foodImage2"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp" />
+                </LinearLayout>
+
+                <!-- 음식 이름, 칼로리, 하트 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="249dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="50dp"
+                            android:text="더 담은 도시락"
+                            android:textColor="#000000"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="150kcal"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <ToggleButton
+                            android:id="@+id/buttonFavorite2"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/button_favorite"
+                            android:layout_marginLeft="20dp"
+                            android:checked="false"
+                            android:text=""
+                            android:textOff=""
+                            android:textOn=""
+                            android:onClick="onFavoriteButtonClick"/>
+
+                    </LinearLayout>
+
+                    <!--음식 설명 -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="이 음식은 100퍼센트 유기농으로 만든 도시락이며 정말 배고플때 마음껏 드실 수 있어요 살이 찌지 않기 때문이거든요"
+                        android:textAlignment="center"
+                        android:textStyle="bold"
+                        android:textColor="#000000"/>
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/foodCart3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/checkbox_background"
+                android:layout_marginTop="15dp"
+                android:padding="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- 음식 사진 -->
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/foodImage3"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp" />
+                </LinearLayout>
+
+                <!-- 음식 이름, 칼로리, 하트 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="249dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="50dp"
+                            android:text="더 담은 도시락"
+                            android:textColor="#000000"
+                            android:textSize="13sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="150kcal"
+                            android:textColor="#000000"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+
+                        <ToggleButton
+                            android:id="@+id/buttonFavorite3"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/button_favorite"
+                            android:checked="false"
+                            android:text=""
+                            android:textOff=""
+                            android:textOn=""
+                            android:onClick="onFavoriteButtonClick"
+                            android:layout_marginLeft="20dp" />
+
+                    </LinearLayout>
+
+                    <!--음식 설명 -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="이 음식은 100퍼센트 유기농으로 만든 도시락이며 정말 배고플때 마음껏 드실 수 있어요 살이 찌지 않기 때문이거든요"
+                        android:textAlignment="center"
+                        android:textStyle="bold"
+                        android:textColor="#000000"/>
+                </LinearLayout>
+            </LinearLayout>
+
+
+
 
         </LinearLayout>
 
+    </ScrollView>
 
-
-    </LinearLayout>
-
-
-
-
-
-
-
+    <!-- 여기까지  스크롤 가능-->
 
 
     <!-- 하단 바 -->
