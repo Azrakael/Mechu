@@ -82,7 +82,8 @@
                     <ImageView
                         android:id="@+id/foodImage1"
                         android:layout_width="150dp"
-                        android:layout_height="150dp" />
+                        android:layout_height="150dp"
+                        android:src="@drawable/ic_menu"/>
                 </LinearLayout>
 
                 <!-- 음식 이름, 칼로리, 하트 -->
@@ -158,7 +159,8 @@
                     <ImageView
                         android:id="@+id/foodImage2"
                         android:layout_width="150dp"
-                        android:layout_height="150dp" />
+                        android:layout_height="150dp"
+                        android:src="@drawable/ic_menu"/>
                 </LinearLayout>
 
                 <!-- 음식 이름, 칼로리, 하트 -->
@@ -235,7 +237,8 @@
                     <ImageView
                         android:id="@+id/foodImage3"
                         android:layout_width="150dp"
-                        android:layout_height="150dp" />
+                        android:layout_height="150dp"
+                        android:src="@drawable/ic_menu"/>
                 </LinearLayout>
 
                 <!-- 음식 이름, 칼로리, 하트 -->
