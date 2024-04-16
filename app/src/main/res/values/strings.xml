@@ -5,4 +5,10 @@
         <item>벌크업</item>
         <item>일반</item>
     </string-array>
+
+
+    <string name="congratulation">   야호! 메츄의 가족이 되었어요\n
+                건강한 메뉴추천 기대해주세요!</string>
+
+
 </resources>

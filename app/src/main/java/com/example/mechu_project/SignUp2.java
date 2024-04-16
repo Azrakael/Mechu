@@ -26,7 +26,7 @@ import java.util.Random;
 //이메일 인증부분
 public class SignUp2 extends AppCompatActivity {
 
-    Button signupNext;
+
     EditText editEmail; // 내가 작성한 이메일 저장 edittext
     EditText validEmail; // 인증 코드를 입력받을 EditText
     String verificationCode; // 인증코드 저장
@@ -75,7 +75,6 @@ public class SignUp2 extends AppCompatActivity {
                 if (verificationCode != null && verificationCode.equals(userInputCode)) {
                     // 인증 코드가 일치하는 경우
                     showMessage("인증이 성공했습니다.");
-                    // 여기에 인증이 성공했을 때 추가로 수행할 작업 추가
                 } else {
                     // 인증 코드가 일치하지 않는 경우
                     showMessage("인증이 실패했습니다. 올바른 인증 코드를 입력하세요.");
@@ -114,7 +113,7 @@ public class SignUp2 extends AppCompatActivity {
             props.put("mail.smtp.auth", "true");     //smtp인증
             props.put("mail.smtp.port", "465");         //smtp 서버 포트 설정
 
-            //이메일 전송에 사용되는 세션 생성
+            //이메일 전송에 사용되는 세션
             Session session = Session.getDefaultInstance(props,
                     new javax.mail.Authenticator() {
                         protected PasswordAuthentication getPasswordAuthentication() {

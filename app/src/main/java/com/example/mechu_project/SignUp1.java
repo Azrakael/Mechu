@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 public class SignUp1 extends AppCompatActivity {
 
+    //체크박스 체크
     Button signupNext;
     CheckBox checkBox1, checkBox2, checkBox3, checkBox4;
 
@@ -24,7 +25,8 @@ public class SignUp1 extends AppCompatActivity {
         checkBox2 = findViewById(R.id.checkbox2);
         checkBox3 = findViewById(R.id.checkbox3);
         checkBox4 = findViewById(R.id.checkbox4);
-
+        // 아아
+        //checkBox1번이 체크되면 모두 체크
         checkBox1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
