@@ -104,7 +104,7 @@ public class SignUp2 extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(String... params) {
             final String username = "hdidvrnd@naver.com"; // 이메일 계정
-            final String password = "Guseotla12@!@"; // 이메일 계정의 비밀번호
+            final String password = "sss"; // 이메일 계정의 비밀번호
 
             Properties props = new Properties();
             props.put("mail.smtp.host", "smtp.naver.com");      //이메일 서버 호스트 설정
