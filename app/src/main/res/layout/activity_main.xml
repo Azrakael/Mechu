@@ -31,9 +31,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.01" />
 
-
-
-    <!-- 프로그레스 바 -->
+    <!-- 프로그레스 바 아직 구현 안됨-->
     <ImageView
         android:id="@+id/semiCircleProgressBar"
         android:layout_width="200dp"
@@ -164,6 +162,7 @@
 
 
     </LinearLayout>
+
 
 
 
