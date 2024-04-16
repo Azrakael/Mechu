@@ -106,11 +106,7 @@ public class SignUp2 extends AppCompatActivity {
     private void sendEmail(String recipient, String verificationCode) {
         emailExecutor.submit(() -> {
             final String username = "hdidvrnd@naver.com"; // 이메일 계정
-<<<<<<< HEAD
-            final String password = "ss"; // 이메일 계정의 비밀번호
-=======
-            final String password = "sss"; // 이메일 계정의 비밀번호
->>>>>>> 5f8cb1719ec6c478e07e1bedb04549f15847d036
+            final String password = "rightsene1313"; // 이메일 계정의 비밀번호
 
             Properties props = new Properties();
             props.put("mail.smtp.host", "smtp.naver.com");
@@ -136,7 +132,7 @@ public class SignUp2 extends AppCompatActivity {
                 }
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
                 message.setSubject("인증번호");
-                message.setText("인증번호는 " + verificationCode + "입니다.");
+                message.setText("해당 인증번호는 " + verificationCode + "입니다.");
 
                 Transport.send(message);
                 postResult("인증 이메일을 전송했습니다.");
@@ -154,6 +150,7 @@ public class SignUp2 extends AppCompatActivity {
     }
 
     private void postResult(String message) {
+        // UI 업데이트를 위한 메서드 (예: 로그 출력 또는 토스트 메시지 표시)
         handler.post(() -> showMessage(message));
     }
 }
