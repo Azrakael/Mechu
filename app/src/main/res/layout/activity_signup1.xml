@@ -8,8 +8,6 @@
 
 
     <!-- 뒤로 가기 버튼 -->
-
-    <!-- 로고 이미지 -->
     <ImageView
         android:id="@+id/backButton"
         android:layout_width="25dp"
@@ -20,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.025" />
 
+    <!-- 로고 이미지 -->
     <ImageView
         android:id="@+id/logoImage"
         android:layout_width="150dp"
@@ -64,6 +63,7 @@
         android:gravity="center_vertical">
 
         <CheckBox
+            android:id="@+id/checkbox1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="모두 동의"
@@ -101,6 +101,7 @@
             android:textSize="12sp"/>
 
         <CheckBox
+            android:id="@+id/checkbox2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-8dp"
@@ -133,6 +134,7 @@
             android:textSize="12sp"/>
 
         <CheckBox
+            android:id="@+id/checkbox3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="-8dp"
@@ -169,6 +171,7 @@
             android:orientation="vertical">
 
             <CheckBox
+                android:id="@+id/checkbox4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-8dp"
