@@ -25,7 +25,7 @@ public class SignUp1 extends AppCompatActivity {
         checkBox2 = findViewById(R.id.checkbox2);
         checkBox3 = findViewById(R.id.checkbox3);
         checkBox4 = findViewById(R.id.checkbox4);
-
+        // 아아
         //checkBox1번이 체크되면 모두 체크
         checkBox1.setOnClickListener(new View.OnClickListener() {
             @Override
