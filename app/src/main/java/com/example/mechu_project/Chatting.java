@@ -33,9 +33,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class Chatting extends AppCompatActivity {
-
+//맬홍
     RecyclerView recyclerView;
-//    TextView tvWelcome;
+//  //  TextView tvWelcome;
     EditText etMsg;
     ImageButton btnSend;
 

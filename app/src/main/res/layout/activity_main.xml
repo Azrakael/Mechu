@@ -53,13 +53,12 @@
 
             <!-- 프로그레스 바 아직 구현 안됨-->
 
-            <ImageView
-                android:id="@+id/semiCircleProgressBar"
-                android:layout_width="200dp"
+            <com.example.mechu_project.HalfCircleGaugeView
+                android:id="@+id/halfCircleGauge"
+                android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_centerInParent="true"
-                app:backgroundColor="#853333"
-                android:layout_gravity="center"/>
+                android:layout_marginTop="20dp" />
 
             <TextView
                 android:id="@+id/text1"
