@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-
+//검색
 public class Search extends AppCompatActivity {
 
 
