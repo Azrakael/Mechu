@@ -49,6 +49,7 @@ public class Introductory extends AppCompatActivity {
         Button signUpButton = findViewById(R.id.signupButton);
         Button goChat = findViewById(R.id.goChat);
 
+        Button loginButton  = findViewById(R.id.loginButton);
         // Sign Up 버튼에 클릭 리스너 설정
         if (signUpButton != null) {
             signUpButton.setOnClickListener(new View.OnClickListener() {

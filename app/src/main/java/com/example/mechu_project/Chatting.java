@@ -33,9 +33,9 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 
 public class Chatting extends AppCompatActivity {
-
+//맬홍
     RecyclerView recyclerView;
-//    TextView tvWelcome;
+//  //  TextView tvWelcome;
     EditText etMsg;
     ImageButton btnSend;
 
@@ -45,8 +45,7 @@ public class Chatting extends AppCompatActivity {
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     OkHttpClient client;
 
-    private static final String MY_SECRET_KEY = "sss";
-    @Override
+    private static final String MY_SECRET_KEY = "sss";    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);

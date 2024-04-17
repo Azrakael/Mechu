@@ -15,6 +15,15 @@
         android:theme="@style/Theme.MechuProject"
         tools:targetApi="31">
         <activity
+            android:name=".Profile"
+            android:exported="false" />
+        <activity
+            android:name=".Search"
+            android:exported="false" />
+        <activity
+            android:name=".Recommend"
+            android:exported="false" />
+        <activity
             android:name=".MenuDetail"
             android:exported="false" />
         <activity
@@ -45,5 +54,6 @@
             android:name=".MainActivity"
             android:exported="true" />
     </application>
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
