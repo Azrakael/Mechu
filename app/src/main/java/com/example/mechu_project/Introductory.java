@@ -2,6 +2,7 @@ package com.example.mechu_project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.content.Intent;
@@ -38,6 +39,13 @@ public class Introductory extends AppCompatActivity {
         miniLogo.animate().translationY(-1100).setDuration(700).setStartDelay(2800);
         lottie.animate().translationY(3000).setDuration(700).setStartDelay(2500);
 
+        // DatabaseHelper 인스턴스 생성
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+
+        // 읽고 쓰기가 가능한 데이터베이스 객체 가져오기
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+
         login_layout.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -72,6 +80,7 @@ public class Introductory extends AppCompatActivity {
                 }
             });
         }
-
+        // 데이터베이스 사용 후 종료
+        db.close();
     }
 }

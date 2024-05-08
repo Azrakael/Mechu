@@ -42,6 +42,9 @@
             android:name=".SignUp1"
             android:exported="false" />
         <activity
+            android:name=".DatabaseHelper"
+            android:exported="false" />
+        <activity
             android:name=".Introductory"
             android:exported="true">
             <intent-filter>

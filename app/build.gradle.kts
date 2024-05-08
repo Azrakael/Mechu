@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.example.mechu_project"
-    compileSdk = 32
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.mechu_project"
