@@ -18,7 +18,6 @@ public class SignUpEnd extends AppCompatActivity {
         setContentView(R.layout.activity_signup_end);
 
         mechuLogo = findViewById(R.id.mechuLogo);
-
         mechuLogo.setTranslationX(-1100);
         mechuLogo.animate().translationX(0).setDuration(700).setStartDelay(150);
 

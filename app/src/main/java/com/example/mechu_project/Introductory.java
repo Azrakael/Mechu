@@ -17,13 +17,18 @@ public class Introductory extends AppCompatActivity {
     LottieAnimationView lottie;
     LinearLayout login_layout;
 
-    Button sign_up_button;
+    Button sign_up_button,letgo;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_introductory);
+
+
+        letgo = findViewById(R.id.letgo);
+
+
 
         miniLogo = findViewById(R.id.miniLogo);
         app_name = findViewById(R.id.appName);
@@ -69,6 +74,16 @@ public class Introductory extends AppCompatActivity {
                     // SignUp1로
                     Intent intent = new Intent(Introductory.this, Chatting.class);
                     startActivity(intent);
+                }
+            });
+
+
+
+            letgo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Introductory.this, MainActivity.class);
+                    startActivity((intent));
                 }
             });
         }
