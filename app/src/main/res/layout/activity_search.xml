@@ -17,8 +17,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.025">
 
+
+
         <!-- 검색 부분 -->
         <ImageView
+            android:id="@+id/search_search1"
             android:layout_width="41dp"
             android:layout_height="match_parent"
             android:clickable="true"
@@ -26,12 +29,38 @@
             android:src="@drawable/ic_search" />
 
         <EditText
-            android:layout_width="match_parent"
+            android:id="@+id/edittext"
+            android:layout_width="303dp"
+            android:visibility="invisible"
             android:layout_height="wrap_content"
-            android:visibility="invisible" />
+            android:layout_marginTop="10dp"
+            android:hint="원하는 음식을 검색하세요" />
+
+
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_search">
+
+
+        <View
+            android:id="@+id/black_line"
+            android:layout_width="298dp"
+            android:visibility="invisible"
+            android:layout_height="2dp"
+            android:layout_marginLeft="44dp"
+            android:background="#000000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    </LinearLayout>
     <!-- 검색 히스토리 뷰 -->
+
+    <!-- 여기에 검은색 줄을 나타내는 View 추가 -->
     <LinearLayout
         android:id="@+id/search_history_view"
         android:layout_width="match_parent"
@@ -64,14 +93,218 @@
             android:textSize="9sp" />
     </LinearLayout>
 
-    <!-- 여기에 검은색 줄을 나타내는 View 추가 -->
-    <View
-        android:id="@+id/black_line"
+
+<!--검색기록부분-->
+    <LinearLayout
+        android:id="@+id/search_part"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="#000000"
-        android:visibility="invisible"
-        app:layout_constraintTop_toBottomOf="@+id/search_search"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/search_history_view">
+
+
+    <com.google.android.material.chip.Chip
+        android:id="@+id/search_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="육회비빔밥"
+        tools:layout_editor_absoluteX="-2dp"
+        app:closeIconEnabled="true"
+        tools:layout_editor_absoluteY="131dp"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginRight="5dp"/>
+
+
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="육회비빔밥"
+            tools:layout_editor_absoluteX="-2dp"
+            app:closeIconEnabled="true"
+            tools:layout_editor_absoluteY="131dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginRight="5dp"/>
+
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="육회비빔밥"
+            tools:layout_editor_absoluteX="-2dp"
+            app:closeIconEnabled="true"
+            tools:layout_editor_absoluteY="131dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginRight="5dp"/>
+
+
+        <com.google.android.material.chip.Chip
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="육회비빔밥"
+            tools:layout_editor_absoluteX="-2dp"
+            app:closeIconEnabled="true"
+            tools:layout_editor_absoluteY="131dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginRight="5dp"/>
+
+
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintTop_toBottomOf="@+id/search_part"
+        tools:layout_editor_absoluteX="38dp"> <!-- 이 속성으로 내부 GridLayout을 중앙으로 정렬합니다. -->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="인기검색어" /> <!-- TextView를 중앙으로 정렬합니다. -->
+
+        <GridLayout
+            android:layout_width="wrap_content"
+            android:layout_height="379dp"
+            android:layout_gravity="center"
+            android:columnCount="2"
+            android:orientation="vertical"
+            android:rowCount="8"
+            android:layout_marginLeft="30dp">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:textSize="15dp"
+                android:text="1.흐예" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:textSize="15dp"
+
+                android:text="1.흐예" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:textSize="15dp"
+
+                 android:text="1.흐예" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                 android:textSize="15dp"
+
+                 android:text="1.흐예" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                 android:textSize="15dp"
+
+                 android:text="1.흐예" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                 android:textSize="15dp"
+
+                android:text="1.흐예" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                 android:textSize="15dp"
+
+                 android:text="1.흐예" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="180dp"
+                android:textSize="15dp"
+
+                 android:text="1.흐예" />
+            <!--마진right를 열당 하나의 text에만 주면 거리가 생김-->
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="180dp"
+                android:textSize="15dp"
+
+                android:layout_marginBottom="10dp"
+                android:text="1.흐예" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="180dp"
+                android:textSize="15dp"
+
+                android:layout_marginBottom="10dp"
+                android:text="1.흐예" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="180dp"
+                android:textSize="15dp"
+
+                android:layout_marginBottom="10dp"
+                android:text="1.흐예" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="15dp"
+
+                android:layout_marginRight="180dp"
+                android:layout_marginBottom="10dp"
+                android:text="1.흐예" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="180dp"
+                android:textSize="15dp"
+
+                android:layout_marginBottom="10dp"
+                android:text="1.흐예" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="180dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="15dp"
+
+                android:text="1.흐예" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="180dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="15dp"
+
+                android:text="1.흐예" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="180dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="15dp"
+
+                android:text="1.흐예" />
+
+        </GridLayout>
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
