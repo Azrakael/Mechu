@@ -2,6 +2,7 @@ package com.example.mechu_project;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.content.Intent;
@@ -13,12 +14,11 @@ import com.airbnb.lottie.LottieAnimationView;
 
 public class Introductory extends AppCompatActivity {
 
-    ImageView miniLogo,app_name,bar;
+    ImageView miniLogo, app_name, bar;
     LottieAnimationView lottie;
     LinearLayout login_layout;
 
     Button sign_up_button,letgo;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,9 @@ public class Introductory extends AppCompatActivity {
         miniLogo.animate().translationY(-1100).setDuration(700).setStartDelay(2800);
         lottie.animate().translationY(3000).setDuration(700).setStartDelay(2500);
 
+        // DatabaseHelper 인스턴스 생성
+        SQLiteDatabase db = com.example.mechu_project.MyApplication.getDatabase();
+
         login_layout.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -54,7 +57,7 @@ public class Introductory extends AppCompatActivity {
         Button signUpButton = findViewById(R.id.signupButton);
         Button goChat = findViewById(R.id.goChat);
 
-        Button loginButton  = findViewById(R.id.loginButton);
+        Button loginButton = findViewById(R.id.loginButton);
         // Sign Up 버튼에 클릭 리스너 설정
         if (signUpButton != null) {
             signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -71,7 +74,7 @@ public class Introductory extends AppCompatActivity {
             goChat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // SignUp1로
+                    // Chatting으로 이동
                     Intent intent = new Intent(Introductory.this, Chatting.class);
                     startActivity(intent);
                 }
@@ -87,6 +90,5 @@ public class Introductory extends AppCompatActivity {
                 }
             });
         }
-
     }
 }

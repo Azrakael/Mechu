@@ -7,6 +7,8 @@
     <color name="mechu_chat_m">#D9CAB3</color>
     <color name="mechu_chat_u">#B3C9D9</color>
     <color name="pink_700">#FF4081</color>
+    <color name="food_color">#FFA07A</color> <!-- 음식 영양소 색상 -->
+    <color name="daily_color">#87CEFA</color> <!-- 일일 권장 섭취량 색상 -->
 
 </resources>
 
