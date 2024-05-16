@@ -38,8 +38,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return exists;
     }
 
-
-
+    // 음식 정보를 가져오는 메서드
+    public Cursor getFoodInfo(String searchText) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT food_name, food_img, calorie FROM food WHERE food_name = ?";
+        return db.rawQuery(query, new String[]{searchText});
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
