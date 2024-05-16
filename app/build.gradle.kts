@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace = "com.example.mechu_project"
-    compileSdk = 32
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.mechu_project"
@@ -40,8 +40,7 @@ android {
 }
 
 dependencies {
-    implementation ("de.hdodenhof:circleiamgeview:3.1.0") //원형 프로필
-    implementation ("com.google.android.material:material:1.4.0") //검색 chip
+     implementation ("com.google.android.material:material:1.9.0") //검색 chip
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("com.sun.mail:android-mail:1.6.7")  //이메일 smtp

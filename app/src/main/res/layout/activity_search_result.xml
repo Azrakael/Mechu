@@ -1,0 +1,174 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/mechu">
+
+    <LinearLayout
+        android:id="@+id/search_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.025">
+
+
+
+        <!-- 검색 부분 -->
+
+
+
+
+        <!-- 뒤로 가기 버튼 -->
+        <ImageView
+            android:id="@+id/backButton1"
+            android:layout_width="31dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_back"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.025" />
+
+
+
+        <EditText
+            android:id="@+id/ResultText"
+            android:layout_width="303dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="18dp"/>
+
+        <ImageView
+            android:id="@+id/search_search1"
+            android:layout_marginLeft="-20dp"
+            android:layout_width="41dp"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:src="@drawable/ic_search" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search_part"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_search">
+
+
+        <View
+            android:id="@+id/black_line"
+            android:layout_width="298dp"
+            android:layout_height="2dp"
+            android:layout_marginLeft="14dp"
+            android:visibility="invisible"
+            android:background="#000000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+    </LinearLayout>
+    <!-- 검색 결과 뷰 -->
+
+
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/search_part">
+
+
+    <LinearLayout
+        android:id="@+id/foodCart1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/checkbox_background"
+        android:layout_marginTop="15dp"
+        android:padding="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <!-- 음식 사진 -->
+        <LinearLayout
+            android:layout_width="136dp"
+            android:layout_height="128dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/foodImage1"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:src="@drawable/ic_menu" />
+        </LinearLayout>
+
+        <!-- 음식 이름, 칼로리, 하트 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!--음식 설명 -->
+            <LinearLayout
+                android:layout_width="249dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="50dp"
+                    android:text="더 담은 도시락"
+                    android:textColor="#000000"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="150kcal"
+                    android:textColor="#000000"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+
+                <ToggleButton
+                    android:id="@+id/buttonFavorite1"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="20dp"
+                    android:background="@drawable/button_favorite"
+                    android:checked="false"
+                    android:onClick="onFavoriteButtonClick"
+                    android:text=""
+                    android:textOff=""
+                    android:textOn="" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+</LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -23,7 +23,7 @@
         <ImageView
             android:id="@+id/search_search1"
             android:layout_width="41dp"
-            android:layout_height="match_parent"
+            android:layout_height="38dp"
             android:clickable="true"
             android:src="@drawable/ic_search" />
 
@@ -122,7 +122,17 @@
     </LinearLayout>
 
 
-    <LinearLayout
+
+
+
+
+
+
+
+
+
+<!--인기검색어 -->
+   <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
