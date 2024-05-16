@@ -10,9 +10,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        jcenter() // Deprecated. Remove if not necessary
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
 rootProject.name = "MechuProject"
 include(":app")
- 

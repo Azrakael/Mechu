@@ -14,12 +14,11 @@ import com.airbnb.lottie.LottieAnimationView;
 
 public class Introductory extends AppCompatActivity {
 
-    ImageView miniLogo,app_name,bar;
+    ImageView miniLogo, app_name, bar;
     LottieAnimationView lottie;
     LinearLayout login_layout;
 
     Button sign_up_button;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +39,7 @@ public class Introductory extends AppCompatActivity {
         lottie.animate().translationY(3000).setDuration(700).setStartDelay(2500);
 
         // DatabaseHelper 인스턴스 생성
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
-
-        // 읽고 쓰기가 가능한 데이터베이스 객체 가져오기
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
+        SQLiteDatabase db = com.example.mechu_project.MyApplication.getDatabase();
 
         login_layout.postDelayed(new Runnable() {
             @Override
@@ -57,7 +52,7 @@ public class Introductory extends AppCompatActivity {
         Button signUpButton = findViewById(R.id.signupButton);
         Button goChat = findViewById(R.id.goChat);
 
-        Button loginButton  = findViewById(R.id.loginButton);
+        Button loginButton = findViewById(R.id.loginButton);
         // Sign Up 버튼에 클릭 리스너 설정
         if (signUpButton != null) {
             signUpButton.setOnClickListener(new View.OnClickListener() {
@@ -74,13 +69,11 @@ public class Introductory extends AppCompatActivity {
             goChat.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // SignUp1로
+                    // Chatting으로 이동
                     Intent intent = new Intent(Introductory.this, Chatting.class);
                     startActivity(intent);
                 }
             });
         }
-        // 데이터베이스 사용 후 종료
-        db.close();
     }
 }

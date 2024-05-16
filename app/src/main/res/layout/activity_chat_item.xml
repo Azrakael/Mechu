@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="8dp">
@@ -43,6 +44,45 @@
             android:textSize="18sp"
             android:text="Hello World"
             android:padding="8dp"/>
+
+        <!-- 추천된 메뉴 -->
+        <LinearLayout
+            android:id="@+id/menuRecommendationLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="4dp"
+            android:visibility="gone"
+            android:background="@drawable/rounded_corner"
+            android:backgroundTint="@color/mechu_chat_m"
+            android:clickable="true"
+            android:focusable="true">
+
+            <ImageView
+                android:id="@+id/menuImageView"
+                android:layout_width="170dp"
+                android:layout_height="150dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:contentDescription="이미지"/>
+
+            <TextView
+                android:id="@+id/menuNameTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="@android:color/black"
+                android:layout_marginBottom="4dp"
+                android:gravity="center_horizontal"/>
+
+            <TextView
+                android:id="@+id/menuCalorieTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@android:color/black"
+                android:gravity="center_horizontal"/>
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -88,7 +128,6 @@
             android:textSize="18sp"
             android:text="Hello World"
             android:padding="8dp"/>
-
     </LinearLayout>
 
 </RelativeLayout>
