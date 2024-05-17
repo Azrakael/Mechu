@@ -1,5 +1,7 @@
 package com.example.mechu_project;
 
+import static java.sql.DriverManager.println;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -41,8 +43,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // 음식 정보를 가져오는 메서드
     public Cursor getFoodInfo(String searchText) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT food_name, food_img, calorie FROM food WHERE food_name = ?";
-        return db.rawQuery(query, new String[]{searchText});
+        String query = "SELECT food_name, food_img, calorie FROM food WHERE food_name LIKE ?";
+        String[] selectionArgs = new String[]{"%" + searchText + "%"};
+        return db.rawQuery(query, selectionArgs);
     }
 
     @Override

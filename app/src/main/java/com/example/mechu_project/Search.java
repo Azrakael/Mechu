@@ -95,22 +95,15 @@ public class Search extends AppCompatActivity {
         search_search1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String searchText = edittext.getText().toString(); // 사용자가 입력한 텍스트를 가져옵니다.
+                String searchText = edittext.getText().toString().trim(); // 사용자가 입력한 텍스트를 가져옵니다.
                 if (!searchText.isEmpty()) {
-                    boolean exists = dbHelper.isFoodNameExists(searchText);
                     addChip(searchText); // 검색 결과와 관계없이 EditText의 텍스트를 Chip에 추가
                     saveChips(); // Save chips after adding a new one
                     edittext.setText(""); // EditText 초기화
 
-                    if (exists) {
-                        // 검색 결과가 있으면
-                        Intent intent = new Intent(Search.this, SearchResult.class);
-                        intent.putExtra("SEARCH_TERM", searchText);
-                        startActivity(intent);
-                    } else {
-                        // 검색 결과가 없으면 사용자에게 알림
-                        edittext.setError("해당 음식이 없습니다.");
-                    }
+                    Intent intent = new Intent(Search.this, SearchResult.class);
+                    intent.putExtra("SEARCH_TERM", searchText);
+                    startActivity(intent);
                 }
             }
         });
