@@ -31,14 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     // 특정 음식 이름으로 데이터베이스에서 검색하는 메서드
-    public boolean isFoodNameExists(String foodName) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM food WHERE food_name = ?";
-        Cursor cursor = db.rawQuery(query, new String[]{foodName});
-        boolean exists = cursor.getCount() > 0;
-        cursor.close();
-        return exists;
-    }
+
 
     // 음식 정보를 가져오는 메서드
     public Cursor getFoodInfo(String searchText) {

@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.BounceInterpolator;
@@ -25,6 +26,9 @@ import android.view.animation.BounceInterpolator;
 import android.view.animation.ScaleAnimation;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
 public class SearchResult extends AppCompatActivity {
 
     ImageView search_search1, backButton1, foodImageView;
@@ -102,30 +106,45 @@ public class SearchResult extends AppCompatActivity {
     private void getFoodInfo(String searchText) {
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         Cursor cursor = dbHelper.getFoodInfo(searchText);
+        LinearLayout containerLayout = findViewById(R.id.food_container);
 
+        // 기존에 추가된 레이아웃 제거
+        containerLayout.removeAllViews();
 
         if (cursor != null && cursor.moveToFirst()) {
-            // 이미지 설정 (개선된 방법)
-            String foodName = cursor.getString(cursor.getColumnIndex("food_name"));
+            do {
+                // 각 음식 정보에 대해 레이아웃 생성 및 설정
+                LinearLayout foodItemLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.activity_food_item, containerLayout, false);
 
-            // loadBitmapFromFile 메서드를 사용하여 Bitmap 가져오기
-            Bitmap foodImageBitmap = loadBitmapFromFile(this, foodName + ".png"); // 파일 확장자 추가
-            if (foodImageBitmap != null) {
-                ImageView foodImageView = findViewById(R.id.food_img);
-                foodImageView.setImageBitmap(foodImageBitmap);
-            }
+                // 이미지 설정 (개선된 방법)
+                String foodName = cursor.getString(cursor.getColumnIndex("food_name"));
+
+                // loadBitmapFromFile 메서드를 사용하여 Bitmap 가져오기
+                Bitmap foodImageBitmap = loadBitmapFromFile(this, foodName + ".png"); // 파일 확장자 추가
+                if (foodImageBitmap != null) {
+                    ImageView foodImageView = foodItemLayout.findViewById(R.id.food_img);
+                    foodImageView.setImageBitmap(foodImageBitmap);
+                }
+
+                // 음식 이름 설정
+                TextView foodNameTextView = foodItemLayout.findViewById(R.id.food_name);
+                foodNameTextView.setText(foodName);
+
+                // 칼로리 설정
+                int calorie = cursor.getInt(cursor.getColumnIndex("calorie"));
+                TextView calorieTextView = foodItemLayout.findViewById(R.id.calorie);
+                calorieTextView.setText(calorie + "kcal");
+
+                // 레이아웃 추가
+                containerLayout.addView(foodItemLayout);
+            } while (cursor.moveToNext());
+        } else {
+            // 검색 결과가 없는 경우
+            LinearLayout noResult = findViewById(R.id.noresult);
+            noResult.setVisibility(View.VISIBLE);
         }
-        // 음식 이름 설정
-        String foodName = cursor.getString(cursor.getColumnIndex("food_name"));
-        TextView foodNameTextView = findViewById(R.id.food_name);
-        foodNameTextView.setText(foodName);
 
-        // 칼로리 설정
-        int calorie = cursor.getInt(cursor.getColumnIndex("calorie"));
-        TextView calorieTextView = findViewById(R.id.calorie);
-        calorieTextView.setText(calorie + "kcal");
-
-        cursor.close(); // 커서를 닫아줍니다.
+        cursor.close(); // 커서 닫기
     }
 
     // 각 버튼의 클릭 이벤트 처리
