@@ -17,7 +17,9 @@ import java.util.Map;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String NAME = "0501_latest.db";
-    public static int VERSION = 4;
+    //version 4->6 업데이트
+    //not null 제약조건 전부 삭제
+    public static int VERSION = 6;
     private Context context;
     private static final String TAG = "DatabaseHelper";
 
@@ -33,21 +35,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS meal_log ( " +
                 "log_id INTEGER PRIMARY KEY AUTOINCREMENT, " + //자동증가
                 "user_id TEXT, " +
-                "meal_date TEXT NOT NULL, " +
-                "meal_time TEXT NOT NULL, " +
+                "meal_date TEXT, " +
+                "meal_time TEXT, " +
                 "food_num INTEGER, " +
                 "FOREIGN KEY(user_id) REFERENCES user(user_id), " +
                 "FOREIGN KEY(food_num) REFERENCES food(food_num));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS food ( " +
                 "food_num INTEGER PRIMARY KEY AUTOINCREMENT, " +  //자동증가
-                "food_name TEXT NOT NULL UNIQUE, " +
+                "food_name TEXT UNIQUE, " +
                 "food_img TEXT, " + // BLOB에서 TEXT로 변경
-                "calorie REAL NOT NULL, " +
-                "carbs REAL NOT NULL, " +
-                "protein REAL NOT NULL, " +
-                "fat REAL NOT NULL, " +
-                "category_name TEXT NOT NULL);");
+                "calorie REAL, " +
+                "carbs REAL, " +
+                "protein REAL, " +
+                "fat REAL, " +
+                "category_name TEXT);");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS review ( " +
                 "review_id INTEGER PRIMARY KEY AUTOINCREMENT, " +  //자동증가
@@ -60,22 +62,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS search ( " +
                 "search_num INTEGER PRIMARY KEY AUTOINCREMENT, " +  //자동증가
                 "user_id TEXT, " +
-                "search_term TEXT NOT NULL, " +
-                "search_date TEXT NOT NULL, " +
+                "search_term TEXT, " +
+                "search_date TEXT, " +
                 "FOREIGN KEY(user_id) REFERENCES user(user_id));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS user ( " +
                 "user_id TEXT PRIMARY KEY, " +
-                "user_name TEXT NOT NULL, " +
-                "email TEXT NOT NULL, " +
-                "password TEXT NOT NULL, " +
+                "user_name TEXT, " +
+                "email TEXT, " +
+                "password TEXT, " +
                 "login_check TEXT, " +
-                "sex TEXT NOT NULL, " +
-                "exercise_type TEXT NOT NULL, " +
-                "height REAL NOT NULL, " +
-                "weight REAL NOT NULL, " +
+                "sex TEXT, " +
+                "exercise_type TEXT, " +
+                "height REAL, " +
+                "weight REAL, " +
                 "profile_img BLOB, " +
-                "target_weight REAL NOT NULL, " +
+                "target_weight REAL, " +
                 "daily_calorie REAL, " +
                 "daily_carbs REAL, " +
                 "daily_protein REAL, " +

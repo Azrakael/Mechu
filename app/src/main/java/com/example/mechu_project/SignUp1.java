@@ -52,6 +52,14 @@ public class SignUp1 extends AppCompatActivity {
                 }
             }
         });
+
+        // 뒤로 가기 버튼 클릭 리스너 설정
+        findViewById(R.id.backButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     // 메시지를 보여주는 간단한 메소드
