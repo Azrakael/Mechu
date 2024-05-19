@@ -48,7 +48,6 @@ public class SignUp2 extends AppCompatActivity {
         buttonValidEmail = findViewById(R.id.buttonValidEmail);
         buttonIdCheck = findViewById(R.id.buttonIdCheck);
 
-        signupNext.setEnabled(false); //이메일이 확인될 때까지 다음 버튼 사용 안 함
 
         // Sign Up 버튼에 클릭 리스너 설정
         if (signupNext != null) {
@@ -59,6 +58,11 @@ public class SignUp2 extends AppCompatActivity {
                     String password = editPasswd.getText().toString().trim();
                     String email = editEmail.getText().toString().trim();
                     String verificationCodeInput = validEmail.getText().toString().trim();
+
+                    if (userId.isEmpty() && password.isEmpty() && email.isEmpty() && verificationCodeInput.isEmpty()) {
+                        showMessage("모든 필드를 채워주세요.");
+                        return;
+                    }
 
                     if (userId.isEmpty()) {
                         showMessage("ID를 입력하세요.");

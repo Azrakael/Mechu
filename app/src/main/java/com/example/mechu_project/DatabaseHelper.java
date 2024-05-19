@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String NAME = "0501_latest.db";
-    public static int VERSION = 5;
+    public static int VERSION = 6;
     private Context context;
     private static final String TAG = "DatabaseHelper";
 
@@ -89,12 +89,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "exercise_type TEXT NOT NULL, " +
                 "height REAL NOT NULL, " +
                 "weight REAL NOT NULL, " +
+                "age INTEGER NOT NULL, " +
                 "profile_img BLOB, " +
                 "target_weight REAL, " +
                 "daily_calorie REAL, " +
                 "daily_carbs REAL, " +
                 "daily_protein REAL, " +
-                "daily_fat REAL);");
+                "daily_fat REAL, " +
+                "current_calorie REAL DEFAULT 0, " + // 현재까지 섭취한 칼로리
+                "current_carbs REAL DEFAULT 0, " + // 현재까지 섭취한 탄수화물
+                "current_protein REAL DEFAULT 0, " + // 현재까지 섭취한 단백질
+                "current_fat REAL DEFAULT 0);"); // 현재까지 섭취한 지방
 
         String[] foods = new String[]{
                 "('김치찌개', ?, 200.0, 10.0, 20.0, 5.0, '한식')",

@@ -1,9 +1,17 @@
 <resources>
     <string name="app_name">메츄</string>
     <string-array name="goal_options">
+        <item>일반</item>
         <item>다이어트</item>
         <item>벌크업</item>
-        <item>일반</item>
+    </string-array>
+
+    <string-array name="activity_level_options">
+        <item>운동 아예 안함</item>
+        <item>가벼운 운동 (일주일에 1~2회)</item>
+        <item>적당한 운동 (일주일에 3~4회)</item>
+        <item>격렬한 운동 (일주일에 5~6회)</item>
+        <item>힘든 운동 (일주일에 6~7회)</item>
     </string-array>
 
 
@@ -11,8 +19,7 @@
                 건강한 메뉴추천 기대해주세요!</string>
 
 
-    <string name = "delete">전체삭제</string>
-
+    <string name="delete">전체삭제</string>
 
 
 </resources>
