@@ -21,6 +21,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import android.os.AsyncTask;
+import com.bumptech.glide.Glide;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -103,14 +105,26 @@ public class SearchResult extends AppCompatActivity {
             if (cursor != null && cursor.moveToFirst()) {
                 do {
                     // 음식 항목 레이아웃을 생성하고 설정
+                    LinearLayout noResult = findViewById(R.id.noresult);
+                    noResult.setVisibility(View.INVISIBLE);
                     LinearLayout foodItemLayout = (LinearLayout) LayoutInflater.from(SearchResult.this).inflate(R.layout.activity_food_item, containerLayout, false);
 
                     String foodName = cursor.getString(cursor.getColumnIndex("food_name"));
-                    Bitmap foodImageBitmap = loadBitmapFromFile(SearchResult.this, foodName + ".png");
-                    if (foodImageBitmap != null) {
-                        ImageView foodImageView = foodItemLayout.findViewById(R.id.food_img);
-                        foodImageView.setImageBitmap(foodImageBitmap);
+                    ImageView foodImageView = foodItemLayout.findViewById(R.id.food_img);
+
+                    // 이미지 파일의 경로 생성
+                    String imagePath = getFilesDir() + File.separator + "images" + File.separator + foodName + ".png";
+                    File imageFile = new File(imagePath);
+
+
+                    if (imageFile.exists()) {
+                        // 이미지 파일이 존재하는 경우 Glide를 사용하여 로드
+                        Glide.with(SearchResult.this)
+                                .load(imageFile)
+                                .into(foodImageView);
                     }
+
+
 
                     TextView foodNameTextView = foodItemLayout.findViewById(R.id.food_name);
                     foodNameTextView.setText(foodName);

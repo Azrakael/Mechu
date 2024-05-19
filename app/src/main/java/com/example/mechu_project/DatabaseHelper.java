@@ -38,7 +38,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT food_name, food_img, calorie FROM food WHERE food_name LIKE ?";
         String[] selectionArgs = new String[]{"%" + searchText + "%"};
-        return db.rawQuery(query, selectionArgs);
+        return db.query("food", new String[]{"food_name", "food_img", "calorie"},
+                "food_name LIKE ?", selectionArgs, null, null, null);
     }
 
     @Override
