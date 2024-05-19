@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String NAME = "0501_latest.db";
-    public static int VERSION = 4;
+    public static int VERSION = 5;
     private Context context;
     private static final String TAG = "DatabaseHelper";
 
@@ -84,13 +84,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "user_name TEXT NOT NULL, " +
                 "email TEXT NOT NULL, " +
                 "password TEXT NOT NULL, " +
-                "login_check TEXT, " +
+                "login_check INTEGER DEFAULT 0, " +
                 "sex TEXT NOT NULL, " +
                 "exercise_type TEXT NOT NULL, " +
                 "height REAL NOT NULL, " +
                 "weight REAL NOT NULL, " +
                 "profile_img BLOB, " +
-                "target_weight REAL NOT NULL, " +
+                "target_weight REAL, " +
                 "daily_calorie REAL, " +
                 "daily_carbs REAL, " +
                 "daily_protein REAL, " +

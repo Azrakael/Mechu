@@ -3,6 +3,8 @@ package com.example.mechu_project;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -27,26 +29,62 @@ import java.util.Random;
 public class SignUp2 extends AppCompatActivity {
 
 
-    EditText editEmail; // 내가 작성한 이메일 저장 edittext
-    EditText validEmail; // 인증 코드를 입력받을 EditText
-    String verificationCode; // 인증코드 저장
+    EditText editEmail, editPasswd, editTextId, validEmail;
+    String verificationCode;
+    Button signupNext, buttonEmailCheck, buttonValidEmail, buttonIdCheck;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup2);
 
-        Button signupNext = findViewById(R.id.signupNext);
-        editEmail = findViewById(R.id.editEmail); // 사용자의 이메일을 입력받는 필드
-        validEmail = findViewById(R.id.validEmail); // 사용자가 인증 코드를 입력하는 필드
+        editEmail = findViewById(R.id.editEmail);
+        editPasswd = findViewById(R.id.editPasswd);
+        editTextId = findViewById(R.id.editTextId);
+        validEmail = findViewById(R.id.validEmail);
+        signupNext = findViewById(R.id.signupNext);
+        buttonEmailCheck = findViewById(R.id.buttonEmailCheck);
+        buttonValidEmail = findViewById(R.id.buttonValidEmail);
+        buttonIdCheck = findViewById(R.id.buttonIdCheck);
+
+        signupNext.setEnabled(false); //이메일이 확인될 때까지 다음 버튼 사용 안 함
 
         // Sign Up 버튼에 클릭 리스너 설정
         if (signupNext != null) {
             signupNext.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // SignUp3로
+                    String userId = editTextId.getText().toString().trim();
+                    String password = editPasswd.getText().toString().trim();
+                    String email = editEmail.getText().toString().trim();
+                    String verificationCodeInput = validEmail.getText().toString().trim();
+
+                    if (userId.isEmpty()) {
+                        showMessage("ID를 입력하세요.");
+                        return;
+                    }
+                    if (password.isEmpty()) {
+                        showMessage("비밀번호를 입력하세요.");
+                        return;
+                    }
+                    if (email.isEmpty()) {
+                        showMessage("이메일을 입력하세요.");
+                        return;
+                    }
+                    if (verificationCodeInput.isEmpty()) {
+                        showMessage("인증번호를 입력하세요.");
+                        return;
+                    }
+                    if (!verificationCodeInput.equals(verificationCode)) {
+                        showMessage("인증번호가 일치하지 않습니다.");
+                        return;
+                    }
+
                     Intent intent = new Intent(SignUp2.this, SignUp3.class);
+                    intent.putExtra("user_id", userId);
+                    intent.putExtra("password", password);
+                    intent.putExtra("email", email);
                     startActivity(intent);
                 }
             });
@@ -56,7 +94,11 @@ public class SignUp2 extends AppCompatActivity {
         findViewById(R.id.buttonEmailCheck).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String recipientEmail = editEmail.getText().toString(); // 사용자가 입력한 이메일 주소를 가져옵니다.
+                String recipientEmail = editEmail.getText().toString().trim(); // 사용자가 입력한 이메일 주소를 가져옵니다.
+                if (recipientEmail.isEmpty()) {
+                    showMessage("이메일 주소를 입력하세요.");
+                    return;
+                }
 
                 // 인증번호 생성
                 verificationCode = generateVerificationCode();
@@ -67,20 +109,51 @@ public class SignUp2 extends AppCompatActivity {
         });
 
         // 인증번호 확인 버튼 클릭 이벤트
-        findViewById(R.id.buttonValidEmail).setOnClickListener(new View.OnClickListener() {
+        buttonValidEmail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String userInputCode = validEmail.getText().toString(); // 사용자가 입력한 인증 코드를 가져옵니다.
+                String userInputCode = validEmail.getText().toString().trim(); // 사용자가 입력한 인증 코드를 가져옴
                 if (verificationCode != null && verificationCode.equals(userInputCode)) {
                     // 인증 코드가 일치하는 경우
                     showMessage("인증이 성공했습니다.");
+                    signupNext.setEnabled(true);
                 } else {
                     // 인증 코드가 일치하지 않는 경우
                     showMessage("인증이 실패했습니다. 올바른 인증 코드를 입력하세요.");
                 }
             }
         });
+
+
+        buttonIdCheck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userId = editTextId.getText().toString().trim();
+                if (userId.isEmpty()) {
+                    showMessage("ID를 입력하세요");
+                    return;
+                }
+
+                // Check if the ID already exists in the database
+                DatabaseHelper dbHelper = new DatabaseHelper(SignUp2.this);
+                boolean isUserIdAvailable = checkUserIdAvailability(dbHelper, userId);
+
+                if (isUserIdAvailable) {
+                    showMessage("사용가능한 ID입니다.");
+                } else {
+                    showMessage("사용중인 ID입니다. 다른 ID를 입력해주세요");
+                }
+            }
+        });
+    }
+
+    private boolean checkUserIdAvailability(DatabaseHelper dbHelper, String userId) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT user_id FROM user WHERE user_id = ?", new String[]{userId});
+        boolean isAvailable = cursor.getCount() == 0;
+        cursor.close();
+        return isAvailable;
     }
 
     // 메시지를 보여주는 메서드
@@ -103,15 +176,15 @@ public class SignUp2 extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(String... params) {
-            final String username = "hdidvrnd@naver.com"; // 이메일 계정
-            final String password = "sssw"; // 이메일 계정의 비밀번호
+            final String username = "sue020219@naver.com"; // 이메일 계정
+            final String password = "awz4652zz"; // 이메일 계정의 비밀번호
 
             Properties props = new Properties();
             props.put("mail.smtp.host", "smtp.naver.com");      //이메일 서버 호스트 설정
-            props.put("mail.smtp.socketFactory.port", "465");       //smtp서버에서 사용할 소켓 팩토리 포트
+            props.put("mail.smtp.socketFactory.port", "587");       //smtp서버에서 사용할 소켓 팩토리 포트
             props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory"); //소켓 팩토리 클래스 설정
             props.put("mail.smtp.auth", "true");     //smtp인증
-            props.put("mail.smtp.port", "465");         //smtp 서버 포트 설정
+            props.put("mail.smtp.port", "587");         //smtp 서버 포트 설정
 
             //이메일 전송에 사용되는 세션
             Session session = Session.getDefaultInstance(props,
@@ -126,7 +199,7 @@ public class SignUp2 extends AppCompatActivity {
                 message.setFrom(new InternetAddress(username, "MECHU Company")); //발신자이름 설정
                 message.addRecipient(Message.RecipientType.TO, new InternetAddress(params[0])); //수신자 설정
                 message.setSubject("인증번호");
-                message.setText("해당 인증번호는 " + params[1] + "입니다.");
+                message.setText("해당 인증번호: " + params[1]);
 
                 Transport.send(message);
                 return true;
