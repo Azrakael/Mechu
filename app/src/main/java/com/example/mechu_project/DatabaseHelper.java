@@ -623,4 +623,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Log.d("InsertDataAsyncTask", data);
         }
     }
+
+    public UserNutritionalInfo getLoggedInUserNutritionalInfo() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT exercise_type, daily_calorie, daily_carbs, daily_protein, daily_fat, current_calorie, current_carbs, current_protein, current_fat FROM user WHERE login_check = 1 LIMIT 1", null);
+        UserNutritionalInfo userNutritionalInfo = null;
+        if (cursor.moveToFirst()) {
+            String exerciseType = cursor.getString(cursor.getColumnIndexOrThrow("exercise_type"));
+            double dailyCalorie = cursor.getDouble(cursor.getColumnIndexOrThrow("daily_calorie"));
+            double dailyCarbs = cursor.getDouble(cursor.getColumnIndexOrThrow("daily_carbs"));
+            double dailyProtein = cursor.getDouble(cursor.getColumnIndexOrThrow("daily_protein"));
+            double dailyFat = cursor.getDouble(cursor.getColumnIndexOrThrow("daily_fat"));
+            double currentCalorie = cursor.getDouble(cursor.getColumnIndexOrThrow("current_calorie"));
+            double currentCarbs = cursor.getDouble(cursor.getColumnIndexOrThrow("current_carbs"));
+            double currentProtein = cursor.getDouble(cursor.getColumnIndexOrThrow("current_protein"));
+            double currentFat = cursor.getDouble(cursor.getColumnIndexOrThrow("current_fat"));
+
+            userNutritionalInfo = new UserNutritionalInfo(exerciseType, dailyCalorie, dailyCarbs, dailyProtein, dailyFat, currentCalorie, currentCarbs, currentProtein, currentFat);
+        }
+        cursor.close();
+        return userNutritionalInfo;
+    }
+
+    public Cursor getRandomFoodItems() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM food ORDER BY RANDOM() LIMIT 7", null);
+    }
+
 }

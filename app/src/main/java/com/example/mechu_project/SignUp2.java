@@ -180,7 +180,7 @@ public class SignUp2 extends AppCompatActivity {
 
         @Override
         protected Boolean doInBackground(String... params) {
-            final String username = "s020219@naver.com"; // 이메일 계정
+            final String username = "s02019@naver.com"; // 이메일 계정
             final String password = "sss"; // 이메일 계정의 비밀번호
 
             Properties props = new Properties();

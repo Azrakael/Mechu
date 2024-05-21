@@ -108,10 +108,28 @@
                 android:layout_gravity="center_horizontal" />
             <!--탄수화물 함량 -->
             <TextView
+                android:id="@+id/loadingTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드설명추가 예정 필드."
+                android:text="조금만 기다려주세요!! 열심히 적고있어요!!"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_below="@id/menuCal"
+                android:layout_marginTop="20dp"
+                android:visibility="gone" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/menuDetail"
+                android:text=""
                 android:padding="8dp" />
+            <ProgressBar
+                android:id="@+id/loadingIndicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:visibility="gone" />
 
             <!-- 원형 프로그레스 바 영역 -->
             <LinearLayout
