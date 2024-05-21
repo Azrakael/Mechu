@@ -36,11 +36,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // 음식 정보를 가져오는 메서드
     public Cursor getFoodInfo(String searchText) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT food_name, food_img, calorie FROM food WHERE food_name LIKE ?";
+        String query = "SELECT food_name, food_img, calorie, carbs, protein, fat FROM food WHERE food_name LIKE ?";
         String[] selectionArgs = new String[]{"%" + searchText + "%"};
-        return db.query("food", new String[]{"food_name", "food_img", "calorie"},
+        return db.query("food", new String[]{"food_name", "food_img", "calorie", "carbs", "protein", "fat"},
                 "food_name LIKE ?", selectionArgs, null, null, null);
     }
+
+
+
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {

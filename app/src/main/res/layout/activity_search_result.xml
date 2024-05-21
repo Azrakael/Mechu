@@ -17,11 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.025">
 
-
-
         <!-- 검색 부분 -->
-
-
 
         <!-- 뒤로 가기 버튼 -->
         <ImageView
@@ -33,7 +29,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.025" />
-
 
         <!-- 검색 텍스트 부분 -->
         <EditText
@@ -52,11 +47,7 @@
             android:layout_height="48dp"
             android:clickable="true"
             android:src="@drawable/ic_search" />
-
     </LinearLayout>
-
-
-
 
     <LinearLayout
         android:id="@+id/search_part"
@@ -64,7 +55,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_search">
-
 
         <View
             android:id="@+id/black_line"
@@ -75,12 +65,9 @@
             android:background="#000000"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
-
-
     </LinearLayout>
+
     <!-- 검색 결과 뷰 -->
-
-
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -90,7 +77,6 @@
         app:layout_constraintTop_toBottomOf="@id/search_part">
 
         <!-- 검색 결과 부분 -->
-
         <LinearLayout
             android:id="@+id/food_container"
             android:layout_width="375dp"
@@ -99,14 +85,8 @@
             android:orientation="vertical"
             android:padding="2dp"
             android:paddingBottom="3dp">
-
         </LinearLayout>
-
-
     </ScrollView>
-
-
-
 
     <LinearLayout
         android:id="@+id/noresult"
@@ -119,14 +99,12 @@
         app:layout_constraintTop_toBottomOf="@+id/search_part"
         tools:layout_editor_absoluteX="38dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:padding="70dp"
-        android:textSize="15dp"
-        android:text="검색된 결과가 없습니다. 다시 검색해주세요" />
-
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="70dp"
+            android:textSize="15dp"
+            android:text="검색된 결과가 없습니다. 다시 검색해주세요" />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
