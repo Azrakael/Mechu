@@ -51,11 +51,14 @@ public class SearchResult extends AppCompatActivity {
         foodNameTextView = findViewById(R.id.food_name);
         calorieTextView = findViewById(R.id.calorie);
         food_detail = findViewById(R.id.food_detail);
+
+
         // 애니메이션 설정
         scaleAnimation = new ScaleAnimation(0.7f, 1.0f, 0.7f, 1.0f, Animation.RELATIVE_TO_SELF, 0.7f, Animation.RELATIVE_TO_SELF, 0.7f);
         scaleAnimation.setDuration(500);
         bounceInterpolator = new BounceInterpolator();
         scaleAnimation.setInterpolator(bounceInterpolator);
+
 
         // Intent에서 초기 검색어 가져오기
         String initialSearchTerm = getIntent().getStringExtra("SEARCH_TERM");
@@ -83,6 +86,13 @@ public class SearchResult extends AppCompatActivity {
         });
     }
 
+
+    // 즐겨찾기 버튼 클릭 처리
+    public void onFavoriteButtonClick(View view) {
+        view.startAnimation(scaleAnimation);
+    }
+
+
     // EditText 업데이트 부분
     private void updateSearchResult(String searchTerm) {
         resultText.setText(searchTerm);
@@ -99,7 +109,7 @@ public class SearchResult extends AppCompatActivity {
         }
 
         @Override
-         protected void onPostExecute(Cursor cursor) {
+        protected void onPostExecute(Cursor cursor) {
             LinearLayout containerLayout = findViewById(R.id.food_container);
             containerLayout.removeAllViews(); // 이전 뷰 제거
 
@@ -136,7 +146,6 @@ public class SearchResult extends AppCompatActivity {
                     int fat = cursor.getInt(cursor.getColumnIndex("fat"));
 
 
-
                     // foodItemLayout에 클릭 리스너 추가
                     foodItemLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -166,9 +175,6 @@ public class SearchResult extends AppCompatActivity {
         }
 
 
-        // 즐겨찾기 버튼 클릭 처리
-    public void onFavoriteButtonClick(View view) {
-        view.startAnimation(scaleAnimation);
+
     }
-}
 }

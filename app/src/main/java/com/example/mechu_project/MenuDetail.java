@@ -28,7 +28,7 @@ public class MenuDetail extends AppCompatActivity {
             String imagePath = intent.getStringExtra("IMAGE_PATH"); // 이미지 경로 가져오기
 
 
-            // 가져온 데이터를 각각의 뷰에 설정하기
+            // 가져온 데이터를 각각의 뷰에 설정
             TextView menuTitle = findViewById(R.id.menuTitle);
             menuTitle.setText(foodName);
 
@@ -44,7 +44,7 @@ public class MenuDetail extends AppCompatActivity {
             TextView menuCarbohydrate = findViewById(R.id.menuCarbohydrate);
             menuCarbohydrate.setText("탄수화물 함량: " + carbohydrateRatio + "g");
 
-                // 이미지 뷰 설정하기
+                // 이미지 뷰 설정
                 ImageView menuImage = findViewById(R.id.menuImage);
                 if (imagePath != null) {
                     File imageFile = new File(imagePath);
@@ -53,19 +53,19 @@ public class MenuDetail extends AppCompatActivity {
                                 .load(imageFile)
                                 .into(menuImage);
 
-// 탄수화물 원형 프로그레스 바 및 텍스트 설정
+                        // 탄수화물 원형 프로그레스 바 및 텍스트 설정
                         ProgressBar carbsProgressBar = findViewById(R.id.carbsProgressBar);
                         TextView carbsProgressText = findViewById(R.id.carbsProgressText);
                         carbsProgressBar.setProgress(carbohydrateRatio); // 탄수화물 비율로 프로그레스 설정
                         carbsProgressText.setText("탄수화물: " + carbohydrateRatio + "g"); // 탄수화물 비율로 텍스트 설정
 
-// 단백질 원형 프로그레스 바 및 텍스트 설정
+                        // 단백질 원형 프로그레스 바 및 텍스트 설정
                         ProgressBar proteinProgressBar = findViewById(R.id.proteinProgressBar);
                         TextView proteinProgressText = findViewById(R.id.proteinProgressText);
                         proteinProgressBar.setProgress(proteinRatio); // 단백질 비율로 프로그레스 설정
                         proteinProgressText.setText("단백질: " + proteinRatio + "g"); // 단백질 비율로 텍스트 설정
 
-// 지방 원형 프로그레스 바 및 텍스트 설정
+                        // 지방 원형 프로그레스 바 및 텍스트 설정
                         ProgressBar fatProgressBar = findViewById(R.id.fatProgressBar);
                         TextView fatProgressText = findViewById(R.id.fatProgressText);
                         fatProgressBar.setProgress(fatRatio); // 지방 비율로 프로그레스 설정
