@@ -57,38 +57,67 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
+
             <!--메뉴 사진 -->
             <ImageView
                 android:id="@+id/menuImage"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="15dp"
-                />
+                android:layout_marginTop="15dp" />
 
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
             <!--메뉴 이름 -->
-            <ToggleButton
-                android:id="@+id/buttonFavorite1"
-                android:layout_width="55dp"
-                android:layout_height="30dp"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/button_favorite"
-                android:checked="false"
-                android:onClick="onFavoriteButtonClick"
-                android:text=""
-                android:textOff=""
-                android:textOn="" />
 
-            <TextView
-                android:id="@+id/menuTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                 android:textSize="30sp"
-                android:textStyle="bold"
-                android:layout_marginTop="15dp"
-                android:layout_gravity="center_horizontal" />
+                <TextView
+                    android:id="@+id/menuTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="15dp"
+                    android:textSize="30sp"
+                    android:textStyle="bold" />
+
+                <ToggleButton
+                    android:id="@+id/love"
+                    android:layout_width="55dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="-40dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_favorite"
+                    android:checked="false"
+                    android:onClick="onFavoriteButtonClick"
+                    android:text=""
+                    android:textOff=""
+                    android:textOn="" />
+
+
+
+                <ToggleButton
+                    android:id="@+id/dontlove"
+                    android:layout_width="55dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="-32dp"
+                    android:layout_marginLeft="280dp"
+                    android:background="@drawable/button_favorite"
+                    android:checked="false"
+                    android:onClick="onFavoriteButtonClick"
+                    android:text=""
+                    android:textOff=""
+                    android:textOn="" />
+
+
+            </LinearLayout>
+
+
+
             <!--메뉴 칼로리정보 -->
             <TextView
                 android:id="@+id/menuCal"
