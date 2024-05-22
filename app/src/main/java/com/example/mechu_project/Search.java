@@ -1,10 +1,12 @@
 package com.example.mechu_project;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -64,6 +66,7 @@ public class Search extends AppCompatActivity {
                 // search_search1 이동 애니메이션
                 search_search1.animate()
                         .translationX(850)
+                        .translationY(30)
                         .setDuration(500)
                         .setInterpolator(new AccelerateDecelerateInterpolator())
                         .start();
@@ -86,12 +89,18 @@ public class Search extends AppCompatActivity {
                                 black_line.setVisibility(View.INVISIBLE);
                                 // edittext 보이게 하기
                                 edittext.setVisibility(View.VISIBLE);
+                                // edittext에 포커스 주기
+                                edittext.requestFocus();
+                                // 키보드 표시하기
+                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                if (imm != null) {
+                                    imm.showSoftInput(edittext, InputMethodManager.SHOW_IMPLICIT);
+                                }
                             }
                         })
                         .start();
             }
         });
-
         // 검색 버튼 클릭 이벤트 리스너 추가
         search_search1.setOnClickListener(new View.OnClickListener() {
             @Override
