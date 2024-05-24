@@ -1,0 +1,225 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/mechu">
+
+    <!-- 뒤로 가기 버튼 -->
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.025" />
+
+    <!-- 로고 이미지 -->
+    <ImageView
+        android:id="@+id/logoImage"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:src="@drawable/mechulogo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <!-- 로고 밑 바 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        app:layout_constraintTop_toBottomOf="@+id/logoImage"
+        android:background="@android:color/black" />
+
+
+    <!-- Scrollable content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/logoImage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+
+
+    <TextView
+        android:id="@+id/modify_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="프로필 수정"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/logoImage" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="여기서 내 소중한 정보를 수정할 수 있어요!"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:textSize="13dp"
+        app:layout_constraintTop_toBottomOf="@+id/modify_profile" />
+
+
+
+            <!-- 내 사진 이미지 -->
+
+            <!-- 아이디 필드 -->
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profileImage"
+                android:layout_width="147dp"
+                android:layout_height="147dp"
+                android:layout_marginTop="56dp"
+                android:src="@drawable/re"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.456"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/id_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="아이디"
+                app:layout_constraintTop_toBottomOf="@id/profileImage"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:layout_editor_absoluteX="1dp" />
+
+            <EditText
+                android:id="@+id/editTextId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/id_text" />
+
+            <!-- 비밀번호 필드 -->
+            <TextView
+                android:id="@+id/password_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="비밀번호"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/editTextId" />
+
+            <EditText
+                android:id="@+id/editPasswd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/password_text" />
+
+            <!-- 이메일 필드 -->
+            <TextView
+                android:id="@+id/email_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="이메일"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/editPasswd" />
+
+            <EditText
+                android:id="@+id/editEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toStartOf="@+id/email_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/email_text" />
+
+
+            <!-- 목표 수정 필드 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:id="@+id/setGoalArea"
+                android:layout_marginTop="30dp"
+                app:layout_constraintTop_toBottomOf="@+id/editEmail">
+                <!-- 목표 설정 텍스트 -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="목표를 수정해주세요!"
+                    android:textSize="18sp"
+                    android:gravity="start"
+                    android:layout_gravity="center_vertical"/>
+
+                <!-- 드롭다운 메뉴 -->
+                <Spinner
+                    android:id="@+id/goalSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/goal_options"
+                    android:layout_gravity="center_vertical" />
+            </LinearLayout>
+
+
+
+            <!-- 목표체중 입력 필드 -->
+            <LinearLayout
+                android:id="@+id/setGoalWeightArea"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="45dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/setGoalArea">
+
+                <EditText
+                    android:id="@+id/editGoalWeight"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="목표체중"
+                    android:inputType="numberDecimal" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="kg" />
+
+            </LinearLayout>
+
+
+
+            <!-- 완료 버튼 -->
+            <Button
+                android:id="@+id/completeSignUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="수정"
+                android:textStyle="bold"
+                android:background="@drawable/basic_button"
+                android:textColor="#FF000000"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@+id/setGoalWeightArea"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="20dp"
+                app:layout_constraintHorizontal_bias="0.5" />
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
