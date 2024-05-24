@@ -7,19 +7,35 @@ import android.content.Intent;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.ScaleAnimation;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import com.bumptech.glide.Glide;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+
 import java.io.File;
 
 public class MenuDetail extends AppCompatActivity {
+
+
+    // 하트 클릭시 색이 채워지는 애니메이션 추가 효과
+    ScaleAnimation scaleAnimation;
+    BounceInterpolator bounceInterpolator;
+
+    Button button1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_detail);
+
 
         // Intent에서 데이터 가져오기
         Intent intent = getIntent();
@@ -76,24 +92,58 @@ public class MenuDetail extends AppCompatActivity {
                 }
             }
         }
+        // 기존 코드와 함께 아래의 내용을 추가합니다.
+        button1 = findViewById(R.id.button1);
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Bottom Sheet Dialog를 생성하고 설정합니다.
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(MenuDetail.this);
+                bottomSheetDialog.setContentView(R.layout.bottom_sheet);
 
+                // 아래 버튼들을 가져옵니다.
+                Button buttonBreakfast = bottomSheetDialog.findViewById(R.id.buttonBreakfast);
+                Button buttonLunch = bottomSheetDialog.findViewById(R.id.buttonLunch);
+                Button buttonDinner = bottomSheetDialog.findViewById(R.id.buttonDinner);
 
-        ToggleButton dontLoveButton = findViewById(R.id.dontlove);
+                // 아래 버튼들에 클릭 리스너를 추가합니다.
+                buttonBreakfast.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 아침 버튼을 클릭했을 때 할 작업을 추가합니다.
+                    }
+                });
 
+                buttonLunch.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 점심 버튼을 클릭했을 때 할 작업을 추가합니다.
+                    }
+                });
 
-        dontLoveButton.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // 하트가 금가는 애니메이션 설정
-            if (isChecked) {
-                dontLoveButton.setBackgroundResource(R.drawable.button_broken_heart);
-                Drawable drawable = dontLoveButton.getBackground();
-                if (drawable instanceof AnimatedVectorDrawableCompat) {
-                    ((AnimatedVectorDrawableCompat) drawable).start();
-                } else if (drawable instanceof AnimatedVectorDrawable) {
-                    ((AnimatedVectorDrawable) drawable).start();
-                }
-            } else {
-                dontLoveButton.setBackgroundResource(R.drawable.button_favorite_full);
+                buttonDinner.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // 저녁 버튼을 클릭했을 때 할 작업을 추가합니다.
+                    }
+                });
+
+                // Bottom Sheet Dialog를 보여줍니다.
+                bottomSheetDialog.show();
             }
         });
+
+        // 클릭시 하트가 채워지는 부분 지속시간
+        scaleAnimation = new ScaleAnimation(0.7f, 1.0f, 0.7f, 1.0f, Animation.RELATIVE_TO_SELF, 0.7f, Animation.RELATIVE_TO_SELF, 0.7f);
+        scaleAnimation.setDuration(500);
+        bounceInterpolator = new BounceInterpolator();
+        scaleAnimation.setInterpolator(bounceInterpolator); // 바운스 효과
+    }
+
+
+
+    public void onFavoriteButtonClick(View view) {
+        // 클릭한 버튼에 애니메이션 적용
+        view.startAnimation(scaleAnimation);
     }
 }

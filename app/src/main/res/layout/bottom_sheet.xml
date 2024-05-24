@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/mechu"
+    android:padding="16dp">
+
+
+    <Button
+        android:id="@+id/buttonBreakfast"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="아침"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/buttonLunch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="점심"
+        android:layout_marginTop="16dp"/>
+
+    <Button
+        android:id="@+id/buttonDinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="저녁"
+        android:layout_marginTop="16dp"/>
+</LinearLayout>
