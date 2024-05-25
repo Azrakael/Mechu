@@ -40,16 +40,6 @@
         tools:layout_editor_absoluteX="16dp" />
 
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
 
         <!-- 성별 입력 필드 -->
     <LinearLayout
@@ -58,6 +48,7 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:layout_marginTop="45dp"
+        app:layout_constraintTop_toBottomOf="@+id/logoImage"
         android:id="@+id/genderCheckArea">
 
         <TextView
@@ -286,9 +277,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,209 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/mechu">
+
+    <!-- 뒤로 가기 버튼 -->
+    <ImageView
+        android:id="@+id/backButton"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:src="@drawable/ic_back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.025" />
+
+    <!-- 로고 이미지 -->
+    <ImageView
+        android:id="@+id/logoImage"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:src="@drawable/mechulogo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <!-- 로고 밑 바 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@+id/logoImage" />
+
+    <!-- 설명 부분 -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/logoImage"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- TDEE 계산법 설명 섹션 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:id="@+id/tdee_calculation_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TDEE 계산법"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/tdee_calculation_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TDEE는 일일 에너지 소비량을 의미합니다. BMR(기초 대사율)에 활동 수준을 곱하여 계산합니다."
+                    android:textSize="16sp"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/bmr_formula"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="BMR 계산법:\n남자: 10 * 체중(kg) + 6.25 * 키(cm) - 5 * 나이 + 5\n여자: 10 * 체중(kg) + 6.25 * 키(cm) - 5 * 나이 - 161"
+                    android:textSize="16sp"
+                    android:paddingTop="8dp"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/activity_level_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="활동 수준에 따른 TDEE 계산법:\n- 운동 아예 안함: BMR * 1.2\n- 가벼운 운동: BMR * 1.375\n- 적당한 운동: BMR * 1.55\n- 격렬한 운동: BMR * 1.725\n- 힘든 운동: BMR * 1.9"
+                    android:textSize="16sp"
+                    android:paddingTop="8dp"
+                    android:textColor="@android:color/black" />
+
+            </LinearLayout>
+
+            <!-- 목표에 따른 식단 추천 섹션 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:id="@+id/diet_goal_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="목표에 따른 식단 추천"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/diet_goal_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="다이어트:\n- TDEE보다 500kcal 적게 섭취\n- 단백질: 체중(kg) * 2.2g\n- 지방: 총 칼로리의 25%\n- 나머지는 탄수화물"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/bulk_goal_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="벌크업:\n- TDEE보다 500kcal 더 많이 섭취\n- 단백질: 체중(kg) * 2.2g\n- 지방: 총 칼로리의 20%\n- 나머지는 탄수화물"
+                    android:textSize="16sp"
+                    android:paddingTop="8dp"
+                    android:textColor="@android:color/black" />
+
+            </LinearLayout>
+
+            <!-- TDEE 결과 및 권장 섭취량 표시 섹션 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:id="@+id/tdee_result_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TDEE 결과 및 권장 섭취량"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:paddingBottom="8dp"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/tdee_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TDEE: 2000 kcal"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/daily_calories_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="권장 일일 섭취량: 1500 kcal (다이어트)"
+                    android:textSize="16sp"
+                    android:paddingTop="8dp"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/daily_protein_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="일일 단백질 섭취량: 110g"
+                    android:textSize="16sp"
+                    android:paddingTop="8dp"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/daily_fat_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="일일 지방 섭취량: 42g"
+                    android:textSize="16sp"
+                    android:paddingTop="8dp"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/daily_carbs_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="일일 탄수화물 섭취량: 150g"
+                    android:textSize="16sp"
+                    android:paddingTop="8dp"
+                    android:textColor="@android:color/black" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,10 +2,14 @@ package com.example.mechu_project;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,18 +20,60 @@ import com.bumptech.glide.request.RequestOptions;
 
 public class Profile extends AppCompatActivity {
 
-    LinearLayout calender;
+    LinearLayout calender, description;
     Button modify_myprofile, logout;
 
+    TextView mytype, mytype1;
+    private String userId;
+    private Spinner goalSpinner;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-
         modify_myprofile = findViewById(R.id.modify_myprofile);
         calender = findViewById(R.id.calender);
         logout = findViewById(R.id.logout);
+        description = findViewById(R.id.description);
+        mytype = findViewById(R.id.mytype);
+        mytype1 = findViewById(R.id.mytype1);
+
+        // SharedPreferences에서 사용자 ID 가져오기
+        SharedPreferences preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        userId = preferences.getString("user_id", null);
+
+        DatabaseHelper dbHelper = new DatabaseHelper(this);
+        Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
+                "SELECT exercise_type FROM user WHERE user_id = ?",
+                new String[]{userId});
+
+        if (cursor.moveToFirst()) {
+            // exercise_type 컬럼의 인덱스 가져오기
+            int exerciseTypeIndex = cursor.getColumnIndex("exercise_type");
+            // exercise_type 값 가져오기
+            String exerciseType = cursor.getString(exerciseTypeIndex);
+            // 가져온 값으로 TextView 설정
+            mytype.setText(exerciseType);
+            // 만약 exercise_type이 "일반"이라면 mytype1을 안 보이게 설정
+            if (exerciseType.equals("일반")) {
+                mytype1.setVisibility(View.GONE);
+            } else {
+                mytype1.setVisibility(View.VISIBLE);
+            }
+        }
+
+
+        cursor.close();
+
+
+        description.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent(Profile.this,Description.class);
+                startActivity(it);
+            }
+        });
+
 
         modify_myprofile.setOnClickListener(new View.OnClickListener() {
             @Override

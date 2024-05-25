@@ -22,6 +22,9 @@
             android:name=".ModifyProfile"
             android:exported="false" />
         <activity
+            android:name=".Description"
+            android:exported="false" />
+        <activity
             android:name=".Calender"
             android:exported="false" />
         <activity
