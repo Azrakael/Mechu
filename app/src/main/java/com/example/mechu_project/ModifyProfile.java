@@ -11,23 +11,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-
-import de.hdodenhof.circleimageview.CircleImageView;
-
 public class ModifyProfile extends AppCompatActivity {
     private EditText editTextId, editPasswd, editEmail, editGoalWeight;
-    private TextView kg;
     private Spinner goalSpinner;
     private Button completeSignUp;
-    private String userId, userName, email, password, goal;
-    private double goalWeight;
+    private String userId, email, password, goal, selectedGoal;
+    private Double goalWeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +34,6 @@ public class ModifyProfile extends AppCompatActivity {
         editGoalWeight = findViewById(R.id.editGoalWeight);
         goalSpinner = findViewById(R.id.goalSpinner);
         completeSignUp = findViewById(R.id.completeSignUp);
-        kg= findViewById(R.id.kg);
-
 
         // SharedPreferences에서 사용자 ID 가져오기
         SharedPreferences preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
@@ -53,109 +44,105 @@ public class ModifyProfile extends AppCompatActivity {
             finish();
             return;
         }
+
         // DB에서 사용자 정보 가져오기
         DatabaseHelper dbHelper = new DatabaseHelper(this);
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
-                "SELECT user_name, password, email, target_weight, exercise_type FROM user WHERE user_id = ?",
+                "SELECT user_id, password, email, target_weight, exercise_type FROM user WHERE user_id = ?",
                 new String[]{userId});
 
         if (cursor.moveToFirst()) {
-            int userNameIndex = cursor.getColumnIndex("user_name");
-            int passwordIndex = cursor.getColumnIndex("password");
+            int userIdIndex = cursor.getColumnIndex("user_id");
+            int passWordIndex = cursor.getColumnIndex("password");
             int emailIndex = cursor.getColumnIndex("email");
-            int goalWeightIndex = cursor.getColumnIndex("target_weight");
-            int goalIndex= cursor.getColumnIndex("exercise_type");
+            int targetWeightIndex = cursor.getColumnIndex("target_weight");
+            int exercisetypeIndex= cursor.getColumnIndex("exercise_type");
 
-
-
-            if (userNameIndex != -1) userName = cursor.getString(userNameIndex);
-            if (passwordIndex != -1) password = cursor.getString(passwordIndex);
+            if (userIdIndex != -1) userId = cursor.getString(userIdIndex);
+            if (passWordIndex != -1) password = cursor.getString(passWordIndex);
             if (emailIndex != -1) email = cursor.getString(emailIndex);
-            if (goalWeightIndex != -1) goalWeight = cursor.getDouble(goalWeightIndex);
-            if (goalIndex != -1) goal = cursor.getString(goalIndex);
+            if (targetWeightIndex != -1) goalWeight = cursor.getDouble(targetWeightIndex);
+            if (exercisetypeIndex != -1) goal = cursor.getString(exercisetypeIndex);
         }
         cursor.close();
 
-
-
-
-        // Goal Spinner 설정 (Setup goal spinner with data and selection)
+        // Goal Spinner 설정
         ArrayAdapter<CharSequence> goalAdapter = ArrayAdapter.createFromResource(this, R.array.goal_options, android.R.layout.simple_spinner_item);
         goalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         goalSpinner.setAdapter(goalAdapter);
 
-
+        // Set initial selection for goalSpinner
         if (goal != null) {
             int goalPosition = goalAdapter.getPosition(goal);
             goalSpinner.setSelection(goalPosition);
         }
 
+        // UI에 사용자 정보 설정
+        editTextId.setText(userId);
+        editPasswd.setText(password);
+        editEmail.setText(email);
+        editGoalWeight.setText(goalWeight != null ? String.valueOf(goalWeight) : "");
 
+        // 스피너 설정 (선택된 값 설정 필요)
         goalSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedGoal = parent.getItemAtPosition(position).toString();
-                // 만약 "다이어트"가 선택되었을 때, editGoalWeight을 보이도록 설정
-                if (selectedGoal.equals("다이어트") || selectedGoal.equals("벌크업")) {
-                    editGoalWeight.setVisibility(View.VISIBLE);
-                    kg.setVisibility(View.VISIBLE);
+                selectedGoal = parent.getItemAtPosition(position).toString();
+                if (selectedGoal.equals("일반")) {
+                    editGoalWeight.setEnabled(false);
+                    findViewById(R.id.setGoalWeightArea).setVisibility(View.GONE);
                 } else {
-                    // 다른 경우에는 editGoalWeight을 숨김
-                    editGoalWeight.setVisibility(View.GONE);
-                    kg.setVisibility(View.GONE);
+                    editGoalWeight.setEnabled(true);
+                    findViewById(R.id.setGoalWeightArea).setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // 선택이 없을 때의 동작, 여기서는 특별히 할 일이 없으므로 비워둡니다.
+                // 동작 X
             }
         });
-
-
-        // UI에 사용자 정보 설정
-        editTextId.setText(userName);
-        editPasswd.setText(password);
-        editEmail.setText(email);
-        editGoalWeight.setText(String.valueOf(goalWeight));
-        // 스피너 설정 (선택된 값 설정 필요)
-
 
         // 완료 버튼 클릭 리스너 설정
         completeSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 업데이트 로직 작성
-                String newUserName = editTextId.getText().toString();
-                String newPassword = editPasswd.getText().toString();
-                String newEmail = editEmail.getText().toString();
-                String newActivityLevel = goalSpinner.getSelectedItem().toString();
-                double newGoalWeight = Double.parseDouble(editGoalWeight.getText().toString());
+                String newUserId = editTextId.getText().toString().trim();
+                String newPassword = editPasswd.getText().toString().trim();
+                String newEmail = editEmail.getText().toString().trim();
+                String stringGoalWeight = editGoalWeight.getText().toString();
+                Double newGoalWeight = stringGoalWeight.isEmpty() ? null : Double.parseDouble(stringGoalWeight);
 
                 // DB 업데이트
-
                 ContentValues values = new ContentValues();
-                values.put("user_name", newUserName);
+                values.put("user_id", newUserId);
                 values.put("password", newPassword);
                 values.put("email", newEmail);
-                values.put("target_weight", newGoalWeight);
-                values.put("exercise_type", newActivityLevel);
+                values.put("exercise_type", selectedGoal);
+                if (newGoalWeight != null) {
+                    values.put("target_weight", newGoalWeight);
+                } else {
+                    values.putNull("target_weight");
+                }
+
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("user_id", newUserId);
+                editor.apply();
 
                 long result = dbHelper.getWritableDatabase().update("user", values, "user_id = ?", new String[]{userId});
 
                 if (result != -1) {
                     showMessage("저장이 완료되었습니다.");
-                    Intent it = new Intent(ModifyProfile.this,Profile.class);
+                    dbHelper.close();
+                    Intent it = new Intent(ModifyProfile.this, Profile.class);
                     startActivity(it);
                 } else {
                     showMessage("저장에 실패했습니다.");
                 }
             }
         });
-
-
     }
-
 
     private void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
