@@ -67,6 +67,9 @@
             android:name=".UserNutritionalInfo"
             android:exported="true" />
         <activity
+            android:name=".FoodItem"
+            android:exported="true" />
+        <activity
             android:name=".Initializer"
             android:exported="true">
             <intent-filter>

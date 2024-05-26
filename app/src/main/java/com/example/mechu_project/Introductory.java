@@ -48,9 +48,9 @@ public class Introductory extends AppCompatActivity {
         //로그인창 초기투명도설정
         login_layout.setAlpha(0f);
 
-        bar.animate().translationY(-1100).setDuration(700).setStartDelay(2800);
-        app_name.animate().translationY(-1100).setDuration(700).setStartDelay(2800);
-        miniLogo.animate().translationY(-1100).setDuration(700).setStartDelay(2800);
+        bar.animate().translationY(-800).setDuration(700).setStartDelay(2800);
+        app_name.animate().translationY(-800).setDuration(700).setStartDelay(2800);
+        miniLogo.animate().translationY(-800).setDuration(700).setStartDelay(2800);
         lottie.animate().translationY(3000).setDuration(700).setStartDelay(2500);
 
         login_layout.postDelayed(new Runnable() {
@@ -62,6 +62,7 @@ public class Introductory extends AppCompatActivity {
         }, 3400); // 3.4초 후에 실행
 
         // Sign Up 버튼에 클릭 리스너 설정
+
         if (sign_up_button != null) {
             sign_up_button.setOnClickListener(new View.OnClickListener() {
                 @Override

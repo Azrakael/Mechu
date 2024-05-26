@@ -47,7 +47,7 @@ public class Search extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("SearchPrefs", MODE_PRIVATE);
 
         // 검색 버튼과 ChipGroup 연결
-        chipGroup = findViewById(R.id.chip_group); // ChipGroup의 ID를 chip_group으로 가정
+        chipGroup = findViewById(R.id.chip_group);
 
         // black_line 초기 상태를 INVISIBLE로 설정
         black_line.setVisibility(View.INVISIBLE);
@@ -101,6 +101,10 @@ public class Search extends AppCompatActivity {
                 DatabaseHelper dbHelper = new DatabaseHelper(Search.this);
                 LinearLayout favoritesearch = findViewById(R.id.favoritesearch);
 
+                //SharedPreferences에서 사용자 ID가져옴
+                SharedPreferences userPrefs = getSharedPreferences("user_prefs",MODE_PRIVATE);
+                String userId = userPrefs.getString("user_id",null);
+
                 // 데이터베이스에서 음식 정보 가져오기
                 Cursor cursor = dbHelper.getFoodInfo(searchText);
 
@@ -110,14 +114,18 @@ public class Search extends AppCompatActivity {
                     saveChips();
                     edittext.setText("");
 
+                    // 검색 기록 저장
+                    if (userId != null) {
+                        dbHelper.insertOrUpdateSearchRecord(userId, searchText);
+                    }
+
                     Intent intent = new Intent(Search.this, SearchResult.class);
                     intent.putExtra("SEARCH_TERM", searchText);
                     startActivity(intent);
                 } else {
                     // 검색 결과가 없는 경우
                     noResult.setVisibility(View.VISIBLE); // 메시지 보이기
-                    favoritesearch.setVisibility(View.INVISIBLE); //인기검색어 안보이게
-
+                    favoritesearch.setVisibility(View.INVISIBLE); // 인기 검색어 안보이게
                 }
 
                 // 커서 닫기

@@ -41,7 +41,7 @@ public class ShowDetail extends AppCompatActivity {
     private TextView proteinProgressText, carbsProgressText, fatProgressText;
 
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    private static final String MY_SECRET_KEY = "sk-sas";
+    private static final String MY_SECRET_KEY = "sss";
     OkHttpClient client;
     private Handler handler;
     private Runnable updateMessageRunnable;

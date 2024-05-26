@@ -51,7 +51,7 @@ public class Chatting extends AppCompatActivity {
     private Runnable typingIndicatorRunnable;
     private int typingIndicatorIndex = 0;
 
-    private static final String MY_SECRET_KEY = "sk-sss";
+    private static final String MY_SECRET_KEY = "sss";
     private static final String TAG = "Chatting";
 
     @Override

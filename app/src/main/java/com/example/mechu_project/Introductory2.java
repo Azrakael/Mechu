@@ -35,9 +35,9 @@ public class Introductory2 extends AppCompatActivity {
         welcomeMessage = findViewById(R.id.welcomeMessage);
 
         // 애니메이션 설정
-        bar.animate().translationY(-1100).setDuration(700).setStartDelay(2800);
-        app_name.animate().translationY(-1100).setDuration(700).setStartDelay(2800);
-        miniLogo.animate().translationY(-1100).setDuration(700).setStartDelay(2800);
+        bar.animate().translationY(-400).setDuration(700).setStartDelay(2800);
+        app_name.animate().translationY(-400).setDuration(700).setStartDelay(2800);
+        miniLogo.animate().translationY(-400).setDuration(700).setStartDelay(2800);
         lottie.animate().translationY(3000).setDuration(700).setStartDelay(2500);
 
         // 환영 메시지 설정
