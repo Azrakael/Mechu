@@ -2,6 +2,9 @@ package com.example.mechu_project;
 
 import static java.sql.DriverManager.println;
 
+import java.text.SimpleDateFormat;
+
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,13 +16,18 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String NAME = "0501_latest.db";
-    public static int VERSION = 6;
+    public static int VERSION = 12;
     private Context context;
     private static final String TAG = "DatabaseHelper";
 
@@ -45,9 +53,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
+    //외래키 지정하려면 외래키 활성화해야함 >> But 현재 활성화하면 어플리케이션이 팅기는 문제 발생
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         println("onCreate 호출됨");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS meal_log ( " +
@@ -82,6 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "user_id TEXT, " +
                 "search_term TEXT NOT NULL, " +
                 "search_date TEXT NOT NULL, " +
+                "search_count INTEGER DEFAULT 0, " +
                 "FOREIGN KEY(user_id) REFERENCES user(user_id));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS user ( " +
@@ -308,6 +319,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "('요거트 스무디', ?, 180.0, 35.0, 5.0, 5.0, '카페')",
                 "('에너지 드링크', ?, 150.0, 40.0, 0.0, 0.0, '카페')"
         };
+
+        db.execSQL("INSERT INTO user (user_id, user_name, email, password, login_check, sex, exercise_type, height, weight, age, daily_calorie,target_weight,daily_carbs,daily_protein,daily_fat) VALUES " +
+                "('root', '관리자', 'admin@test.com', '1111', 1, 'M', '일반', 175, 69, 23,3000,66,50,100,50);");
 
         new InsertDataAsyncTask(this.context, db, foods).execute();
     }
@@ -582,7 +596,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         statement.bindDouble(4, Double.parseDouble(parts[3].trim()));
                         statement.bindDouble(5, Double.parseDouble(parts[4].trim()));
                         statement.bindDouble(6, Double.parseDouble(parts[5].trim()));
-                        statement.bindString(7, parts[6].trim());
+                        statement.bindString(7, parts[6].trim().replace("'", ""));  //입력된 카테고리에서 '제거
 
                         statement.executeInsert();
                     } else {
@@ -645,9 +659,134 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return userNutritionalInfo;
     }
 
-    public Cursor getRandomFoodItems() {
+//    public Cursor getRandomFoodItems() {
+//        SQLiteDatabase db = this.getReadableDatabase();
+//        return db.rawQuery("SELECT * FROM food ORDER BY RANDOM() LIMIT 7", null);
+//    }
+
+    //검색기록 추가 및 업데이트메서드
+    public void insertOrUpdateSearchRecord(String userId, String searchTerm) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        // 기존 검색 기록이 있는지 확인
+        Cursor cursor = db.query("search",
+                new String[] {"search_count"},
+                "user_id=? AND search_term=?",
+                new String[] {userId, searchTerm},
+                null, null, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            // 기존 기록이 있는 경우 검색 횟수 업데이트
+            int searchCount = cursor.getInt(cursor.getColumnIndex("search_count")) + 1;
+            ContentValues values = new ContentValues();
+            values.put("search_count", searchCount);
+            values.put("search_date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()));
+
+            db.update("search", values, "user_id=? AND search_term=?", new String[]{userId, searchTerm});
+        } else {
+            // 기존 기록이 없는 경우 새 기록 추가
+            ContentValues values = new ContentValues();
+            values.put("user_id", userId);
+            values.put("search_term", searchTerm);
+            values.put("search_date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()));
+            values.put("search_count", 1);
+
+            db.insert("search", null, values);
+        }
+
+        if (cursor != null) {
+            cursor.close();
+        }
+
+        db.close();
+    }
+
+
+    private static final String[] CATEGORIES = {"한식", "중식", "일식", "양식"};
+    // 네 개의 카테고리 중에서 두 개를 랜덤으로 선택하는 메서드
+    public List<String> getRandomCategories() {
+        List<String> categoryList = new ArrayList<>();
+        Collections.addAll(categoryList, CATEGORIES);
+        Collections.shuffle(categoryList);
+        return categoryList.subList(0, 2);
+    }
+
+    // 특정 카테고리의 랜덤 음식 메뉴를 가져오는 메서드
+    public Cursor getRandomFoodItemsByCategory(String categoryName) {
         SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM food ORDER BY RANDOM() LIMIT 7", null);
+        return db.rawQuery("SELECT * FROM food WHERE category_name = ? ORDER BY RANDOM() LIMIT 4", new String[]{categoryName});
+    }
+
+    // 두 개의 랜덤 카테고리를 선택하고, 각 카테고리에서 4개의 랜덤 음식을 가져오는 메서드
+    public List<Cursor> getRandomFoodItems() {
+        List<String> randomCategories = getRandomCategories();
+        List<Cursor> randomFoodItems = new ArrayList<>();
+        for (String category : randomCategories) {
+            randomFoodItems.add(getRandomFoodItemsByCategory(category));
+        }
+        return randomFoodItems;
+    }
+
+    // 카페 카테고리에서 랜덤으로 4개의 항목을 가져오는 메서드
+    public Cursor getRandomCafeItems() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM food WHERE category_name = '카페' ORDER BY RANDOM() LIMIT 4", null);
+    }
+
+    // 사용자 맞춤 메뉴 추천을 위한 메서드
+    public List<FoodItem> getRecommendedFoodItems(String userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<FoodItem> recommendedFoodItems = new ArrayList<>();
+
+        String userQuery = "SELECT daily_calorie, daily_carbs, daily_protein, daily_fat, " +
+                "current_calorie, current_carbs, current_protein, current_fat " +
+                "FROM user WHERE user_id = ?";
+        Cursor userCursor = db.rawQuery(userQuery, new String[]{userId});
+
+        if (userCursor != null && userCursor.moveToFirst()) {
+            double dailyCalorie = userCursor.getDouble(userCursor.getColumnIndex("daily_calorie"));
+            double dailyCarbs = userCursor.getDouble(userCursor.getColumnIndex("daily_carbs"));
+            double dailyProtein = userCursor.getDouble(userCursor.getColumnIndex("daily_protein"));
+            double dailyFat = userCursor.getDouble(userCursor.getColumnIndex("daily_fat"));
+
+            double currentCalorie = userCursor.getDouble(userCursor.getColumnIndex("current_calorie"));
+            double currentCarbs = userCursor.getDouble(userCursor.getColumnIndex("current_carbs"));
+            double currentProtein = userCursor.getDouble(userCursor.getColumnIndex("current_protein"));
+            double currentFat = userCursor.getDouble(userCursor.getColumnIndex("current_fat"));
+
+            double remainingCalorie = dailyCalorie - currentCalorie;
+            double remainingCarbs = dailyCarbs - currentCarbs;
+            double remainingProtein = dailyProtein - currentProtein;
+            double remainingFat = dailyFat - currentFat;
+
+            userCursor.close();
+
+            String foodQuery = "SELECT food_name, calorie, carbs, protein, fat, category_name " +
+                    "FROM food " +
+                    "ORDER BY ABS((calorie - ?)) + ABS((carbs - ?)) + ABS((protein - ?)) + ABS((fat - ?)) ASC " +
+                    "LIMIT 4";
+            Cursor foodCursor = db.rawQuery(foodQuery, new String[]{
+                    String.valueOf(remainingCalorie),
+                    String.valueOf(remainingCarbs),
+                    String.valueOf(remainingProtein),
+                    String.valueOf(remainingFat)
+            });
+
+            if (foodCursor != null && foodCursor.moveToFirst()) {
+                do {
+                    String foodName = foodCursor.getString(foodCursor.getColumnIndex("food_name"));
+                    double calorie = foodCursor.getDouble(foodCursor.getColumnIndex("calorie"));
+                    double carbs = foodCursor.getDouble(foodCursor.getColumnIndex("carbs"));
+                    double protein = foodCursor.getDouble(foodCursor.getColumnIndex("protein"));
+                    double fat = foodCursor.getDouble(foodCursor.getColumnIndex("fat"));
+                    String categoryName = foodCursor.getString(foodCursor.getColumnIndex("category_name"));
+
+                    recommendedFoodItems.add(new FoodItem(foodName, calorie, carbs, protein, fat, categoryName));
+                } while (foodCursor.moveToNext());
+                foodCursor.close();
+            }
+        }
+
+        return recommendedFoodItems;
     }
 
 }

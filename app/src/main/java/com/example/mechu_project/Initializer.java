@@ -92,8 +92,7 @@ public class Initializer extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setDailyResetAlarm();
             } else {
-                // 권한이 거부된 경우 처리할 내용을 여기에 작성
-                // 예를 들어 사용자에게 권한이 필요함을 알리는 메시지를 표시하거나, 기본 기능을 제공하지 않도록 설정할 수 있습니다.
+                // 권한이 거부된 경우 처리
             }
         }
     }

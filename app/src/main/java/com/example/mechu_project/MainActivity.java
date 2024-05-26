@@ -1,31 +1,37 @@
 package com.example.mechu_project;
 
-import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.File;
-import java.util.Random;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
+    private static final String TAG = "MainActivity";
 
     // 하트 클릭시 색이 채워지는 애니메이션 추가 효과
     ScaleAnimation scaleAnimation;
@@ -36,6 +42,13 @@ public class MainActivity extends AppCompatActivity {
     private static final int TAB_SEARCHING = R.id.tab_searching;
     private static final int TAB_MECHU = R.id.tab_mechu;
     private static final int TAB_SETTINGS = R.id.tab_settings;
+    private ConstraintLayout topLayout;
+    private BottomNavigationView bottomNavigationView;
+    private ScrollView scrollView;
+    private boolean isTopLayoutVisible = true;
+    private int lastScrollY = 70;
+    private static final int SCROLL_THRESHOLD = 200;
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +62,10 @@ public class MainActivity extends AppCompatActivity {
         scaleAnimation.setInterpolator(bounceInterpolator); // 바운스 효과
 
         // BottomNavigationView 설정
-        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        topLayout = findViewById(R.id.top_layout);
+        bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        scrollView = findViewById(R.id.scroll_view);
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -76,83 +92,223 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // 사용자명 가져오기
+        SharedPreferences preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String userName = preferences.getString("user_name", "사용자");
+
         // 음식 항목을 동적으로 추가
         new LoadRandomFoodItemsTask().execute();
+        // 사용자 맞춤 추천 항목 추가
+        new LoadRecommendedFoodItemsTask(userName).execute();
+
+        // 스크롤 이벤트 감지하여 상단 레이아웃 visibility 조정
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                int scrollY = scrollView.getScrollY();
+                handler.removeCallbacksAndMessages(null); // 이전에 예약된 작업 취소
+
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        int diff = scrollY - lastScrollY;
+
+                        if (Math.abs(diff) > SCROLL_THRESHOLD) {
+                            if (diff > 0 && isTopLayoutVisible) { // 스크롤 다운
+                                topLayout.setVisibility(View.GONE);
+                                isTopLayoutVisible = false;
+                            } else if (diff < 0 && !isTopLayoutVisible) { // 스크롤 업
+                                topLayout.setVisibility(View.VISIBLE);
+                                isTopLayoutVisible = true;
+                            }
+                            lastScrollY = scrollY;
+                        }
+                    }
+                }, 0);
+            }
+        });
     }
 
-    private class LoadRandomFoodItemsTask extends AsyncTask<Void, Void, Cursor> {
+    private class LoadRandomFoodItemsTask extends AsyncTask<Void, Void, List<Cursor>> {
         @Override
-        protected Cursor doInBackground(Void... params) {
+        protected List<Cursor> doInBackground(Void... params) {
             DatabaseHelper dbHelper = new DatabaseHelper(MainActivity.this);
             return dbHelper.getRandomFoodItems();
         }
 
         @Override
-        protected void onPostExecute(Cursor cursor) {
-            LinearLayout containerLayout = findViewById(R.id.food_container); // 여기에 음식 항목들을 추가할 것입니다.
-            containerLayout.removeAllViews(); // 이전 뷰 제거
+        protected void onPostExecute(List<Cursor> cursors) {
+            LinearLayout category1Container = findViewById(R.id.category1_container);
+            LinearLayout category2Container = findViewById(R.id.category2_container);
+            TextView category1Text = findViewById(R.id.category1_text);
+            TextView category2Text = findViewById(R.id.category2_text);
+            LinearLayout cafeFoodContainer = findViewById(R.id.cafe_food_container);
 
-            if (cursor != null && cursor.moveToFirst()) {
+            if (cursors.size() >= 2) {
+                Cursor cursor1 = cursors.get(0);
+                Cursor cursor2 = cursors.get(1);
+
+                if (cursor1 != null && cursor1.moveToFirst()) {
+                    String category1Name = cursor1.getString(cursor1.getColumnIndex("category_name"));
+                    category1Text.setText("오늘은 '" + category1Name + "'이 땡겨요!");
+                    do {
+                        addFoodItemToContainer(cursor1, category1Container);
+                    } while (cursor1.moveToNext());
+                    cursor1.close();
+                }
+
+                if (cursor2 != null && cursor2.moveToFirst()) {
+                    String category2Name = cursor2.getString(cursor2.getColumnIndex("category_name"));
+                    category2Text.setText("'" + category2Name + "'에선 이게 맛있을거에요!");
+                    do {
+                        addFoodItemToContainer(cursor2, category2Container);
+                    } while (cursor2.moveToNext());
+                    cursor2.close();
+                }
+            }
+
+            // Load Cafe Items
+            DatabaseHelper dbHelper = new DatabaseHelper(MainActivity.this);
+            Cursor cafeCursor = dbHelper.getRandomCafeItems();
+            if (cafeCursor != null && cafeCursor.moveToFirst()) {
                 do {
-                    // 음식 항목 레이아웃을 생성하고 설정
-                    LinearLayout foodItemLayout = (LinearLayout) LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_food_item, containerLayout, false);
+                    addFoodItemToContainer(cafeCursor, cafeFoodContainer);
+                } while (cafeCursor.moveToNext());
+                cafeCursor.close();
+            }
+        }
 
-                    String foodName = cursor.getString(cursor.getColumnIndex("food_name"));
-                    ImageView foodImageView = foodItemLayout.findViewById(R.id.food_img);
+        private void addFoodItemToContainer(Cursor cursor, LinearLayout container) {
+            LinearLayout foodItemLayout = (LinearLayout) LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_food_item_hz, container, false);
 
-                    // 이미지 파일의 경로 생성
-                    String imagePath = getFilesDir() + File.separator + "images" + File.separator + foodName + ".png";
-                    File imageFile = new File(imagePath);
+            String foodName = cursor.getString(cursor.getColumnIndex("food_name"));
+            String imagePath = getFilesDir() + File.separator + "images" + File.separator + foodName + ".png";
+            int calorie = cursor.getInt(cursor.getColumnIndex("calorie"));
+            int carbs = cursor.getInt(cursor.getColumnIndex("carbs"));
+            int protein = cursor.getInt(cursor.getColumnIndex("protein"));
+            int fat = cursor.getInt(cursor.getColumnIndex("fat"));
 
-                    if (imageFile.exists()) {
-                        // 이미지 파일이 존재하는 경우 Glide를 사용하여 로드
-                        Glide.with(MainActivity.this)
-                                .load(imageFile)
-                                .into(foodImageView);
-                    } else {
-                        // 이미지가 없는 경우 기본 이미지 설정
-                        foodImageView.setImageResource(R.drawable.ic_menu);
-                    }
-
-                    TextView foodNameTextView = foodItemLayout.findViewById(R.id.food_name);
-                    foodNameTextView.setText(foodName);
-
-                    int calorie = cursor.getInt(cursor.getColumnIndex("calorie"));
-                    TextView calorieTextView = foodItemLayout.findViewById(R.id.calorie);
-                    calorieTextView.setText(calorie + "kcal");
-
-                    int carbs = cursor.getInt(cursor.getColumnIndex("carbs"));
-                    int protein = cursor.getInt(cursor.getColumnIndex("protein"));
-                    int fat = cursor.getInt(cursor.getColumnIndex("fat"));
-
-                    // foodItemLayout에 클릭 리스너 추가
-                    foodItemLayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(MainActivity.this, MenuDetail.class);
-                            intent.putExtra("FOOD_NAME", foodName);
-                            intent.putExtra("CALORIE", calorie);
-                            intent.putExtra("CARBS", carbs);
-                            intent.putExtra("PROTEIN", protein);
-                            intent.putExtra("FAT", fat);
-                            intent.putExtra("IMAGE_PATH", imagePath); // 이미지 경로 추가
-                            startActivity(intent);
-                        }
-                    });
-
-                    containerLayout.addView(foodItemLayout);
-                } while (cursor.moveToNext());
+            ImageView foodImageView = foodItemLayout.findViewById(R.id.food_img);
+            File imageFile = new File(imagePath);
+            if (imageFile.exists()) {
+                Glide.with(MainActivity.this)
+                        .load(imageFile)
+                        .into(foodImageView);
+            } else {
+                foodImageView.setImageResource(R.drawable.ic_menu);
             }
 
-            if (cursor != null) {
-                cursor.close();
+            TextView foodNameTextView = foodItemLayout.findViewById(R.id.food_name);
+            foodNameTextView.setText(foodName);
+
+            TextView calorieTextView = foodItemLayout.findViewById(R.id.calorie);
+            calorieTextView.setText(calorie + "kcal");
+
+            foodItemLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "메뉴 선택됨: " + foodName + ", 칼로리: " + calorie);
+                    Intent intent = new Intent(MainActivity.this, MenuDetail.class);
+                    intent.putExtra("FOOD_NAME", foodName);
+                    intent.putExtra("CALORIE", calorie);
+                    intent.putExtra("CARBS", carbs);
+                    intent.putExtra("PROTEIN", protein);
+                    intent.putExtra("FAT", fat);
+                    intent.putExtra("IMAGE_PATH", imagePath);
+                    startActivity(intent);
+                }
+            });
+
+            container.addView(foodItemLayout);
+        }
+    }
+
+    private class LoadRecommendedFoodItemsTask extends AsyncTask<Void, Void, List<FoodItem>> {
+        private String userName;
+
+        public LoadRecommendedFoodItemsTask(String userName) {
+            this.userName = userName;
+        }
+
+        @Override
+        protected List<FoodItem> doInBackground(Void... params) {
+            DatabaseHelper dbHelper = new DatabaseHelper(MainActivity.this);
+            SharedPreferences preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+            String userId = preferences.getString("user_id", null);
+
+            if (userId == null) {
+                Log.e(TAG, "사용자 ID가 null입니다. 추천 식품을 로드할 수 없습니다.");
+                return null;
             }
+
+            List<FoodItem> foodItems = dbHelper.getRecommendedFoodItems(userId);
+            Log.d(TAG, "추천 메뉴: " + foodItems);
+            return foodItems;
+        }
+
+        @Override
+        protected void onPostExecute(List<FoodItem> foodItems) {
+            LinearLayout recommendedContainer = findViewById(R.id.user_recommended_container);
+            TextView recommendedTitle = findViewById(R.id.recommended_title);
+            recommendedTitle.setText(userName + "님을 위해 골라봤어요!");
+
+            if (foodItems != null && !foodItems.isEmpty()) {
+                for (FoodItem foodItem : foodItems) {
+                    addFoodItemToContainer(foodItem, recommendedContainer);
+                }
+            } else {
+                TextView emptyTextView = new TextView(MainActivity.this);
+                emptyTextView.setText("추천 메뉴가 없습니다.");
+                recommendedContainer.addView(emptyTextView);
+            }
+        }
+
+        private void addFoodItemToContainer(FoodItem foodItem, LinearLayout container) {
+            LinearLayout foodItemLayout = (LinearLayout) LayoutInflater.from(MainActivity.this).inflate(R.layout.activity_food_item_hz, container, false);
+
+            String foodName = foodItem.getFoodName();
+            String imagePath = getFilesDir() + File.separator + "images" + File.separator + foodName + ".png";
+            int calorie = (int) foodItem.getCalorie();
+            int carbs = (int) foodItem.getCarbs();
+            int protein = (int) foodItem.getProtein();
+            int fat = (int) foodItem.getFat();
+
+            ImageView foodImageView = foodItemLayout.findViewById(R.id.food_img);
+            File imageFile = new File(imagePath);
+            if (imageFile.exists()) {
+                Glide.with(MainActivity.this)
+                        .load(imageFile)
+                        .into(foodImageView);
+            } else {
+                foodImageView.setImageResource(R.drawable.ic_menu);
+            }
+
+            TextView foodNameTextView = foodItemLayout.findViewById(R.id.food_name);
+            foodNameTextView.setText(foodName);
+
+            TextView calorieTextView = foodItemLayout.findViewById(R.id.calorie);
+            calorieTextView.setText(calorie + "kcal");
+
+            foodItemLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this, MenuDetail.class);
+                    intent.putExtra("FOOD_NAME", foodName);
+                    intent.putExtra("CALORIE", calorie);
+                    intent.putExtra("CARBS", carbs);
+                    intent.putExtra("PROTEIN", protein);
+                    intent.putExtra("FAT", fat);
+                    intent.putExtra("IMAGE_PATH", imagePath);
+                    startActivity(intent);
+                }
+            });
+
+            container.addView(foodItemLayout);
         }
     }
 
     // 각 버튼의 클릭 이벤트 처리
     public void onFavoriteButtonClick(View view) {
-        // 클릭한 버튼에 애니메이션 적용
         view.startAnimation(scaleAnimation);
     }
 }

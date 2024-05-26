@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/checkbox_background"
+    android:layout_marginEnd="10dp"
+    android:padding="10dp"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:id="@+id/food_detail"
+    android:clickable="true"
+    android:focusable="true">
+
+    <!-- 음식 사진 -->
+    <ImageView
+        android:id="@+id/food_img"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="centerCrop" />
+
+    <!-- 음식 설명 -->
+    <TextView
+        android:id="@+id/food_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:id="@+id/calorie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:textColor="#000000"
+        android:textSize="14sp"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal" />
+</LinearLayout>
