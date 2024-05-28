@@ -66,6 +66,19 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         scrollView = findViewById(R.id.scroll_view);
 
+        View halfCircleGauge = findViewById(R.id.halfCircleGauge);
+        halfCircleGauge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, FoodRecord.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+
+
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
