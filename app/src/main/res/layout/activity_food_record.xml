@@ -50,11 +50,13 @@
         <!-- 원형 프로그레스 바 영역 -->
         <com.example.mechu_project.HalfCircleGaugeView
             android:id="@+id/halfCircleGauge"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_width="407dp"
+            android:layout_height="199dp"
             android:layout_marginTop="116dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -84,13 +86,7 @@
                     android:layout_marginTop="8dp"
                     android:rotation="270"/>
 
-                <TextView
-                    android:id="@+id/proteinProgressText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="8dp" />
+
 
                 <TextView
                     android:id="@+id/proteinProgressLabel"
@@ -98,7 +94,35 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="단백질"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:layout_marginTop="20dp"/>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:id="@+id/proteinProgressText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="g"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="5dp"/>
+
+                </LinearLayout>
+
+
+
             </LinearLayout>
 
             <!-- 탄수화물 원형 프로그레스 바 -->
@@ -121,13 +145,6 @@
                     android:layout_marginTop="8dp"
                     android:rotation="270"/>
 
-                <TextView
-                    android:id="@+id/carbsProgressText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="8dp" />
 
                 <TextView
                     android:id="@+id/carbsProgressLabel"
@@ -135,7 +152,36 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="탄수화물"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:layout_marginTop="20dp"/>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:id="@+id/carbsProgressText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp" />
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="g"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="5dp"/>
+
+                </LinearLayout>
+
+
+
+
+
             </LinearLayout>
 
             <!-- 지방 원형 프로그레스 바 -->
@@ -158,13 +204,6 @@
                     android:layout_marginTop="8dp"
                     android:rotation="270"/>
 
-                <TextView
-                    android:id="@+id/fatProgressText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="8dp" />
 
                 <TextView
                     android:id="@+id/fatProgressLabel"
@@ -172,7 +211,41 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="지방"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:layout_marginTop="20dp"/>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+
+                    <TextView
+                        android:id="@+id/fatProgressText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14sp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="8dp" />
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="g"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="5dp"/>
+
+                </LinearLayout>
+
+
+
+
+
+
+
             </LinearLayout>
         </LinearLayout>
 
@@ -187,9 +260,10 @@
         android:padding="2dp"
         android:gravity="center_vertical"
         android:orientation="vertical"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <!-- 더보기 -->
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="33dp"
@@ -205,51 +279,325 @@
                 android:textSize="13sp" />
         </LinearLayout>
 
-
-        <!-- 아침 레이아웃 -->
+        <!--음식 레ㅐ이아웃-->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:padding="16dp">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <!-- 아침 레이아웃 -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="아침"
-                android:textSize="20sp"/>
+                android:orientation="horizontal"
+                android:gravity="top">
+
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/basic_breakfast_food"/>
+
+                <TextView
+                    android:id="@+id/morning_food"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="아침>"
+                    android:textSize="25dp"
+                    android:clickable="true"/>
+
+                <ImageView
+                    android:id="@+id/menuPlus1"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/basic_plus"
+                    android:layout_marginLeft="230dp"
+                    android:clickable="true"/>
+            </LinearLayout>
+
+            <!--아침 메뉴 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/m_food_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="밥도둑"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/m_food_cal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="220dp"
+                    android:text="30"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="kcal"
+                    android:textSize="20dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/m_food_name2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="비빔밥"
+                    android:textSize="18dp" />
+
+                <TextView
+                    android:id="@+id/m_food_cal2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="220dp"
+                    android:text="50"
+                    android:textSize="20dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="kcal"
+                    android:textSize="20dp" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/basic_spot"
+                android:layout_gravity="center"
+                />
+
+
         </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:orientation="vertical">
 
         <!-- 점심 레이아웃 -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:padding="16dp">
+            android:gravity="top">
+
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/basic_launch_food"/>
+
+            <TextView
+                android:id="@+id/launch_food"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="점심 >"
+                android:textSize="25dp"
+                android:clickable="true"/>
+            <ImageView
+                android:id="@+id/menuPlus2"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/basic_plus"
+                android:layout_marginLeft="225dp"
+                android:clickable="true"/>
+
+        </LinearLayout>
+
+
+        <!--점심 메뉴 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/l_food_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="밥도둑"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/l_food_cal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="220dp"
+                android:text="30"
+                android:textSize="20dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="점심"
-                android:textSize="20sp"/>
+                android:layout_marginLeft="10dp"
+                android:text="kcal"
+                android:textSize="20dp" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/l_food_name2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="비빔밥"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/l_food_cal2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="220dp"
+                android:text="50"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="kcal"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/basic_spot"
+            android:layout_gravity="center"/>
+
+
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:orientation="vertical">
+
 
         <!-- 저녁 레이아웃 -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center"
-            android:padding="16dp">
+            android:gravity="top">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/basic_dinner_food" />
+
+        <TextView
+            android:id="@+id/dinner_food"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="저녁 >"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:clickable="true"/>
+
+        <ImageView
+            android:id="@+id/menuPlus3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/basic_plus"
+            android:layout_marginLeft="225dp"
+            android:clickable="true"/>
+    </LinearLayout>
+
+
+        <!--저녁 메뉴 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:id="@+id/d_food_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="밥도둑"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/d_food_cal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="220dp"
+                android:text="30"
+                android:textSize="20dp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="저녁"
-                android:textSize="20sp"/>
+                android:layout_marginLeft="10dp"
+                android:text="kcal"
+                android:textSize="20dp" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/d_food_name2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="비빔밥"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/d_food_cal2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="220dp"
+                android:text="50"
+                android:textSize="20dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="kcal"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/basic_spot"
+            android:layout_gravity="center"/>
+
+
+    </LinearLayout>
+
     </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
