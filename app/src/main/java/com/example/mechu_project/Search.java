@@ -18,16 +18,15 @@ import com.google.android.material.chip.ChipGroup;
 import android.content.SharedPreferences;
 import java.util.HashSet;
 import java.util.Set;
-
 public class Search extends AppCompatActivity {
-    ImageView search_search1;      //검색이미지
-    LinearLayout search_search;     //검색이미지,edittext 부분을 담는 레이아웃
+    ImageView search_search1;      // 검색 이미지
+    LinearLayout search_search;    // 검색 이미지, EditText 부분을 담는 레이아웃
     View black_line;
     EditText edittext;
-    Button deleteAllButton; // 검색 버튼 추가
-    ChipGroup chipGroup; // Chip을 추가할 ChipGroup 선언
+    Button deleteAllButton; // 전체 삭제 버튼
+    ChipGroup chipGroup;    // Chip을 추가할 ChipGroup 선언
 
-    private DatabaseHelper dbHelper;     //dbHelper 선언
+    private DatabaseHelper dbHelper;     // dbHelper 선언
     private static final String KEY_CHIPS = "chips";
     private SharedPreferences sharedPreferences;
 
@@ -35,6 +34,7 @@ public class Search extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
         search_search1 = findViewById(R.id.search_search1);
         black_line = findViewById(R.id.black_line);
         edittext = findViewById(R.id.edittext);
@@ -44,8 +44,7 @@ public class Search extends AppCompatActivity {
         // DatabaseHelper 초기화
         dbHelper = new DatabaseHelper(this);
 
-
-        // SharedPreferences 초기화 chip을저장하기 위한 부분(최근검색어 부분)
+        // SharedPreferences 초기화 (최근 검색어 저장을 위해)
         sharedPreferences = getSharedPreferences("SearchPrefs", MODE_PRIVATE);
 
         // 검색 버튼과 ChipGroup 연결
@@ -54,7 +53,7 @@ public class Search extends AppCompatActivity {
         // black_line 초기 상태를 INVISIBLE로 설정
         black_line.setVisibility(View.INVISIBLE);
 
-        // Load saved chips
+        // 저장된 칩들을 로드
         loadChips();
 
         search_search.setOnClickListener(new View.OnClickListener() {
@@ -101,6 +100,7 @@ public class Search extends AppCompatActivity {
                         .start();
             }
         });
+
         // 검색 버튼 클릭 이벤트 리스너 추가
         search_search1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,9 +110,9 @@ public class Search extends AppCompatActivity {
                 DatabaseHelper dbHelper = new DatabaseHelper(Search.this);
                 LinearLayout favoritesearch = findViewById(R.id.favoritesearch);
 
-                //SharedPreferences에서 사용자 ID가져옴
-                SharedPreferences userPrefs = getSharedPreferences("user_prefs",MODE_PRIVATE);
-                String userId = userPrefs.getString("user_id",null);
+                // SharedPreferences에서 사용자 ID 가져옴
+                SharedPreferences userPrefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+                String userId = userPrefs.getString("user_id", null);
 
                 // 데이터베이스에서 음식 정보 가져오기
                 Cursor cursor = dbHelper.getFoodInfo(searchText);
@@ -143,21 +143,18 @@ public class Search extends AppCompatActivity {
                 }
             }
         });
+
+        // 전체 삭제 버튼 클릭 리스너 추가
         deleteAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                chipGroup.removeAllViews(); // ChipGroup 내의 모든 뷰(Chip)를 삭제합니다.
-                saveChips(); // Save the empty state
+                chipGroup.removeAllViews(); // ChipGroup 내의 모든 뷰(Chip)를 삭제
+                saveChips(); // 빈 상태 저장
             }
         });
     }
 
-
-    //검색 결과를  chip에 저장해 검색 부분을 나갔다 들어와도 유지되게 하는 코드
-
-
-
-    //칩을 그룹에 추가
+    // 칩을 ChipGroup에 추가
     private void addChip(String text) {
         Chip chip = new Chip(this);
         chip.setText(text);
@@ -166,14 +163,22 @@ public class Search extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 chipGroup.removeView(chip); // Chip 삭제
-                saveChips(); // Save chips after removing one
+                saveChips(); // 칩 삭제 후 저장
             }
         });
+
+        // 칩 클릭 리스너 추가
+        chip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edittext.setText(chip.getText().toString()); // 칩 텍스트를 EditText에 설정
+            }
+        });
+
         chipGroup.addView(chip); // ChipGroup에 Chip 추가
     }
 
-
-    //chip을 저장
+    // 칩들을 저장
     private void saveChips() {
         Set<String> chipsSet = new HashSet<>();
         for (int i = 0; i < chipGroup.getChildCount(); i++) {
@@ -183,8 +188,7 @@ public class Search extends AppCompatActivity {
         sharedPreferences.edit().putStringSet(KEY_CHIPS, chipsSet).apply();
     }
 
-
-    //저장된 칩을 가져옴
+    // 저장된 칩들을 로드
     private void loadChips() {
         Set<String> chipsSet = sharedPreferences.getStringSet(KEY_CHIPS, new HashSet<>());
         for (String chipText : chipsSet) {
