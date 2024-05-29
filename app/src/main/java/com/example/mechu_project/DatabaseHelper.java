@@ -27,7 +27,7 @@ import java.util.Map;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String NAME = "0501_latest.db";
-    public static int VERSION = 12;
+    public static int VERSION = 14;
     private Context context;
     private static final String TAG = "DatabaseHelper";
 
@@ -77,7 +77,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "carbs REAL NOT NULL, " +
                 "protein REAL NOT NULL, " +
                 "fat REAL NOT NULL, " +
-                "category_name TEXT NOT NULL);");
+                "category_name TEXT NOT NULL, " +
+                "is_low_carbon INTEGER DEFAULT 0);");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS review ( " +
                 "review_id INTEGER PRIMARY KEY AUTOINCREMENT, " +  //자동증가
@@ -574,7 +575,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             db.beginTransaction();
             try {
-                String sql = "INSERT INTO food (food_name, food_img, calorie, carbs, protein, fat, category_name) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO food (food_name, food_img, calorie, carbs, protein, fat, category_name, is_low_carbon) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 SQLiteStatement statement = db.compileStatement(sql);
 
                 for (int i = 0; i < foods.length; i++) {
@@ -598,6 +599,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         statement.bindDouble(6, Double.parseDouble(parts[5].trim()));
                         statement.bindString(7, parts[6].trim().replace("'", ""));  //입력된 카테고리에서 '제거
 
+                        // 저탄소 메뉴 여부 설정
+                        boolean isLowCarbon = determineIfLowCarbon(foodName);
+                        statement.bindLong(8, isLowCarbon ? 1 : 0);
+
                         statement.executeInsert();
                     } else {
                         log("이미지 리소스를 찾을 수 없음: " + foodName);
@@ -614,6 +619,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 db.endTransaction();
             }
             return null;
+        }
+
+        private boolean determineIfLowCarbon(String foodName) {
+            // 저탄소 메뉴 목록
+            String[] lowCarbonFoods = new String[]{
+                    "샐러드", "야채튀김", "야채", "과일", "콩나물국", "도토리묵", "김밥",
+                    "콩국수", "나베", "백김치", "물냉면", "호박죽", "오이무침", "미역국",
+                    "두부조림", "감자전", "비빔밥", "김치볶음밥", "매운탕", "청국장",
+                    "북엇국", "파인애플볶음밥"
+            };
+
+            // 저탄소 메뉴 목록에 있는지 확인
+            for (String lowCarbonFood : lowCarbonFoods) {
+                if (foodName.contains(lowCarbonFood)) {
+                    return true;
+                }
+            }
+            return false;
         }
 
         @Override
@@ -787,6 +810,33 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return recommendedFoodItems;
+    }
+
+    public void insertMealLog(SQLiteDatabase db, String userId, String mealDate, String mealTime, int foodNum) {
+        String insertQuery = "INSERT INTO meal_log (user_id, meal_date, meal_time, food_num) VALUES (?, ?, ?, ?)";
+        db.execSQL(insertQuery, new Object[]{userId, mealDate, mealTime, foodNum});
+    }
+
+    public void updateUserIntake(SQLiteDatabase db, String userId, int calorie, int carbs, int protein, int fat) {
+        String updateQuery = "UPDATE user SET " +
+                "current_calorie = current_calorie + ?, " +
+                "current_carbs = current_carbs + ?, " +
+                "current_protein = current_protein + ?, " +
+                "current_fat = current_fat + ? " +
+                "WHERE user_id = ?";
+        db.execSQL(updateQuery, new Object[]{calorie, carbs, protein, fat, userId});
+    }
+
+    public Cursor getUserInfo(String userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM user WHERE user_id = ?";
+        return db.rawQuery(query, new String[]{userId});
+    }
+
+    public Cursor getLowCarbonFoodItems() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM food WHERE is_low_carbon = 1 ORDER BY RANDOM() LIMIT 4";
+        return db.rawQuery(query, null);
     }
 
 }

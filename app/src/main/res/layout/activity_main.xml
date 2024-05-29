@@ -7,10 +7,18 @@
     android:orientation="vertical"
     android:background="@color/mechu">
 
+    <View
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"
+        android:visibility="gone" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp">
 
         <ImageView
             android:layout_width="86dp"
@@ -23,6 +31,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.017" />
 
+
+
         <ImageView
             android:id="@+id/logoImage"
             android:layout_width="156dp"
@@ -33,7 +43,8 @@
             app:layout_constraintHorizontal_bias="0.227"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.01" />
+            app:layout_constraintVertical_bias="0.01"
+            android:onClick="refreshPage"/>
 
         <View
             android:layout_width="match_parent"
@@ -104,6 +115,37 @@
                         android:orientation="horizontal"
                         android:id="@+id/user_recommended_container">
                         <!-- 동적으로 추가될 사용자 맞춤 추천 메뉴들 -->
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </LinearLayout>
+
+            <!-- 지구를 위한 저탄소 메뉴 영역 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/low_carbon_title"
+                    android:text="지구를 위한 저탄소메뉴는 어떠세요?"
+                    android:textSize="18dp"
+                    android:textStyle="bold"
+                    android:paddingBottom="8dp"/>
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:id="@+id/low_carbon_container">
+                        <!-- 동적으로 추가될 저탄소 메뉴들 -->
                     </LinearLayout>
                 </HorizontalScrollView>
             </LinearLayout>
