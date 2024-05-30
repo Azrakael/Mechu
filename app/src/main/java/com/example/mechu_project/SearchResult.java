@@ -1,7 +1,5 @@
 package com.example.mechu_project;
-
 import static com.example.mechu_project.ImageUtils.loadBitmapFromFile;
-
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -22,14 +20,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import android.os.AsyncTask;
 import com.bumptech.glide.Glide;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
 public class SearchResult extends AppCompatActivity {
 
-    ImageView search_search1, backButton1, foodImageView;
+    ImageView search_search1, backButton1, foodImageView, plus_menu;
     EditText resultText;
     TextView foodNameTextView, calorieTextView;
 
@@ -58,6 +55,7 @@ public class SearchResult extends AppCompatActivity {
         scaleAnimation.setDuration(500);
         bounceInterpolator = new BounceInterpolator();
         scaleAnimation.setInterpolator(bounceInterpolator);
+
 
 
         // Intent에서 초기 검색어 가져오기
