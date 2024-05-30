@@ -7,15 +7,34 @@
     android:padding="16dp"
     android:background="@color/mechu">
 
+
+
+
+    <!--취소 버튼 1 -->
+    <ImageView
+        android:id="@+id/backButton23"
+        android:layout_width="31dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.025"
+        android:layout_marginBottom="710dp"
+        android:visibility="invisible"
+        android:clickable="true" />
+
     <LinearLayout
         android:id="@+id/search_search"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.025">
+
+
 
 
 
@@ -30,11 +49,28 @@
         <EditText
             android:id="@+id/edittext"
             android:layout_width="303dp"
-            android:layout_marginLeft="-30dp"
+            android:layout_marginLeft="-10dp"
             android:visibility="invisible"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:hint="원하는 음식을 검색하세요" />
+
+        <!-- 취소버튼 -->
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_weight="1"
+            android:background="#00ff"
+            android:clickable="true"
+            android:padding="1dp"
+            android:text="취소"
+            android:textColor="#000000"
+            android:textSize="18sp" />
+
+
+
+
 
 
     </LinearLayout>
@@ -120,15 +156,6 @@
 
 
     </LinearLayout>
-
-
-
-
-
-
-
-
-
 
 
 <!--인기검색어 -->

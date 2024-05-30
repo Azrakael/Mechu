@@ -77,35 +77,33 @@
     </LinearLayout>
 
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-    <Button
-        android:id="@+id/buttonBreakfast"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="아침"
-        android:textColor="#000000"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/transparent"/>
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/buttonBreakfast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="아침"
+            android:textColor="#000000"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/button_bolder" />
 
-    <Button
-        android:id="@+id/buttonLunch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="점심"
-        android:textColor="#000000"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/transparent"/>
+        <Button
+            android:id="@+id/buttonLunch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="점심"
+            android:textColor="#000000"
+            android:background="@drawable/button_bolder" />
 
-    <Button
-        android:id="@+id/buttonDinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="저녁"
-        android:textColor="#000000"
-        android:layout_marginTop="16dp"
-        android:background="@android:color/transparent"/>
-</LinearLayout>
+        <Button
+            android:id="@+id/buttonDinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="저녁"
+            android:textColor="#000000"
+            android:background="@drawable/button_bolder" />
+    </LinearLayout>
 </LinearLayout>

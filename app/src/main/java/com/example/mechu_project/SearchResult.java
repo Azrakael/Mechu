@@ -1,6 +1,8 @@
 package com.example.mechu_project;
 
 import static com.example.mechu_project.ImageUtils.loadBitmapFromFile;
+
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -146,14 +148,24 @@ public class SearchResult extends AppCompatActivity {
 
                         @Override
                         public void onClick(View v) {
-                            LinearLayout foodDetailLayout = foodItemLayout.findViewById(R.id.food_detail);
-                            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) foodDetailLayout.getLayoutParams();
-                            if (isExpanded) {
-                                params.height = (int) (150 * getResources().getDisplayMetrics().density);
-                            } else {
-                                params.height = (int) (340 * getResources().getDisplayMetrics().density);
-                            }
-                            foodDetailLayout.setLayoutParams(params);
+                            final LinearLayout foodDetailLayout = foodItemLayout.findViewById(R.id.food_detail);
+                            final LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) foodDetailLayout.getLayoutParams();
+                            int targetHeight = isExpanded ? (int) (150 * getResources().getDisplayMetrics().density) : (int) (310 * getResources().getDisplayMetrics().density);
+                            final int initialHeight = foodDetailLayout.getHeight();
+
+                            ValueAnimator valueAnimator = ValueAnimator.ofInt(initialHeight, targetHeight);
+                            valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator animation) {
+                                    int animatedValue = (int) animation.getAnimatedValue();
+                                    params.height = animatedValue;
+                                    foodDetailLayout.setLayoutParams(params);
+                                }
+                            });
+
+                            valueAnimator.setDuration(500); // 애니메이션 지속 시간 (밀리초)
+                            valueAnimator.start();
+
                             isExpanded = !isExpanded;
                         }
                     });

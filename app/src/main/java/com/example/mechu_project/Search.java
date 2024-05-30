@@ -1,5 +1,6 @@
 package com.example.mechu_project;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -18,15 +19,18 @@ import com.google.android.material.chip.ChipGroup;
 import android.content.SharedPreferences;
 import java.util.HashSet;
 import java.util.Set;
+import android.util.Log;
+
 public class Search extends AppCompatActivity {
-    ImageView search_search1;      // 검색 이미지
-    LinearLayout search_search;    // 검색 이미지, EditText 부분을 담는 레이아웃
+    ImageView search_search1, backButton23; // 검색 이미지 및 뒤로가기 버튼
+    LinearLayout search_search; // 검색 이미지, EditText 부분을 담는 레이아웃
     View black_line;
     EditText edittext;
     Button deleteAllButton; // 전체 삭제 버튼
-    ChipGroup chipGroup;    // Chip을 추가할 ChipGroup 선언
+    ChipGroup chipGroup; // Chip을 추가할 ChipGroup 선언
+    Button cancel;
 
-    private DatabaseHelper dbHelper;     // dbHelper 선언
+    private DatabaseHelper dbHelper; // dbHelper 선언
     private static final String KEY_CHIPS = "chips";
     private SharedPreferences sharedPreferences;
 
@@ -40,6 +44,9 @@ public class Search extends AppCompatActivity {
         edittext = findViewById(R.id.edittext);
         search_search = findViewById(R.id.search_search);
         deleteAllButton = findViewById(R.id.deleteAllButton);
+        cancel = findViewById(R.id.cancel);
+        backButton23 = findViewById(R.id.backButton23);
+        backButton23.bringToFront();
 
         // DatabaseHelper 초기화
         dbHelper = new DatabaseHelper(this);
@@ -56,11 +63,37 @@ public class Search extends AppCompatActivity {
         // 저장된 칩들을 로드
         loadChips();
 
+        backButton23.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("SearchActivity", "Back button clicked");
+                Intent it = new Intent(Search.this, MainActivity.class);
+                startActivity(it);
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent it = new Intent(Search.this, MainActivity.class);
+                startActivity(it);
+            }
+        });
+
         search_search.setOnClickListener(new View.OnClickListener() {
+            private boolean isClicked = false; // 클릭 상태를 추적하는 변수
+
             @Override
             public void onClick(View v) {
+                if (isClicked) {
+                    return; // 이미 클릭되었으면 아무 작업도 하지 않음
+                }
+
+                isClicked = true; // 클릭 상태를 true로 변경
+
                 // 검은 선을 보이게 하기
                 black_line.setVisibility(View.VISIBLE);
+                backButton23.setVisibility(View.VISIBLE);
 
                 // search_search1 이동 애니메이션
                 search_search1.animate()
@@ -69,6 +102,15 @@ public class Search extends AppCompatActivity {
                         .setDuration(500)
                         .setInterpolator(new AccelerateDecelerateInterpolator())
                         .start();
+
+                // 취소가 이동
+                cancel.animate()
+                        .translationX(300) // 이동할 거리
+                        .setDuration(500) // 애니메이션 지속 시간
+                        .setInterpolator(new AccelerateDecelerateInterpolator())
+                        .start();
+
+                // 뒤로가기 버튼 생성
 
                 // black_line 초기 위치 설정 및 초기 길이 설정
                 black_line.setTranslationX(-850);
