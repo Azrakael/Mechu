@@ -283,7 +283,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="150dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/morningTab">
 
             <!-- 아침 레이아웃 -->
             <LinearLayout
@@ -386,7 +387,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/lunchTab">
 
         <!-- 점심 레이아웃 -->
         <LinearLayout
@@ -495,7 +497,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:id="@+id/dinnerTab">
 
 
         <!-- 저녁 레이아웃 -->

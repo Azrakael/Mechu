@@ -19,6 +19,9 @@
         android:theme="@style/Theme.MechuProject"
         tools:targetApi="31">
         <activity
+            android:name=".FoodRecordDetail"
+            android:exported="false" />
+        <activity
             android:name=".FoodRecord"
             android:exported="false" />
         <activity
