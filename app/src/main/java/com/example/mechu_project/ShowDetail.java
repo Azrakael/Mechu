@@ -50,7 +50,7 @@ public class ShowDetail extends AppCompatActivity {
     private BottomSheetDialog bottomSheetDialog;
 
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    private static final String MY_SECRET_KEY = "ssss";
+    private static final String MY_SECRET_KEY = "sk-ㄴㄴ";
     OkHttpClient client;
     private Handler handler;
     private Runnable updateMessageRunnable;
