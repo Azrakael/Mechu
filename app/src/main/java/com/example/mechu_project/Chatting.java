@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.mechu_project.adapter.MessageAdapter;
 import com.example.mechu_project.model.Message;
@@ -41,6 +44,7 @@ public class Chatting extends AppCompatActivity {
     RecyclerView recyclerView;
     EditText etMsg;
     ImageButton btnSend;
+    TextView userId
 
     List<Message> messageList;
     MessageAdapter messageAdapter;
@@ -51,13 +55,21 @@ public class Chatting extends AppCompatActivity {
     private Runnable typingIndicatorRunnable;
     private int typingIndicatorIndex = 0;
 
-    private static final String MY_SECRET_KEY = "sss";
+    private static final String MY_SECRET_KEY = "sk-sss";
     private static final String TAG = "Chatting";
+
+    // SharedPreferences에서 사용자명 가져오기
+    SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+    String username = sharedPreferences.getString("user_name", "사용자");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        //사용자명 설정
+
 
         client = new OkHttpClient().newBuilder()
                 .connectTimeout(60, TimeUnit.SECONDS)
@@ -103,6 +115,8 @@ public class Chatting extends AppCompatActivity {
             recyclerView.smoothScrollToPosition(messageAdapter.getItemCount());
         });
     }
+
+
 
     void addTypingIndicator() {
         String[] typingIndicatorTexts = {"잠시만 기다려 주세요... 🤔", "잠시만 기다려 주세요... 🤔.", "잠시만 기다려 주세요... 🤔..", "잠시만 기다려 주세요... 🤔..."};

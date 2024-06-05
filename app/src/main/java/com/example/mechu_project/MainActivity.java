@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 } else if (item.getItemId() == TAB_MECHU) {
                     // 메뉴추천 화면으로 이동
-                    Intent intent = new Intent(MainActivity.this, Chatting.class);
+                    Intent intent = new Intent(MainActivity.this, Recommend.class);
                     startActivity(intent);
                     return true;
                 } else if (item.getItemId() == TAB_SETTINGS) {
