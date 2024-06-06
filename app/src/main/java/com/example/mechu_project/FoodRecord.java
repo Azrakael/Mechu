@@ -12,7 +12,7 @@ import android.widget.LinearLayout;
 //메뉴추천
 public class FoodRecord extends AppCompatActivity {
 
-    ImageView menuPlus1,menuPlus2,menuPlus3;
+    ImageView menuPlus1,menuPlus2,menuPlus3, backbutton, logoImage;
 
 
     @Override
@@ -22,6 +22,25 @@ public class FoodRecord extends AppCompatActivity {
         menuPlus1 = findViewById(R.id.menuPlus1);
         menuPlus2 = findViewById(R.id.menuPlus2);
         menuPlus3 = findViewById(R.id.menuPlus3);
+        backbutton = findViewById(R.id.backButton);
+        logoImage = findViewById(R.id.logoImage);
+
+
+        logoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(FoodRecord.this, MainActivity.class);
+                startActivity(it);
+            }
+        });
+
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
 
         menuPlus1.setOnClickListener(new View.OnClickListener() {

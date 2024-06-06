@@ -68,15 +68,37 @@ public class MenuDetail extends AppCompatActivity {
     private Handler handler;
     private Runnable updateMessageRunnable;
     private BottomSheetDialog bottomSheetDialog;
+    private ImageView backbutton,logoImage;
 
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    private static final String MY_SECRET_KEY = "sk-ㄴㄴ";
+    private static final String MY_SECRET_KEY = "sk-sss";
     OkHttpClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_detail);
+
+        logoImage = findViewById(R.id.logoImage);
+        backbutton = findViewById(R.id.backButton);
+
+
+
+        logoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(MenuDetail.this,MainActivity.class);
+                startActivity(it);
+            }
+        });
+
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
 
         dbHelper = new DatabaseHelper(this);
         db = dbHelper.getWritableDatabase();

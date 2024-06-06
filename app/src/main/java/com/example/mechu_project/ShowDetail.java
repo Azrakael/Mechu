@@ -1,5 +1,6 @@
 package com.example.mechu_project;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -42,7 +43,7 @@ import okhttp3.Response;
 public class ShowDetail extends AppCompatActivity {
 
     private static final String TAG = "ShowDetail";
-    private ImageView menuImageView;
+    private ImageView menuImageView, backbutton, logoImage;
     private TextView menuTitleTextView, menuCalorieTextView, menuProteinTextView, menuFatTextView, menuCarbohydrateTextView, menuDetailTextView, loadingTextView;
     private ProgressBar proteinProgressBar, carbsProgressBar, fatProgressBar;
     private TextView proteinProgressText, carbsProgressText, fatProgressText;
@@ -50,7 +51,7 @@ public class ShowDetail extends AppCompatActivity {
     private BottomSheetDialog bottomSheetDialog;
 
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    private static final String MY_SECRET_KEY = "sk-ㄴㄴ";
+    private static final String MY_SECRET_KEY = "sk-sss";
     OkHttpClient client;
     private Handler handler;
     private Runnable updateMessageRunnable;
@@ -66,6 +67,26 @@ public class ShowDetail extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_detail);
+
+        backbutton = findViewById(R.id.backButton);
+        logoImage = findViewById(R.id.logoImage);
+
+        logoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(ShowDetail.this, MainActivity.class);
+                startActivity(it);
+            }
+        });
+
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+
 
         client = new OkHttpClient().newBuilder()
                 .connectTimeout(30, TimeUnit.SECONDS)

@@ -44,7 +44,6 @@ public class Chatting extends AppCompatActivity {
     RecyclerView recyclerView;
     EditText etMsg;
     ImageButton btnSend;
-    TextView userId
 
     List<Message> messageList;
     MessageAdapter messageAdapter;
@@ -55,13 +54,8 @@ public class Chatting extends AppCompatActivity {
     private Runnable typingIndicatorRunnable;
     private int typingIndicatorIndex = 0;
 
-    private static final String MY_SECRET_KEY = "sk-sss";
+    private static final String MY_SECRET_KEY = "sk-ㄴㄴㄴ";
     private static final String TAG = "Chatting";
-
-    // SharedPreferences에서 사용자명 가져오기
-    SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-    String username = sharedPreferences.getString("user_name", "사용자");
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

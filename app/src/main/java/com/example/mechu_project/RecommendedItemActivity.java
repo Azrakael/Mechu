@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,7 +16,7 @@ import com.bumptech.glide.Glide;
 public class RecommendedItemActivity extends AppCompatActivity {
 
     private TextView recommendationTitle, foodNameTextView, calorieTextView;
-    private ImageView foodImageView;
+    private ImageView foodImageView, logoImage, backbutton;
     private Button refreshButton;
     private DatabaseHelper databaseHelper;
     private boolean isSecondRecommendation = false;
@@ -32,6 +33,8 @@ public class RecommendedItemActivity extends AppCompatActivity {
         calorieTextView = findViewById(R.id.calorieTextView);
         foodImageView = findViewById(R.id.foodImageView);
         refreshButton = findViewById(R.id.refreshButton);
+        logoImage = findViewById(R.id.logoImage);
+        backbutton = findViewById(R.id.backButton);
 
         databaseHelper = new DatabaseHelper(this);
 
@@ -39,10 +42,34 @@ public class RecommendedItemActivity extends AppCompatActivity {
         String tagType = intent.getStringExtra("TAG_TYPE");
         String tagValue = intent.getStringExtra("TAG_VALUE");
 
+        logoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(RecommendedItemActivity.this,MainActivity.class);
+                startActivity(it);
+            }
+        });
+
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(RecommendedItemActivity.this, Recommend.class);
+                // 현재 tagType을 인텐트에 추가
+                it.putExtra("TAG_TYPE", tagType);
+                it.putExtra("SHOW_OPTIONS", true); // 옵션을 보여주기 위해 추가
+                offset = 0; // offset 값을 0으로 초기화
+                startActivity(it);
+            }
+        });
+
         setRecommendationTitle(tagType, tagValue);
         displayRecommendedItem(tagType, tagValue);
         refreshButton.setOnClickListener(v -> refreshRecommendation(tagType, tagValue));
     }
+
+
+
+
 
     private void setRecommendationTitle(String tagType, String tagValue) {
         // SharedPreferences에서 사용자명 가져오기

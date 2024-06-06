@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ public class Profile extends AppCompatActivity {
     TextView mytype, mytype1;
     private String userId;
     private Spinner goalSpinner;
+    ImageView backbutton,logoImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +39,27 @@ public class Profile extends AppCompatActivity {
         description = findViewById(R.id.description);
         mytype = findViewById(R.id.mytype);
         mytype1 = findViewById(R.id.mytype1);
+        logoImage = findViewById(R.id.logoImage);
+        backbutton = findViewById(R.id.backButton);
+
+
+
+        logoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(Profile.this, MainActivity.class);
+                startActivity(it);
+            }
+        });
+
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(Profile.this,MainActivity.class);
+                startActivity(it);
+            }
+        });
+
 
         // SharedPreferences에서 사용자 ID 가져오기
         SharedPreferences preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
