@@ -1,52 +1,45 @@
 package com.example.mechu_project;
 
-import static com.example.mechu_project.ImageUtils.loadBitmapFromFile;
-
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.ScaleAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 public class SearchResult extends AppCompatActivity {
 
     ImageView search_search1, backButton1, foodImageView, buttonFavorite1;
     EditText resultText;
     TextView foodNameTextView, calorieTextView;
+    LinearLayout food_detail, noResult, favoritesearch;
 
-    // 하트 클릭시 색이 채워지는 애니메이션 추가 효과
-    LinearLayout food_detail;
     private SQLiteDatabase db;
     private DatabaseHelper dbHelper;
     private BottomSheetDialog bottomSheetDialog;
     private Handler handler;
+    private SharedPreferences sharedPreferences;
+    private static final String KEY_CHIPS = "chips";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +55,13 @@ public class SearchResult extends AppCompatActivity {
         calorieTextView = findViewById(R.id.calorie);
         food_detail = findViewById(R.id.food_detail);
         buttonFavorite1 = findViewById(R.id.buttonFavorite1);
+        noResult = findViewById(R.id.noresult);
+        favoritesearch = findViewById(R.id.favoritesearch);
 
         dbHelper = new DatabaseHelper(this);
         db = dbHelper.getWritableDatabase();
         handler = new Handler();
+        sharedPreferences = getSharedPreferences("SearchPrefs", MODE_PRIVATE);
 
         // Intent에서 초기 검색어 가져오기
         String initialSearchTerm = getIntent().getStringExtra("SEARCH_TERM");
@@ -79,8 +75,7 @@ public class SearchResult extends AppCompatActivity {
         search_search1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String newSearchTerm = resultText.getText().toString();
-                updateSearchResult(newSearchTerm);
+                performSearch();
             }
         });
 
@@ -91,6 +86,24 @@ public class SearchResult extends AppCompatActivity {
                 startActivity(it);
             }
         });
+    }
+
+    // 검색 수행 메서드
+    private void performSearch() {
+        String searchText = resultText.getText().toString().trim();
+        if (searchText.isEmpty()) {
+            Toast.makeText(this, "메츄가 검색어 입력 안하면 혼낸대", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        saveSearchTerm(searchText);
+        updateSearchResult(searchText);
+    }
+
+    // 검색어 저장 메서드
+    private void saveSearchTerm(String searchTerm) {
+        Set<String> chipsSet = sharedPreferences.getStringSet(KEY_CHIPS, new HashSet<>());
+        chipsSet.add(searchTerm);
+        sharedPreferences.edit().putStringSet(KEY_CHIPS, chipsSet).apply();
     }
 
     // EditText 업데이트 부분
@@ -104,7 +117,6 @@ public class SearchResult extends AppCompatActivity {
         @Override
         protected Cursor doInBackground(String... params) {
             String searchText = params[0];
-            DatabaseHelper dbHelper = new DatabaseHelper(SearchResult.this);
             return dbHelper.getFoodInfo(searchText);
         }
 
@@ -115,7 +127,6 @@ public class SearchResult extends AppCompatActivity {
 
             if (cursor != null && cursor.moveToFirst()) {
                 do {
-                    LinearLayout noResult = findViewById(R.id.noresult);
                     noResult.setVisibility(View.INVISIBLE);
                     LinearLayout foodItemLayout = (LinearLayout) LayoutInflater.from(SearchResult.this).inflate(R.layout.activity_food_item, containerLayout, false);
 
@@ -224,7 +235,6 @@ public class SearchResult extends AppCompatActivity {
                     containerLayout.addView(foodItemLayout);
                 } while (cursor.moveToNext());
             } else {
-                LinearLayout noResult = findViewById(R.id.noresult);
                 noResult.setVisibility(View.VISIBLE);
             }
 

@@ -1,26 +1,26 @@
 package com.example.mechu_project;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.Button;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import android.content.SharedPreferences;
-import java.util.HashSet;
-import java.util.Set;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class Search extends AppCompatActivity {
     ImageView search_search1, backButton23;
@@ -47,12 +47,10 @@ public class Search extends AppCompatActivity {
         deleteAllButton = findViewById(R.id.deleteAllButton);
         cancel = findViewById(R.id.cancel);
         backButton23 = findViewById(R.id.backButton23);
-        backButton23.bringToFront();
+        chipGroup = findViewById(R.id.chip_group);
 
         dbHelper = new DatabaseHelper(this);
-
         sharedPreferences = getSharedPreferences("SearchPrefs", MODE_PRIVATE);
-        chipGroup = findViewById(R.id.chip_group);
 
         black_line.setVisibility(View.INVISIBLE);
 
@@ -123,13 +121,6 @@ public class Search extends AppCompatActivity {
         chip.setOnCloseIconClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences userPrefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
-                String userId = userPrefs.getString("user_id", null);
-
-                if (userId != null) {
-                    dbHelper.hideSearchRecord(userId, chip.getText().toString());
-                }
-
                 chipGroup.removeView(chip);
                 saveChips();
             }
@@ -211,23 +202,16 @@ public class Search extends AppCompatActivity {
     }
 
     private void loadChips() {
-        SharedPreferences userPrefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
-        String userId = userPrefs.getString("user_id", null);
-
-        if (userId != null) {
-            Cursor cursor = dbHelper.getVisibleSearchRecords(userId);
-            if (cursor != null) {
-                while (cursor.moveToNext()) {
-                    String searchTerm = cursor.getString(cursor.getColumnIndex("search_term"));
-                    addChip(searchTerm);
-                }
-                cursor.close();
-            }
+        chipGroup.removeAllViews();
+        Set<String> chipsSet = sharedPreferences.getStringSet(KEY_CHIPS, new HashSet<>());
+        for (String chipText : chipsSet) {
+            addChip(chipText);
         }
     }
 
     private void performSearch() {
         String searchText = edittext.getText().toString().trim();
+        Log.d("performSearch", "Search text: " + searchText);
 
         if (searchText.isEmpty()) {
             Toast.makeText(this, "메츄가 검색어 입력 안하면 혼내", Toast.LENGTH_SHORT).show();
@@ -242,21 +226,24 @@ public class Search extends AppCompatActivity {
 
         if (userId != null) {
             dbHelper.insertOrUpdateSearchRecord(userId, searchText);
+            Log.d("performSearch", "Inserted or updated search record for user: " + userId);
         }
 
         Cursor cursor = dbHelper.getFoodInfo(searchText);
 
         if (cursor != null && cursor.getCount() > 0) {
+            Log.d("performSearch", "Search results found: " + cursor.getCount());
             if (!isChipExists(searchText)) {
                 addChip(searchText);
+                saveChips();
             }
-            saveChips();
             edittext.setText("");
 
             Intent intent = new Intent(Search.this, SearchResult.class);
             intent.putExtra("SEARCH_TERM", searchText);
             startActivity(intent);
         } else {
+            Log.d("performSearch", "No search results found.");
             noResult.setVisibility(View.VISIBLE);
             favoritesearch.setVisibility(View.INVISIBLE);
         }
