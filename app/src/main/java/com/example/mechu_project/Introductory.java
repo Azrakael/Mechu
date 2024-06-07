@@ -136,25 +136,25 @@ public class Introductory extends AppCompatActivity {
             });
         }
 
-        Button goChat = findViewById(R.id.goChat);
-        if (goChat != null) {
-            goChat.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // Chatting으로 이동
-                    Intent intent = new Intent(Introductory.this, Chatting.class);
-                    startActivity(intent);
-                }
-            });
-
-            letgo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(Introductory.this, MainActivity.class);
-                    startActivity(intent);
-                }
-            });
-        }
+//        Button goChat = findViewById(R.id.goChat);
+//        if (goChat != null) {
+//            goChat.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    // Chatting으로 이동
+//                    Intent intent = new Intent(Introductory.this, Chatting.class);
+//                    startActivity(intent);
+//                }
+//            });
+//
+//            letgo.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Intent intent = new Intent(Introductory.this, MainActivity.class);
+//                    startActivity(intent);
+//                }
+//            });
+//        }
     }
 
     private void showMessage(String message) {

@@ -44,7 +44,6 @@ public class Chatting extends AppCompatActivity {
     RecyclerView recyclerView;
     EditText etMsg;
     ImageButton btnSend;
-    TextView userId
 
     List<Message> messageList;
     MessageAdapter messageAdapter;
@@ -55,20 +54,15 @@ public class Chatting extends AppCompatActivity {
     private Runnable typingIndicatorRunnable;
     private int typingIndicatorIndex = 0;
 
-    private static final String MY_SECRET_KEY = "sk-sss";
+    private static final String MY_SECRET_KEY = "sss";
     private static final String TAG = "Chatting";
 
-    // SharedPreferences에서 사용자명 가져오기
-    SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-    String username = sharedPreferences.getString("user_name", "사용자");
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-
-        //사용자명 설정
 
 
         client = new OkHttpClient().newBuilder()
@@ -116,7 +110,10 @@ public class Chatting extends AppCompatActivity {
         });
     }
 
-
+    private String getUserIdFromSharedPreferences() {
+        SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        return sharedPreferences.getString("user_id", null);
+    }
 
     void addTypingIndicator() {
         String[] typingIndicatorTexts = {"잠시만 기다려 주세요... 🤔", "잠시만 기다려 주세요... 🤔.", "잠시만 기다려 주세요... 🤔..", "잠시만 기다려 주세요... 🤔..."};
@@ -139,14 +136,38 @@ public class Chatting extends AppCompatActivity {
         handler.removeCallbacks(typingIndicatorRunnable);
     }
 
-    void addResponse(String response) {
+    void addResponse(String originalResponse) {
         runOnUiThread(() -> {
             removeTypingIndicator();
             messageList.remove(messageList.size() - 1);
 
-            if (validateMenuInResponse(response)) {
-                addToChat(response, Message.SENT_BY_SYSTEM);
-                extractMenuAndShowDetails(response);
+            // 메뉴명 검증 및 추출
+            Pattern pattern = Pattern.compile("\\*\\*(.*?)\\*\\*");
+            Matcher matcher = pattern.matcher(originalResponse);
+            List<String> menuNames = new ArrayList<>();
+            while (matcher.find()) {
+                String menuName = matcher.group(1);
+                if (!menuNames.contains(menuName)) {
+                    menuNames.add(menuName);
+                }
+            }
+
+            if (validateMenuInResponse(originalResponse, menuNames)) {
+                // 메뉴명에 **를 각 메뉴에 한 번만 적용하도록 수정
+                StringBuilder modifiedResponse = new StringBuilder(originalResponse);
+                for (String menuName : menuNames) {
+                    String target = "\\*\\*" + menuName + "\\*\\*";
+                    String replacement = menuName;
+                    modifiedResponse = new StringBuilder(modifiedResponse.toString().replaceAll(target, replacement));
+                }
+                for (String menuName : menuNames) {
+                    int index = modifiedResponse.indexOf(menuName);
+                    if (index != -1) {
+                        modifiedResponse.replace(index, index + menuName.length(), "**" + menuName + "**");
+                    }
+                }
+                addToChat(modifiedResponse.toString(), Message.SENT_BY_SYSTEM);
+                extractMenuAndShowDetails(modifiedResponse.toString());
             } else {
                 addToChat("잠깐 문제가 생겼어요ㅠㅠ 조금만 더 기다려주세요", Message.SENT_BY_SYSTEM);
                 callAPI(messageList.get(messageList.size() - 2).getMessage()); // 이전 질문을 다시 사용
@@ -154,14 +175,11 @@ public class Chatting extends AppCompatActivity {
         });
     }
 
-    boolean validateMenuInResponse(String response) {
-        Pattern pattern = Pattern.compile("\\*\\*(.*?)\\*\\*");
-        Matcher matcher = pattern.matcher(response);
+    boolean validateMenuInResponse(String response, List<String> menuNames) {
         boolean isValid = true;
         SQLiteDatabase db = MyApplication.getDatabase();
 
-        while (matcher.find()) {
-            String menuName = matcher.group(1);
+        for (String menuName : menuNames) {
             Log.d(TAG, "Validating menu: " + menuName); // 메뉴명을 로그에 기록
             Cursor cursor = db.rawQuery("SELECT food_name FROM food WHERE food_name = ?", new String[]{menuName});
             if (!cursor.moveToFirst()) {

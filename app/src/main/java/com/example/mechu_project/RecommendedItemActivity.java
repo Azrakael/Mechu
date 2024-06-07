@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
@@ -20,6 +21,8 @@ public class RecommendedItemActivity extends AppCompatActivity {
     private DatabaseHelper databaseHelper;
     private boolean isSecondRecommendation = false;
     private int offset = 0;
+    private LinearLayout recommendedLayout; // 추가
+    private String currentFoodName; // 추가
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,7 @@ public class RecommendedItemActivity extends AppCompatActivity {
         calorieTextView = findViewById(R.id.calorieTextView);
         foodImageView = findViewById(R.id.foodImageView);
         refreshButton = findViewById(R.id.refreshButton);
+        recommendedLayout = findViewById(R.id.recommendedLayout); // 추가
 
         databaseHelper = new DatabaseHelper(this);
 
@@ -41,7 +45,11 @@ public class RecommendedItemActivity extends AppCompatActivity {
 
         setRecommendationTitle(tagType, tagValue);
         displayRecommendedItem(tagType, tagValue);
+
         refreshButton.setOnClickListener(v -> refreshRecommendation(tagType, tagValue));
+
+        // 추천된 항목 클릭 이벤트 추가
+        recommendedLayout.setOnClickListener(v -> openShowDetailActivity());
     }
 
     private void setRecommendationTitle(String tagType, String tagValue) {
@@ -57,7 +65,7 @@ public class RecommendedItemActivity extends AppCompatActivity {
             if ("mood".equals(tagType)) {
                 titleText = String.format("지금 %s님의 기분이 '%s' 상태라면 \n 이런 메뉴는 어떨까요?", username, tagValue);
             } else if ("weather".equals(tagType)) {
-                titleText = String.format("지금 날씨가 %s 상태라면 \n 이런 메뉴는 어때요?", tagValue);
+                titleText = String.format("지금 날씨가 '%s' 상태라면 \n 이런 메뉴는 어때요?", tagValue);
             }
         }
 
@@ -81,13 +89,15 @@ public class RecommendedItemActivity extends AppCompatActivity {
             double calorie = cursor.getDouble(cursor.getColumnIndex("calorie"));
 
             foodNameTextView.setText(foodName);
-            calorieTextView.setText("칼로리는 " + calorie + "에요!");
+            calorieTextView.setText("칼로리는 " + calorie + "kcal 에요!");
 
             String imagePath = getFilesDir() + "/images/" + foodImage;
             Glide.with(this)
                     .load(imagePath)
                     .error(R.drawable.characterlogo) // 이미지 로드 실패 시 기본 이미지
                     .into(foodImageView);
+
+            currentFoodName = foodName; // 현재 음식 이름 저장
             cursor.close();
         } else {
             // 더 이상 데이터가 없으면 offset을 초기화하고 첫 번째 추천을 다시 보여주기
@@ -101,5 +111,11 @@ public class RecommendedItemActivity extends AppCompatActivity {
         offset++; // 다음 추천 항목을 위해 offset 증가
         setRecommendationTitle(tagType, tagValue);
         displayRecommendedItem(tagType, tagValue);
+    }
+
+    private void openShowDetailActivity() {
+        Intent intent = new Intent(this, ShowDetail.class);
+        intent.putExtra("menuName", currentFoodName); // 현재 음식 이름을 인텐트에 추가
+        startActivity(intent);
     }
 }

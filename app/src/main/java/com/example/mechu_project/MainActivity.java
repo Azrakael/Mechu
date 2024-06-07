@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     // 하트 클릭시 색이 채워지는 애니메이션 추가 효과
     ScaleAnimation scaleAnimation;
-    BounceInterpolator bounceInterpolator;
+//    BounceInterpolator bounceInterpolator;
 
     // 탭 상수 정의
     private static final int TAB_HOME = R.id.tab_home;
@@ -60,10 +60,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // 클릭시 하트가 채워지는 부분 지속시간
-        scaleAnimation = new ScaleAnimation(0.7f, 1.0f, 0.7f, 1.0f, Animation.RELATIVE_TO_SELF, 0.7f, Animation.RELATIVE_TO_SELF, 0.7f);
-        scaleAnimation.setDuration(500);
-        bounceInterpolator = new BounceInterpolator();
-        scaleAnimation.setInterpolator(bounceInterpolator); // 바운스 효과
+//        scaleAnimation = new ScaleAnimation(0.7f, 1.0f, 0.7f, 1.0f, Animation.RELATIVE_TO_SELF, 0.7f, Animation.RELATIVE_TO_SELF, 0.7f);
+//        scaleAnimation.setDuration(500);
+//        bounceInterpolator = new BounceInterpolator();
+//        scaleAnimation.setInterpolator(bounceInterpolator); // 바운스 효과
 
         // BottomNavigationView 설정
         topLayout = findViewById(R.id.top_layout);

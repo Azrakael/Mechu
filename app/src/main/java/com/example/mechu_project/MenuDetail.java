@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -68,9 +69,10 @@ public class MenuDetail extends AppCompatActivity {
     private Handler handler;
     private Runnable updateMessageRunnable;
     private BottomSheetDialog bottomSheetDialog;
+    private ToggleButton heartButton;
 
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    private static final String MY_SECRET_KEY = "sk-ㄴㄴ";
+    private static final String MY_SECRET_KEY = "sss";
     OkHttpClient client;
 
     @Override
@@ -80,6 +82,8 @@ public class MenuDetail extends AppCompatActivity {
 
         dbHelper = new DatabaseHelper(this);
         db = dbHelper.getWritableDatabase();
+
+        heartButton = findViewById(R.id.love);
 
         client = new OkHttpClient().newBuilder()
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -207,6 +211,15 @@ public class MenuDetail extends AppCompatActivity {
         scaleAnimation.setDuration(500);
         bounceInterpolator = new BounceInterpolator();
         scaleAnimation.setInterpolator(bounceInterpolator); // 바운스 효과
+
+        // 하트 버튼 클릭 리스너 설정
+        heartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleLikeButton();
+            }
+        });
+
     }
 
     private void callAPIForDetails(String menuName) {
@@ -335,7 +348,13 @@ public class MenuDetail extends AppCompatActivity {
                 break;
         }
 
-        prompt += "\nPlease provide the response in Korean.";
+        prompt += "\nAlways provide the response in the following format without any special characters or markdown:\n";
+        prompt += "1. (메뉴명)의 영양 정보: Provide detailed and friendly nutritional information about the menu item.\n\n";
+        prompt += "2. 섭취방법: Provide very detailed and friendly intake instructions.\n\n";
+        prompt += "3. 같이 먹으면 좋은 음식: Suggest good complementary dishes with detailed and friendly explanations.\n\n";
+        prompt += "4. 같이 먹으면 안좋은 음식: Mention dishes to avoid with detailed and friendly explanations.\n";
+        prompt += "Please provide the response in Korean and make it very friendly and detailed.";
+
         return prompt;
     }
 
@@ -387,6 +406,40 @@ public class MenuDetail extends AppCompatActivity {
         }
     }
 
+    public void onFavoriteButtonClick(View view) {
+        handleLikeButton();
+    }
+
+    private void handleLikeButton() {
+        String userId = getUserIdFromSharedPreferences();
+        if (userId == null) {
+            Toast.makeText(this, "User ID not found.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String likeDate = getCurrentDate();
+
+        if (heartButton.isChecked()) {
+            // 좋아요 기록 추가
+            dbHelper.insertLike(db, userId, likeDate, foodName);
+            Toast.makeText(this, foodName + "을(를) 좋아하시군요!", Toast.LENGTH_SHORT).show();
+        } else {
+            // 좋아요 기록 삭제
+            dbHelper.removeLike(db, userId, foodName);
+            Toast.makeText(this, foodName + "을(를) 좋아요에서 뺐어요", Toast.LENGTH_SHORT).show();
+        }
+
+        heartButton.startAnimation(scaleAnimation); // 애니메이션 효과 추가
+    }
+
+    private void updateLikeButtonState() {
+        String userId = getUserIdFromSharedPreferences();
+        if (userId != null) {
+            boolean isLiked = dbHelper.isFoodLiked(db, userId, foodName);
+            heartButton.setChecked(isLiked);
+        }
+    }
+
+
     private String getUserIdFromSharedPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
         return sharedPreferences.getString("user_id", null);
@@ -407,8 +460,4 @@ public class MenuDetail extends AppCompatActivity {
         return foodNum;
     }
 
-    public void onFavoriteButtonClick(View view) {
-        // 클릭한 버튼에 애니메이션 적용
-        view.startAnimation(scaleAnimation);
-    }
 }

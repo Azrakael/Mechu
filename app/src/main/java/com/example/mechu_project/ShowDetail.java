@@ -9,11 +9,14 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,6 +44,9 @@ import okhttp3.Response;
 
 public class ShowDetail extends AppCompatActivity {
 
+    ScaleAnimation scaleAnimation;
+    BounceInterpolator bounceInterpolator;
+
     private static final String TAG = "ShowDetail";
     private ImageView menuImageView;
     private TextView menuTitleTextView, menuCalorieTextView, menuProteinTextView, menuFatTextView, menuCarbohydrateTextView, menuDetailTextView, loadingTextView;
@@ -48,9 +54,10 @@ public class ShowDetail extends AppCompatActivity {
     private TextView proteinProgressText, carbsProgressText, fatProgressText;
     private Button button1; // 식단 추가 버튼
     private BottomSheetDialog bottomSheetDialog;
+    private ToggleButton heartButton;
 
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    private static final String MY_SECRET_KEY = "sk-ㄴㄴ";
+    private static final String MY_SECRET_KEY = "sss";
     OkHttpClient client;
     private Handler handler;
     private Runnable updateMessageRunnable;
@@ -62,10 +69,13 @@ public class ShowDetail extends AppCompatActivity {
     int proteinRatio;
     int fatRatio;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_detail);
+
+        
 
         client = new OkHttpClient().newBuilder()
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -88,6 +98,7 @@ public class ShowDetail extends AppCompatActivity {
         carbsProgressText = findViewById(R.id.carbsProgressText);
         fatProgressText = findViewById(R.id.fatProgressText);
         button1 = findViewById(R.id.button1); // 식단 추가 버튼
+        heartButton = findViewById(R.id.love);
 
         handler = new Handler();
 
@@ -198,6 +209,23 @@ public class ShowDetail extends AppCompatActivity {
                 bottomSheetDialog.show();
             }
         });
+
+        // 클릭시 하트가 채워지는 부분 지속시간
+        scaleAnimation = new ScaleAnimation(0.7f, 1.0f, 0.7f, 1.0f, Animation.RELATIVE_TO_SELF, 0.7f, Animation.RELATIVE_TO_SELF, 0.7f);
+        scaleAnimation.setDuration(500);
+        bounceInterpolator = new BounceInterpolator();
+        scaleAnimation.setInterpolator(bounceInterpolator); // 바운스 효과
+
+        // 하트 버튼 클릭 리스너 설정
+        heartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleLikeButton();
+            }
+        });
+
+
+
     }
 
     private void setCircularProgress(ProgressBar progressBar, double value, double maxValue, TextView textView, String label) {
@@ -345,7 +373,13 @@ public class ShowDetail extends AppCompatActivity {
                 break;
         }
 
-        prompt += "\nPlease provide the response in Korean.";
+        prompt += "\nAlways provide the response in the following format without any special characters or markdown:\n";
+        prompt += "1. (메뉴명)의 영양 정보: Provide detailed and friendly nutritional information about the menu item.\n\n";
+        prompt += "2. 섭취방법: Provide very detailed and friendly intake instructions.\n\n";
+        prompt += "3. 같이 먹으면 좋은 음식: Suggest good complementary dishes with detailed and friendly explanations.\n\n";
+        prompt += "4. 같이 먹으면 안좋은 음식: Mention dishes to avoid with detailed and friendly explanations.\n";
+        prompt += "Please provide the response in Korean and make it very friendly and detailed.";
+
         return prompt;
     }
 
@@ -376,6 +410,39 @@ public class ShowDetail extends AppCompatActivity {
 
         if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
             bottomSheetDialog.dismiss();
+        }
+    }
+
+    public void onFavoriteButtonClick(View view) {
+        handleLikeButton();
+    }
+
+    private void handleLikeButton() {
+        String userId = getUserIdFromSharedPreferences();
+        if (userId == null) {
+            Toast.makeText(this, "User ID not found.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String likeDate = getCurrentDate();
+
+        if (heartButton.isChecked()) {
+            // 좋아요 기록 추가
+            dbHelper.insertLike(dbHelper.getWritableDatabase(), userId, likeDate, foodName);
+            Toast.makeText(this, foodName + "을(를) 좋아하시군요!", Toast.LENGTH_SHORT).show();
+        } else {
+            // 좋아요 기록 삭제
+            dbHelper.removeLike(dbHelper.getWritableDatabase(), userId, foodName);
+            Toast.makeText(this, foodName + "을(를) 좋아요에서 뺐어요", Toast.LENGTH_SHORT).show();
+        }
+
+        heartButton.startAnimation(scaleAnimation); // 애니메이션 효과 추가
+    }
+
+    private void updateLikeButtonState() {
+        String userId = getUserIdFromSharedPreferences();
+        if (userId != null) {
+            boolean isLiked = dbHelper.isFoodLiked(dbHelper.getWritableDatabase(), userId, foodName);
+            heartButton.setChecked(isLiked);
         }
     }
 

@@ -20,9 +20,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -70,6 +73,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "FOREIGN KEY(food_num) REFERENCES food(food_num));");
 
 
+        db.execSQL("CREATE TABLE IF NOT EXISTS food_like ( " +
+                "like_num INTEGER PRIMARY KEY AUTOINCREMENT, " +  //자동증가
+                "user_id TEXT, " +
+                "like_date TEXT NOT NULL, " +
+                "food_name TEXT NOT NULL);");
+
+
         //기분 : 우울함 | 기분좋음 | 화남 | 지루함
         //날씨 : 비 | 쾌청 | 바람 | 눈
         db.execSQL("CREATE TABLE IF NOT EXISTS food ( " +
@@ -85,13 +95,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "category_name TEXT NOT NULL, " +
                 "is_low_carbon INTEGER DEFAULT 0);");
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS review ( " +
-                "review_id INTEGER PRIMARY KEY AUTOINCREMENT, " +  //자동증가
-                "user_id TEXT, " +
-                "review_date TEXT, " +
-                "review_like INTEGER, " +
-                "review_content TEXT, " +
-                "FOREIGN KEY(user_id) REFERENCES user(user_id));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS search ( " +
                 "search_num INTEGER PRIMARY KEY AUTOINCREMENT, " +  //자동증가
@@ -342,6 +345,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         println("onUpgrade 호출됨 : " + oldVersion + " -> " + newVersion);
         db.execSQL("DROP TABLE IF EXISTS meal_log");
         db.execSQL("DROP TABLE IF EXISTS food");
+        db.execSQL("DROP TABLE IF EXISTS food_like");
         db.execSQL("DROP TABLE IF EXISTS review");
         db.execSQL("DROP TABLE IF EXISTS search");
         db.execSQL("DROP TABLE IF EXISTS user");
@@ -762,44 +766,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return db.rawQuery("SELECT * FROM food WHERE category_name = '카페' ORDER BY RANDOM() LIMIT 4", null);
     }
 
-    // 사용자 맞춤 메뉴 추천을 위한 메서드
     public List<FoodItem> getRecommendedFoodItems(String userId) {
         SQLiteDatabase db = this.getReadableDatabase();
         List<FoodItem> recommendedFoodItems = new ArrayList<>();
 
-        String userQuery = "SELECT daily_calorie, daily_carbs, daily_protein, daily_fat, " +
-                "current_calorie, current_carbs, current_protein, current_fat " +
-                "FROM user WHERE user_id = ?";
+        // 사용자 칼로리 데이터 가져오기
+        String userQuery = "SELECT daily_calorie, current_calorie FROM user WHERE user_id = ?";
         Cursor userCursor = db.rawQuery(userQuery, new String[]{userId});
 
         if (userCursor != null && userCursor.moveToFirst()) {
             double dailyCalorie = userCursor.getDouble(userCursor.getColumnIndex("daily_calorie"));
-            double dailyCarbs = userCursor.getDouble(userCursor.getColumnIndex("daily_carbs"));
-            double dailyProtein = userCursor.getDouble(userCursor.getColumnIndex("daily_protein"));
-            double dailyFat = userCursor.getDouble(userCursor.getColumnIndex("daily_fat"));
-
             double currentCalorie = userCursor.getDouble(userCursor.getColumnIndex("current_calorie"));
-            double currentCarbs = userCursor.getDouble(userCursor.getColumnIndex("current_carbs"));
-            double currentProtein = userCursor.getDouble(userCursor.getColumnIndex("current_protein"));
-            double currentFat = userCursor.getDouble(userCursor.getColumnIndex("current_fat"));
-
-            double remainingCalorie = dailyCalorie - currentCalorie;
-            double remainingCarbs = dailyCarbs - currentCarbs;
-            double remainingProtein = dailyProtein - currentProtein;
-            double remainingFat = dailyFat - currentFat;
-
+            double remainingCalorie = dailyCalorie / 3 - currentCalorie;
             userCursor.close();
 
-            String foodQuery = "SELECT food_name, calorie, carbs, protein, fat, category_name " +
-                    "FROM food " +
-                    "ORDER BY ABS((calorie - ?)) + ABS((carbs - ?)) + ABS((protein - ?)) + ABS((fat - ?)) ASC " +
-                    "LIMIT 4";
-            Cursor foodCursor = db.rawQuery(foodQuery, new String[]{
-                    String.valueOf(remainingCalorie),
-                    String.valueOf(remainingCarbs),
-                    String.valueOf(remainingProtein),
-                    String.valueOf(remainingFat)
-            });
+            // 영양소 기반 추천 4개 가져오기
+            String foodQuery = "SELECT food_name, calorie, carbs, protein, fat, category_name FROM (" +
+                    "SELECT food_name, calorie, carbs, protein, fat, category_name FROM food " +
+                    "WHERE category_name != '카페' " +
+                    "ORDER BY ABS((calorie - ?)) " +
+                    ") ORDER BY RANDOM() LIMIT 4";
+            Cursor foodCursor = db.rawQuery(foodQuery, new String[]{String.valueOf(remainingCalorie)});
 
             if (foodCursor != null && foodCursor.moveToFirst()) {
                 do {
@@ -816,7 +803,121 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
         }
 
-        return recommendedFoodItems;
+        // 추가적인 추천 4개 가져오기
+        List<FoodItem> additionalRecommendedItems = getAdditionalRecommendedItems(userId);
+
+        // 부족한 추천 항목을 채우기 위해 영양소 기반 추천 추가
+        int additionalCountNeeded = 4 - additionalRecommendedItems.size();
+        if (additionalCountNeeded > 0) {
+            additionalRecommendedItems.addAll(getAdditionalNutrientBasedItems(additionalCountNeeded, recommendedFoodItems));
+        }
+
+        recommendedFoodItems.addAll(additionalRecommendedItems);
+
+        // 총 8개의 추천 메뉴를 셔플해서 반환
+        Collections.shuffle(recommendedFoodItems);
+        return recommendedFoodItems.size() > 8 ? recommendedFoodItems.subList(0, 8) : recommendedFoodItems;
+    }
+
+    // 추가적인 추천 항목을 가져오는 메서드
+    private List<FoodItem> getAdditionalRecommendedItems(String userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<FoodItem> additionalRecommendedItems = new ArrayList<>();
+
+        // 최근 검색어 기반 추천
+        String searchQuery = "SELECT food_name, calorie, carbs, protein, fat, category_name FROM food " +
+                "WHERE food_name IN (SELECT search_term FROM search WHERE user_id = ? ORDER BY search_date DESC LIMIT 4)";
+        Cursor searchCursor = db.rawQuery(searchQuery, new String[]{userId});
+
+        if (searchCursor != null && searchCursor.moveToFirst()) {
+            do {
+                String foodName = searchCursor.getString(searchCursor.getColumnIndex("food_name"));
+                double calorie = searchCursor.getDouble(searchCursor.getColumnIndex("calorie"));
+                double carbs = searchCursor.getDouble(searchCursor.getColumnIndex("carbs"));
+                double protein = searchCursor.getDouble(searchCursor.getColumnIndex("protein"));
+                double fat = searchCursor.getDouble(searchCursor.getColumnIndex("fat"));
+                String categoryName = searchCursor.getString(searchCursor.getColumnIndex("category_name"));
+
+                additionalRecommendedItems.add(new FoodItem(foodName, calorie, carbs, protein, fat, categoryName));
+            } while (searchCursor.moveToNext());
+            searchCursor.close();
+        }
+
+        // 최근 식사 기록 기반 추천
+        String mealLogQuery = "SELECT food_name, calorie, carbs, protein, fat, category_name FROM food " +
+                "WHERE food_num IN (SELECT food_num FROM meal_log WHERE user_id = ? ORDER BY meal_date DESC LIMIT 4)";
+        Cursor mealLogCursor = db.rawQuery(mealLogQuery, new String[]{userId});
+
+        if (mealLogCursor != null && mealLogCursor.moveToFirst()) {
+            do {
+                String foodName = mealLogCursor.getString(mealLogCursor.getColumnIndex("food_name"));
+                double calorie = mealLogCursor.getDouble(mealLogCursor.getColumnIndex("calorie"));
+                double carbs = mealLogCursor.getDouble(mealLogCursor.getColumnIndex("carbs"));
+                double protein = mealLogCursor.getDouble(mealLogCursor.getColumnIndex("protein"));
+                double fat = mealLogCursor.getDouble(mealLogCursor.getColumnIndex("fat"));
+                String categoryName = mealLogCursor.getString(mealLogCursor.getColumnIndex("category_name"));
+
+                additionalRecommendedItems.add(new FoodItem(foodName, calorie, carbs, protein, fat, categoryName));
+            } while (mealLogCursor.moveToNext());
+            mealLogCursor.close();
+        }
+
+        // 좋아하는 음식 기반 추천
+        String foodLikeQuery = "SELECT food_name, calorie, carbs, protein, fat, category_name FROM food " +
+                "WHERE food_name IN (SELECT food_name FROM food_like WHERE user_id = ? ORDER BY like_date DESC LIMIT 4)";
+        Cursor foodLikeCursor = db.rawQuery(foodLikeQuery, new String[]{userId});
+
+        if (foodLikeCursor != null && foodLikeCursor.moveToFirst()) {
+            do {
+                String foodName = foodLikeCursor.getString(foodLikeCursor.getColumnIndex("food_name"));
+                double calorie = foodLikeCursor.getDouble(foodLikeCursor.getColumnIndex("calorie"));
+                double carbs = foodLikeCursor.getDouble(foodLikeCursor.getColumnIndex("carbs"));
+                double protein = foodLikeCursor.getDouble(foodLikeCursor.getColumnIndex("protein"));
+                double fat = foodLikeCursor.getDouble(foodLikeCursor.getColumnIndex("fat"));
+                String categoryName = foodLikeCursor.getString(foodLikeCursor.getColumnIndex("category_name"));
+
+                additionalRecommendedItems.add(new FoodItem(foodName, calorie, carbs, protein, fat, categoryName));
+            } while (foodLikeCursor.moveToNext());
+            foodLikeCursor.close();
+        }
+
+        // 중복 제거 및 최대 4개 반환
+        Set<FoodItem> uniqueItems = new HashSet<>(additionalRecommendedItems);
+        additionalRecommendedItems = new ArrayList<>(uniqueItems);
+        Collections.shuffle(additionalRecommendedItems);
+        return additionalRecommendedItems.size() > 4 ? additionalRecommendedItems.subList(0, 4) : additionalRecommendedItems;
+    }
+
+    // 영양소 기반 추천 항목을 추가로 가져오는 메서드
+    private List<FoodItem> getAdditionalNutrientBasedItems(int count, List<FoodItem> existingItems) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        List<FoodItem> additionalItems = new ArrayList<>();
+        Set<String> existingNames = existingItems.stream().map(FoodItem::getFoodName).collect(Collectors.toSet());
+
+        // 추가 영양소 기반 추천
+        String foodQuery = "SELECT food_name, calorie, carbs, protein, fat, category_name FROM food " +
+                "WHERE category_name != '카페' " +
+                "ORDER BY RANDOM() LIMIT ?";
+        Cursor foodCursor = db.rawQuery(foodQuery, new String[]{String.valueOf(count)});
+
+        if (foodCursor != null && foodCursor.moveToFirst()) {
+            do {
+                String foodName = foodCursor.getString(foodCursor.getColumnIndex("food_name"));
+                if (existingNames.contains(foodName)) {
+                    continue;
+                }
+                double calorie = foodCursor.getDouble(foodCursor.getColumnIndex("calorie"));
+                double carbs = foodCursor.getDouble(foodCursor.getColumnIndex("carbs"));
+                double protein = foodCursor.getDouble(foodCursor.getColumnIndex("protein"));
+                double fat = foodCursor.getDouble(foodCursor.getColumnIndex("fat"));
+                String categoryName = foodCursor.getString(foodCursor.getColumnIndex("category_name"));
+
+                additionalItems.add(new FoodItem(foodName, calorie, carbs, protein, fat, categoryName));
+            } while (foodCursor.moveToNext());
+            foodCursor.close();
+        }
+
+        return additionalItems;
     }
 
     public void insertMealLog(SQLiteDatabase db, String userId, String mealDate, String mealTime, int foodNum) {
@@ -857,6 +958,25 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         return cursor;
+    }
+
+    public void insertLike(SQLiteDatabase db, String userId, String likeDate, String foodName) {
+        ContentValues values = new ContentValues();
+        values.put("user_id", userId);
+        values.put("like_date", likeDate);
+        values.put("food_name", foodName);
+        db.insert("food_like", null, values);
+    }
+
+    public void removeLike(SQLiteDatabase db, String userId, String foodName) {
+        db.delete("food_like", "user_id = ? AND food_name = ?", new String[]{userId, foodName});
+    }
+
+    public boolean isFoodLiked(SQLiteDatabase db, String userId, String foodName) {
+        Cursor cursor = db.rawQuery("SELECT 1 FROM food_like WHERE user_id = ? AND food_name = ?", new String[]{userId, foodName});
+        boolean isLiked = cursor.moveToFirst();
+        cursor.close();
+        return isLiked;
     }
 
 }

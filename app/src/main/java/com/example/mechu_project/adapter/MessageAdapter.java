@@ -2,6 +2,7 @@ package com.example.mechu_project.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,10 +27,17 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
     private static final String TAG = "MessageAdapter";
     private List<Message> messageList;
     private Context context;
+    private String userId;
 
     public MessageAdapter(List<Message> messageList, Context context) {
         this.messageList = messageList;
         this.context = context;
+        this.userId = getUserIdFromSharedPreferences();
+    }
+
+    private String getUserIdFromSharedPreferences() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("user_id", "Unknown User") + "님";
     }
 
     @NonNull
@@ -46,6 +54,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             holder.leftChatView.setVisibility(View.GONE);
             holder.rightChatView.setVisibility(View.VISIBLE);
             holder.rightChatTv.setText(message.getMessage());
+            holder.userId.setText(userId);
         } else {
             holder.rightChatView.setVisibility(View.GONE);
             holder.leftChatView.setVisibility(View.VISIBLE);
@@ -98,7 +107,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout leftChatView, rightChatView, menuRecommendationLayout;
-        TextView leftChatTv, rightChatTv, menuNameTextView, menuCalorieTextView;
+        TextView leftChatTv, rightChatTv, menuNameTextView, menuCalorieTextView, userId;
         ImageView menuImageView;
 
         public ViewHolder(@NonNull View itemView) {
@@ -111,6 +120,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.ViewHold
             menuNameTextView = itemView.findViewById(R.id.menuNameTextView);
             menuCalorieTextView = itemView.findViewById(R.id.menuCalorieTextView);
             menuImageView = itemView.findViewById(R.id.menuImageView);
+            userId = itemView.findViewById(R.id.userId); // userId TextView 추가
         }
     }
 }
