@@ -778,6 +778,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public Cursor getCurrentIntake(String userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT current_calorie, current_carbs, current_protein, current_fat FROM user WHERE user_id = ?";
+        return db.rawQuery(query, new String[]{userId});
+    }
+
 
     private static final String[] CATEGORIES = {"한식", "중식", "일식", "양식"};
     // 네 개의 카테고리 중에서 두 개를 랜덤으로 선택하는 메서드
@@ -803,6 +809,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return randomFoodItems;
     }
+
+    // 특정 날짜와 식사 시간에 대한 식단 로그 조회
+    public Cursor getMealLog(String userId, String mealDate, String mealTime) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT ml.*, f.food_name FROM meal_log ml INNER JOIN food f ON ml.food_num = f.food_num WHERE ml.user_id = ? AND ml.meal_date = ? AND ml.meal_time = ?";
+        return db.rawQuery(query, new String[]{userId, mealDate, mealTime});
+    }
+
+    // 식단 로그 삭제
+    public void deleteMealLog(String userId, String mealDate, String mealTime) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("meal_log", "user_id = ? AND meal_date = ? AND meal_time = ?",
+                new String[]{userId, mealDate, mealTime});
+    }
+
 
     // 카페 카테고리에서 랜덤으로 4개의 항목을 가져오는 메서드
     public Cursor getRandomCafeItems() {
