@@ -770,7 +770,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public Cursor getMealLog(String userId, String mealTime) {
+        if (userId == null || mealTime == null) {
+            throw new IllegalArgumentException("User ID and meal time cannot be null");
+        }
 
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT f.food_name, f.calorie " +
+                "FROM meal_log ml " +
+                "JOIN food f ON ml.food_num = f.food_num " +
+                "WHERE ml.user_id = ? AND ml.meal_time = ?";
+        return db.rawQuery(query, new String[]{userId, mealTime});
+    }
     // show 값이 0인 검색 기록을 가져오는 메서드
     public Cursor getVisibleSearchRecords(String userId) {
         SQLiteDatabase db = this.getReadableDatabase();

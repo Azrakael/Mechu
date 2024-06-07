@@ -18,8 +18,12 @@ public class FoodRecord extends AppCompatActivity {
     ImageView menuPlus1, menuPlus2, menuPlus3, backbutton, logoImage;
     private ProgressBar proteinProgressBar, carbsProgressBar, fatProgressBar;
     private TextView proteinProgressText, carbsProgressText, fatProgressText;
+    private TextView mFoodName, mFoodCal, mFoodName2, mFoodCal2;
+    private TextView lFoodName, lFoodCal, lFoodName2, lFoodCal2;
+    private TextView dFoodName, dFoodCal, dFoodName2, dFoodCal2;
     private DatabaseHelper dbHelper;
     private SharedPreferences sharedPreferences;
+    private String userId;  // userId 변수 추가
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +41,19 @@ public class FoodRecord extends AppCompatActivity {
         proteinProgressText = findViewById(R.id.proteinProgressText);
         carbsProgressText = findViewById(R.id.carbsProgressText);
         fatProgressText = findViewById(R.id.fatProgressText);
+
+        mFoodName = findViewById(R.id.m_food_name);
+        mFoodCal = findViewById(R.id.m_food_cal);
+        mFoodName2 = findViewById(R.id.m_food_name2);
+        mFoodCal2 = findViewById(R.id.m_food_cal2);
+        lFoodName = findViewById(R.id.l_food_name);
+        lFoodCal = findViewById(R.id.l_food_cal);
+        lFoodName2 = findViewById(R.id.l_food_name2);
+        lFoodCal2 = findViewById(R.id.l_food_cal2);
+        dFoodName = findViewById(R.id.d_food_name);
+        dFoodCal = findViewById(R.id.d_food_cal);
+        dFoodName2 = findViewById(R.id.d_food_name2);
+        dFoodCal2 = findViewById(R.id.d_food_cal2);
 
         dbHelper = new DatabaseHelper(this);
         sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
@@ -105,10 +122,12 @@ public class FoodRecord extends AppCompatActivity {
 
         // 섭취 정보를 가져와서 업데이트
         updateIntakeInfo();
+        // 아침, 점심, 저녁 메뉴 로드
+        loadMealLog();
     }
 
     private void updateIntakeInfo() {
-        String userId = getUserIdFromSharedPreferences();
+        userId = getUserIdFromSharedPreferences();  // userId 초기화
         if (userId == null) {
             Toast.makeText(this, "User ID not found.", Toast.LENGTH_SHORT).show();
             return;
@@ -129,6 +148,39 @@ public class FoodRecord extends AppCompatActivity {
             cursor.close();
         } else {
             Toast.makeText(this, "Failed to load intake data.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void loadMealLog() {
+        userId = getUserIdFromSharedPreferences();  // userId 초기화
+        if (userId == null) {
+            Toast.makeText(this, "User ID not found.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        loadMealLogForTime("아침", mFoodName, mFoodCal, mFoodName2, mFoodCal2);
+        loadMealLogForTime("점심", lFoodName, lFoodCal, lFoodName2, lFoodCal2);
+        loadMealLogForTime("저녁", dFoodName, dFoodCal, dFoodName2, dFoodCal2);
+    }
+
+    private void loadMealLogForTime(String mealTime, TextView foodName, TextView foodCal, TextView foodName2, TextView foodCal2) {
+        Cursor cursor = dbHelper.getMealLog(userId, mealTime);
+        if (cursor != null && cursor.moveToFirst()) {
+            foodName.setText(cursor.getString(cursor.getColumnIndex("food_name")));
+            foodCal.setText(cursor.getString(cursor.getColumnIndex("calorie")) + "kcal");
+            if (cursor.moveToNext()) {
+                foodName2.setText(cursor.getString(cursor.getColumnIndex("food_name")));
+                foodCal2.setText(cursor.getString(cursor.getColumnIndex("calorie")) + "kcal");
+            } else {
+                foodName2.setText("");
+                foodCal2.setText("");
+            }
+            cursor.close();
+        } else {
+            foodName.setText("");
+            foodCal.setText("");
+            foodName2.setText("");
+            foodCal2.setText("");
         }
     }
 
