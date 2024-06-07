@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
     public static String NAME = "0501_latest.db";
-    public static int VERSION = 15;
+    public static int VERSION = 16;
     private Context context;
     private static final String TAG = "DatabaseHelper";
 
@@ -102,6 +102,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "search_term TEXT NOT NULL, " +
                 "search_date TEXT NOT NULL, " +
                 "search_count INTEGER DEFAULT 0, " +
+                "show INTEGER DEFAULT 0, " + // 추가된 컬럼
                 "FOREIGN KEY(user_id) REFERENCES user(user_id));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS user ( " +
@@ -340,6 +341,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         println("onOpen 호출됨");
     }
 
+
+
+
+
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         println("onUpgrade 호출됨 : " + oldVersion + " -> " + newVersion);
@@ -350,6 +356,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS search");
         db.execSQL("DROP TABLE IF EXISTS user");
         onCreate(db);
+
+        // 기존 테이블을 삭제하지 않도록 변경합니다. 대신, 필요한 경우 기존 테이블을 수정합니다.
+        if (oldVersion < 15) {
+            // search 테이블에 show 컬럼 추가
+            db.execSQL("ALTER TABLE search ADD COLUMN show INTEGER DEFAULT 0;");
+        }
     }
 
     public void println(String data) {
@@ -714,7 +726,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ContentValues values = new ContentValues();
             values.put("search_count", searchCount);
             values.put("search_date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()));
-
+            values.put("show", 0); // show 값을 0으로 업데이트
             db.update("search", values, "user_id=? AND search_term=?", new String[]{userId, searchTerm});
         } else {
             // 기존 기록이 없는 경우 새 기록 추가
@@ -723,6 +735,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             values.put("search_term", searchTerm);
             values.put("search_date", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date()));
             values.put("search_count", 1);
+            values.put("show", 0); // show 값을 0으로 업데이트
 
             db.insert("search", null, values);
         }
@@ -732,6 +745,58 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         db.close();
+    }
+
+    public void updateUserProfileImage(String userId, String imagePath) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("profile_img", imagePath);
+        db.update("user", values, "user_id = ?", new String[]{userId});
+        db.close();
+    }
+
+
+    // show 값을 1로 업데이트하는 메서드
+    public void hideAllSearchRecords(String userId) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("show", 1);
+        db.update("search", values, "user_id=?", new String[]{userId});
+        db.close();
+    }
+
+
+    public void hideSearchRecord(String userId, String searchTerm) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("show", 1);
+        db.update("search", values, "user_id=? AND search_term=?", new String[]{userId, searchTerm});
+        db.close();
+    }
+
+    public Cursor getMealLog(String userId, String mealTime) {
+        if (userId == null || mealTime == null) {
+            throw new IllegalArgumentException("User ID and meal time cannot be null");
+        }
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT f.food_name, f.calorie " +
+                "FROM meal_log ml " +
+                "JOIN food f ON ml.food_num = f.food_num " +
+                "WHERE ml.user_id = ? AND ml.meal_time = ?";
+        return db.rawQuery(query, new String[]{userId, mealTime});
+    }
+    // show 값이 0인 검색 기록을 가져오는 메서드
+    public Cursor getVisibleSearchRecords(String userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.query("search", null, "user_id=? AND show=0", new String[]{userId}, null, null, "search_date DESC");
+    }
+
+
+    public Cursor getCurrentIntake(String userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT current_calorie, current_carbs, current_protein, current_fat FROM user WHERE user_id = ?";
+        return db.rawQuery(query, new String[]{userId});
     }
 
 
@@ -759,6 +824,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return randomFoodItems;
     }
+
+    // 특정 날짜와 식사 시간에 대한 식단 로그 조회
+    public Cursor getMealLog(String userId, String mealDate, String mealTime) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT ml.*, f.food_name FROM meal_log ml INNER JOIN food f ON ml.food_num = f.food_num WHERE ml.user_id = ? AND ml.meal_date = ? AND ml.meal_time = ?";
+        return db.rawQuery(query, new String[]{userId, mealDate, mealTime});
+    }
+
+    // 식단 로그 삭제
+    public void deleteMealLog(String userId, String mealDate, String mealTime) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("meal_log", "user_id = ? AND meal_date = ? AND meal_time = ?",
+                new String[]{userId, mealDate, mealTime});
+    }
+
 
     // 카페 카테고리에서 랜덤으로 4개의 항목을 가져오는 메서드
     public Cursor getRandomCafeItems() {

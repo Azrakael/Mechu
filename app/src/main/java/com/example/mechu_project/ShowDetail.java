@@ -1,5 +1,7 @@
 package com.example.mechu_project;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -20,6 +22,7 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -48,7 +51,7 @@ public class ShowDetail extends AppCompatActivity {
     BounceInterpolator bounceInterpolator;
 
     private static final String TAG = "ShowDetail";
-    private ImageView menuImageView;
+    private ImageView menuImageView, backbutton, logoImage;
     private TextView menuTitleTextView, menuCalorieTextView, menuProteinTextView, menuFatTextView, menuCarbohydrateTextView, menuDetailTextView, loadingTextView;
     private ProgressBar proteinProgressBar, carbsProgressBar, fatProgressBar;
     private TextView proteinProgressText, carbsProgressText, fatProgressText;
@@ -76,6 +79,23 @@ public class ShowDetail extends AppCompatActivity {
         setContentView(R.layout.activity_menu_detail);
 
         
+        backbutton = findViewById(R.id.backButton);
+        logoImage = findViewById(R.id.logoImage);
+
+        logoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(ShowDetail.this, MainActivity.class);
+                startActivity(it);
+            }
+        });
+
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         client = new OkHttpClient().newBuilder()
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -388,7 +408,6 @@ public class ShowDetail extends AppCompatActivity {
         return friendlyMessage;
     }
 
-
     private void handleMealLog(String mealTime) {
         String userId = getUserIdFromSharedPreferences();
         if (userId == null) {
@@ -403,10 +422,40 @@ public class ShowDetail extends AppCompatActivity {
             return;
         }
 
-        dbHelper.insertMealLog(dbHelper.getWritableDatabase(), userId, mealDate, mealTime, foodNum);
-        dbHelper.updateUserIntake(dbHelper.getWritableDatabase(), userId, calorie, carbohydrateRatio, proteinRatio, fatRatio);
+        // Check if a meal already exists for the given date and meal time
+        Cursor cursor = dbHelper.getMealLog(userId, mealDate, mealTime);
+        if (cursor != null && cursor.moveToFirst()) {
+            String existingFoodName = cursor.getString(cursor.getColumnIndex("food_name"));
+            cursor.close();
 
-        Toast.makeText(this, mealTime + " 식단에 추가되었습니다.", Toast.LENGTH_SHORT).show();
+            // Show a dialog to confirm replacement
+            new AlertDialog.Builder(this)
+                    .setTitle("식단 교체 확인")
+                    .setMessage(existingFoodName + "을(를) 삭제하고 " + foodName + "을(를) 추가할까요?")
+                    .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Remove the existing meal log
+                            dbHelper.deleteMealLog(userId, mealDate, mealTime);
+
+                            // Add the new meal log
+                            dbHelper.insertMealLog(dbHelper.getWritableDatabase(), userId, mealDate, mealTime, foodNum);
+                            dbHelper.updateUserIntake(dbHelper.getWritableDatabase(), userId, calorie, carbohydrateRatio, proteinRatio, fatRatio);
+
+                            Toast.makeText(ShowDetail.this, mealTime + " 식단이 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton("아니요", null)
+                    .show();
+        } else {
+            if (cursor != null) {
+                cursor.close();
+            }
+            // No existing meal log, directly add the new one
+            dbHelper.insertMealLog(dbHelper.getWritableDatabase(), userId, mealDate, mealTime, foodNum);
+            dbHelper.updateUserIntake(dbHelper.getWritableDatabase(), userId, calorie, carbohydrateRatio, proteinRatio, fatRatio);
+
+            Toast.makeText(this, mealTime + " 식단에 추가되었습니다.", Toast.LENGTH_SHORT).show();
+        }
 
         if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
             bottomSheetDialog.dismiss();

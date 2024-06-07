@@ -12,13 +12,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Calender extends AppCompatActivity {
 
-    ImageView backButton;
+    ImageView backButton, logoImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_calender);
 
         backButton = findViewById(R.id.backButton);
+        logoImage = findViewById(R.id.logoImage);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -28,5 +29,13 @@ public class Calender extends AppCompatActivity {
             }
         });
 
+
+        logoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(Calender.this,MainActivity.class);
+                startActivity(it);
+            }
+        });
     }
 }

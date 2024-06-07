@@ -1,9 +1,11 @@
 package com.example.mechu_project;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -79,6 +81,24 @@ public class MenuDetail extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_detail);
+
+        logoImage = findViewById(R.id.logoImage);
+        backbutton = findViewById(R.id.backButton);
+
+        logoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(MenuDetail.this, MainActivity.class);
+                startActivity(it);
+            }
+        });
+
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         dbHelper = new DatabaseHelper(this);
         db = dbHelper.getWritableDatabase();
@@ -389,17 +409,40 @@ public class MenuDetail extends AppCompatActivity {
             return;
         }
 
-        dbHelper.insertMealLog(db, userId, mealDate, mealTime, foodNum);
+        // Check if a meal already exists for the given date and meal time
+        Cursor cursor = dbHelper.getMealLog(userId, mealDate, mealTime);
+        if (cursor != null && cursor.moveToFirst()) {
+            String existingFoodName = cursor.getString(cursor.getColumnIndex("food_name"));
+            cursor.close();
 
-        // Intent에서 음식의 영양 정보를 가져옴
-        int calorie = getIntent().getIntExtra("CALORIE", 0);
-        int carbs = getIntent().getIntExtra("CARBS", 0);
-        int protein = getIntent().getIntExtra("PROTEIN", 0);
-        int fat = getIntent().getIntExtra("FAT", 0);
+            // Show a dialog to confirm replacement
+            new AlertDialog.Builder(this)
+                    .setTitle("식단 교체 확인")
+                    .setMessage(existingFoodName + "을(를) 삭제하고 " + foodName + "을(를) 추가할까요?")
+                    .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Remove the existing meal log
+                            dbHelper.deleteMealLog(userId, mealDate, mealTime);
 
-        dbHelper.updateUserIntake(db, userId, calorie, carbs, protein, fat);
+                            // Add the new meal log
+                            dbHelper.insertMealLog(db, userId, mealDate, mealTime, foodNum);
+                            dbHelper.updateUserIntake(db, userId, calorie, carbohydrateRatio, proteinRatio, fatRatio);
 
-        Toast.makeText(this, mealTime + " 식단에 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MenuDetail.this, mealTime + " 식단이 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton("아니요", null)
+                    .show();
+        } else {
+            if (cursor != null) {
+                cursor.close();
+            }
+            // No existing meal log, directly add the new one
+            dbHelper.insertMealLog(db, userId, mealDate, mealTime, foodNum);
+            dbHelper.updateUserIntake(db, userId, calorie, carbohydrateRatio, proteinRatio, fatRatio);
+
+            Toast.makeText(this, mealTime + " 식단에 추가되었습니다.", Toast.LENGTH_SHORT).show();
+        }
 
         if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
             bottomSheetDialog.dismiss();
