@@ -72,6 +72,7 @@ public class MenuDetail extends AppCompatActivity {
     private Runnable updateMessageRunnable;
     private BottomSheetDialog bottomSheetDialog;
     private ToggleButton heartButton;
+    private ImageView logoImage, backbutton;
 
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private static final String MY_SECRET_KEY = "sss";
@@ -239,6 +240,9 @@ public class MenuDetail extends AppCompatActivity {
                 handleLikeButton();
             }
         });
+
+        // 좋아요 버튼 상태 업데이트
+        updateLikeButtonState();
 
     }
 
@@ -477,7 +481,7 @@ public class MenuDetail extends AppCompatActivity {
     private void updateLikeButtonState() {
         String userId = getUserIdFromSharedPreferences();
         if (userId != null) {
-            boolean isLiked = dbHelper.isFoodLiked(db, userId, foodName);
+            boolean isLiked = dbHelper.isFoodLiked(dbHelper.getWritableDatabase(), userId, foodName);
             heartButton.setChecked(isLiked);
         }
     }

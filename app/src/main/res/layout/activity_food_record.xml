@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -93,26 +92,13 @@
                     android:textSize="20sp"
                     android:layout_marginTop="20dp"/>
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/proteinProgressText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/proteinProgressText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="8dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="g"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginLeft="5dp"/>
-                </LinearLayout>
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp" />
             </LinearLayout>
 
             <!-- 탄수화물 원형 프로그레스 바 -->
@@ -144,26 +130,13 @@
                     android:textSize="20sp"
                     android:layout_marginTop="20dp"/>
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/carbsProgressText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/carbsProgressText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="8dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="g"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginLeft="5dp"/>
-                </LinearLayout>
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp" />
             </LinearLayout>
 
             <!-- 지방 원형 프로그레스 바 -->
@@ -195,26 +168,13 @@
                     android:textSize="20sp"
                     android:layout_marginTop="20dp"/>
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/fatProgressText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:id="@+id/fatProgressText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="8dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="g"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginLeft="5dp"/>
-                </LinearLayout>
+                    android:textSize="14sp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp" />
             </LinearLayout>
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -246,319 +206,329 @@
                 android:textSize="13sp" />
         </LinearLayout>
 
-        <!--아침 레이아웃-->
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:fillViewport="true">
 
-            <!-- 아침 -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/basic_breakfast_food"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/basic_breakfast_food"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <TextView
-                    android:id="@+id/morning_food"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:text="아침>"
-                    android:textSize="25dp"
-                    android:clickable="true"
-                    app:layout_constraintStart_toEndOf="@id/basic_breakfast_food"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <ImageView
-                    android:id="@+id/menuPlus1"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/basic_plus"
-                    android:layout_marginStart="16dp"
-                    android:clickable="true"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!--아침 메뉴 -->
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/m_food_name"
-                    android:layout_width="0dp"
+                <!--아침 레이아웃-->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="밥도둑"
-                    android:textSize="18dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/m_food_cal"/>
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/m_food_cal"
-                    android:layout_width="0dp"
+                    <!-- 아침 -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageView
+                            android:id="@+id/basic_breakfast_food"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/basic_breakfast_food"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <TextView
+                            android:id="@+id/morning_food"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textStyle="bold"
+                            android:text="아침>"
+                            android:textSize="25dp"
+                            android:clickable="true"
+                            app:layout_constraintStart_toEndOf="@id/basic_breakfast_food"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+
+                        <ImageView
+                            android:id="@+id/menuPlus1"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/basic_plus"
+                            android:layout_marginStart="16dp"
+                            android:clickable="true"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <!--아침 메뉴 및 영양 정보-->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:id="@+id/m_food_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textSize="18dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/m_food_cal"/>
+
+                        <TextView
+                            android:id="@+id/m_food_cal"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textSize="20dp"
+                            android:layout_marginStart="8dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/m_food_name"
+                            android:gravity="right"/>
+
+                        <TextView
+                            android:id="@+id/morning_carbs_info"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="탄수화물: 0g"
+                            android:visibility="gone"
+                            android:gravity="start"
+                            app:layout_constraintStart_toStartOf="@id/m_food_name"
+                            app:layout_constraintTop_toBottomOf="@id/m_food_name" />
+
+                        <TextView
+                            android:id="@+id/morning_protein_info"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="단백질: 0g"
+                            android:visibility="gone"
+                            android:gravity="start"
+                            app:layout_constraintStart_toStartOf="@id/m_food_name"
+                            app:layout_constraintTop_toBottomOf="@id/morning_carbs_info" />
+
+                        <TextView
+                            android:id="@+id/morning_fat_info"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="지방: 0g"
+                            android:visibility="gone"
+                            android:gravity="start"
+                            app:layout_constraintStart_toStartOf="@id/m_food_name"
+                            app:layout_constraintTop_toBottomOf="@id/morning_protein_info" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+
+                <!--점심 레이아웃-->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="30"
-                    android:textSize="20dp"
-                    android:layout_marginLeft="230dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/m_food_name" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:orientation="vertical">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                    <!-- 점심 -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/m_food_name2"
-                    android:layout_width="0dp"
+                        <ImageView
+                            android:id="@+id/basic_launch_food"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/basic_launch_food"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/launch_food"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:text="점심 >"
+                            android:textSize="25dp"
+                            android:textStyle="bold"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toEndOf="@id/basic_launch_food"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <ImageView
+                            android:id="@+id/menuPlus2"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginStart="16dp"
+                            android:background="@drawable/basic_plus"
+                            android:clickable="true"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <!--점심 메뉴 및 영양 정보-->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
+
+                        <TextView
+                            android:id="@+id/l_food_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textSize="18dp"
+                            app:layout_constraintEnd_toStartOf="@+id/l_food_cal"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/l_food_cal"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textSize="20dp"
+                            android:layout_marginStart="8dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/l_food_name"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:gravity="right" />
+
+                        <TextView
+                            android:id="@+id/lunch_carbs_info"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="탄수화물: 0g"
+                            android:gravity="start"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="@id/l_food_name"
+                            app:layout_constraintTop_toBottomOf="@id/l_food_name" />
+
+                        <TextView
+                            android:id="@+id/lunch_protein_info"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="단백질: 0g"
+                            android:gravity="start"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="@id/l_food_name"
+                            app:layout_constraintTop_toBottomOf="@id/lunch_carbs_info" />
+
+                        <TextView
+                            android:id="@+id/lunch_fat_info"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="지방: 0g"
+                            android:gravity="start"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="@id/l_food_name"
+                            app:layout_constraintTop_toBottomOf="@id/lunch_protein_info" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+
+                <!--저녁 레이아웃-->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="비빔밥"
-                    android:textSize="18dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/m_food_cal2"/>
+                    android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/m_food_cal2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="50"
-                    android:textSize="20dp"
-                    android:layout_marginLeft="230dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/m_food_name2" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    <!-- 저녁 -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/basic_spot"
-                android:layout_gravity="center"/>
-        </LinearLayout>
+                        <ImageView
+                            android:id="@+id/basic_dinner_food"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/basic_dinner_food"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <!--점심 레이아웃-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/dinner_food"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="저녁 >"
+                            android:textSize="25dp"
+                            android:textStyle="bold"
+                            android:clickable="true"
+                            app:layout_constraintStart_toEndOf="@id/basic_dinner_food"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <!-- 점심 -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/menuPlus3"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:background="@drawable/basic_plus"
+                            android:layout_marginStart="16dp"
+                            android:clickable="true"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent"/>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <ImageView
-                    android:id="@+id/basic_launch_food"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/basic_launch_food"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <!--저녁 메뉴 및 영양 정보-->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp">
 
-                <TextView
-                    android:id="@+id/launch_food"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:text="점심 >"
-                    android:textSize="25dp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@id/basic_launch_food"
-                    app:layout_constraintTop_toTopOf="parent" />
+                        <TextView
+                            android:id="@+id/d_food_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textSize="18dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/d_food_cal"/>
 
-                <ImageView
-                    android:id="@+id/menuPlus2"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginStart="16dp"
-                    android:background="@drawable/basic_plus"
-                    android:clickable="true"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:id="@+id/d_food_cal"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:textSize="20dp"
+                            android:layout_marginStart="8dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/d_food_name"
+                            android:gravity="right"/>
 
-            <!--점심 메뉴 -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
 
-                <TextView
-                    android:id="@+id/l_food_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="밥도둑"
-                    android:textSize="18dp"
-                    app:layout_constraintEnd_toStartOf="@+id/l_food_cal"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                        <TextView
+                            android:id="@+id/dinner_carbs_info"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="탄수화물: 0g"
+                            android:gravity="start"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="@id/d_food_name"
+                            app:layout_constraintTop_toBottomOf="@id/d_food_name" />
 
-                <TextView
-                    android:id="@+id/l_food_cal"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="30"
-                    android:textSize="20dp"
-                    android:layout_marginLeft="230dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/l_food_name"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                        <TextView
+                            android:id="@+id/dinner_protein_info"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="단백질: 0g"
+                            android:gravity="start"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="@id/d_food_name"
+                            app:layout_constraintTop_toBottomOf="@id/dinner_carbs_info" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/l_food_name2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="비빔밥"
-                    android:textSize="18dp"
-                    app:layout_constraintEnd_toStartOf="@+id/l_food_cal2"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/l_food_cal2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="50"
-                    android:textSize="20dp"
-                    android:layout_marginLeft="230dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/l_food_name2"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center"
-                android:background="@drawable/basic_spot" />
-        </LinearLayout>
-
-        <!--저녁 레이아웃-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:orientation="vertical">
-
-            <!-- 저녁 -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <ImageView
-                    android:id="@+id/basic_dinner_food"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/basic_dinner_food"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <TextView
-                    android:id="@+id/dinner_food"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="저녁 >"
-                    android:textSize="25dp"
-                    android:textStyle="bold"
-                    android:clickable="true"
-                    app:layout_constraintStart_toEndOf="@id/basic_dinner_food"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-
-                <ImageView
-                    android:id="@+id/menuPlus3"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/basic_plus"
-                    android:layout_marginStart="16dp"
-                    android:clickable="true"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!--저녁 메뉴 -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
-
-                <TextView
-                    android:id="@+id/d_food_name"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="밥도둑"
-                    android:textSize="18dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/d_food_cal"/>
-
-                <TextView
-                    android:id="@+id/d_food_cal"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="30"
-                    android:textSize="20dp"
-                    android:layout_marginLeft="230dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/d_food_name" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/d_food_name2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="비빔밥"
-                    android:textSize="18dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/d_food_cal2"/>
-
-                <TextView
-                    android:id="@+id/d_food_cal2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="50"
-                    android:layout_marginLeft="230dp"
-                    android:textSize="20dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/d_food_name2" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:background="@drawable/basic_spot"
-                android:layout_gravity="center"/>
-        </LinearLayout>
+                        <TextView
+                            android:id="@+id/dinner_fat_info"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="지방: 0g"
+                            android:gravity="start"
+                            android:visibility="gone"
+                            app:layout_constraintStart_toStartOf="@id/d_food_name"
+                            app:layout_constraintTop_toBottomOf="@id/dinner_protein_info" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

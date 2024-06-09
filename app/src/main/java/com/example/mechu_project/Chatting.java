@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -15,6 +16,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mechu_project.adapter.MessageAdapter;
@@ -44,6 +46,7 @@ public class Chatting extends AppCompatActivity {
     RecyclerView recyclerView;
     EditText etMsg;
     ImageButton btnSend;
+    ImageView backbutton, logoImage;
 
     List<Message> messageList;
     MessageAdapter messageAdapter;
@@ -64,6 +67,24 @@ public class Chatting extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
 
+        logoImage = findViewById(R.id.logoImage);
+        backbutton = findViewById(R.id.backButton);
+
+        logoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(Chatting.this, MainActivity.class);
+                startActivity(it);
+            }
+        });
+
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(Chatting.this, Recommend.class);
+                startActivity(it);
+            }
+        });
 
         client = new OkHttpClient().newBuilder()
                 .connectTimeout(60, TimeUnit.SECONDS)
@@ -153,7 +174,6 @@ public class Chatting extends AppCompatActivity {
             }
 
             if (validateMenuInResponse(originalResponse, menuNames)) {
-                // 메뉴명에 **를 각 메뉴에 한 번만 적용하도록 수정
                 StringBuilder modifiedResponse = new StringBuilder(originalResponse);
                 for (String menuName : menuNames) {
                     String target = "\\*\\*" + menuName + "\\*\\*";
@@ -170,7 +190,7 @@ public class Chatting extends AppCompatActivity {
                 extractMenuAndShowDetails(modifiedResponse.toString());
             } else {
                 addToChat("잠깐 문제가 생겼어요ㅠㅠ 조금만 더 기다려주세요", Message.SENT_BY_SYSTEM);
-                callAPI(messageList.get(messageList.size() - 2).getMessage()); // 이전 질문을 다시 사용
+                callAPI(messageList.get(messageList.size() - 2).getMessage());
             }
         });
     }
@@ -180,13 +200,13 @@ public class Chatting extends AppCompatActivity {
         SQLiteDatabase db = MyApplication.getDatabase();
 
         for (String menuName : menuNames) {
-            Log.d(TAG, "Validating menu: " + menuName); // 메뉴명을 로그에 기록
+            Log.d(TAG, "Validating menu: " + menuName);
             Cursor cursor = db.rawQuery("SELECT food_name FROM food WHERE food_name = ?", new String[]{menuName});
             if (!cursor.moveToFirst()) {
                 isValid = false;
-                Log.d(TAG, "Menu not found in database: " + menuName); // 데이터베이스에서 메뉴를 찾지 못한 경우 로그에 기록
+                Log.d(TAG, "Menu not found in database: " + menuName);
             } else {
-                Log.d(TAG, "Menu found in database: " + menuName); // 데이터베이스에서 메뉴를 찾은 경우 로그에 기록
+                Log.d(TAG, "Menu found in database: " + menuName);
             }
             cursor.close();
         }
@@ -220,7 +240,7 @@ public class Chatting extends AppCompatActivity {
 
             String imgFilePath = new File(getFilesDir(), "images/" + foodImgPath).getAbsolutePath();
 
-            Log.d(TAG, "Showing details for menu: " + menuName); // 메뉴 상세 정보를 로그에 기록
+            Log.d(TAG, "Showing details for menu: " + menuName);
 
             Message menuMessage = new Message(null, Message.SENT_BY_SYSTEM, foodName, imgFilePath, calorie);
             runOnUiThread(() -> {
@@ -229,7 +249,7 @@ public class Chatting extends AppCompatActivity {
                 recyclerView.smoothScrollToPosition(messageAdapter.getItemCount());
             });
         } else {
-            Log.d(TAG, "Menu not found in showMenuDetails: " + menuName); // `showMenuDetails`에서 메뉴를 찾지 못한 경우 로그에 기록
+            Log.d(TAG, "Menu not found in showMenuDetails: " + menuName);
             addToChat("요청하신 메뉴를 찾을 수 없습니다. 😔", Message.SENT_BY_SYSTEM);
         }
         cursor.close();

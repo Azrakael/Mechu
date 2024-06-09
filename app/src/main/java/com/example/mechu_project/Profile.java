@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -28,12 +29,11 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
-import com.bumptech.glide.Glide;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -44,11 +44,13 @@ public class Profile extends AppCompatActivity {
 
     LinearLayout calender, description;
     Button modify_myprofile, logout;
-    TextView mytype, mytype1, myname;
+    TextView mytype, mytype1, myname, loveitCount, viewLikedFoods;
     private String userId;
     private Spinner goalSpinner;
     ImageView backbutton, logoImage;
     CircleImageView profileImage;
+    LinearLayout linearLayoutContainer;
+    DatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +61,16 @@ public class Profile extends AppCompatActivity {
         calender = findViewById(R.id.calender);
         logout = findViewById(R.id.logout);
         description = findViewById(R.id.description);
+        viewLikedFoods = findViewById(R.id.loveit);
         mytype = findViewById(R.id.mytype);
         mytype1 = findViewById(R.id.mytype1);
         myname = findViewById(R.id.myname);
+        loveitCount = findViewById(R.id.loveit_count);
         logoImage = findViewById(R.id.logoImage);
         backbutton = findViewById(R.id.backButton);
         profileImage = findViewById(R.id.profileImage);
+        linearLayoutContainer = findViewById(R.id.linearLayoutContainer);
+        dbHelper = new DatabaseHelper(this);
 
         logoImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +96,6 @@ public class Profile extends AppCompatActivity {
         String userName = preferences.getString("user_name", "아아아");
         myname.setText(userName);
 
-        DatabaseHelper dbHelper = new DatabaseHelper(this);
         Cursor cursor = dbHelper.getReadableDatabase().rawQuery(
                 "SELECT exercise_type, profile_img FROM user WHERE user_id = ?",
                 new String[]{userId});
@@ -117,6 +122,9 @@ public class Profile extends AppCompatActivity {
             }
         }
         cursor.close();
+
+        // 좋아요 수 가져오기 및 설정
+        updateLikeCount();
 
         description.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,6 +187,37 @@ public class Profile extends AppCompatActivity {
                 }
             }
         });
+
+        // 좋아요된 음식 데이터 가져오기 및 다른 액티비티로 전송
+        viewLikedFoods.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Cursor likedFoodsCursor = dbHelper.getLikedFoods(userId);
+                ArrayList<String> likedFoods = new ArrayList<>();
+
+                while (likedFoodsCursor.moveToNext()) {
+                    String foodName = likedFoodsCursor.getString(likedFoodsCursor.getColumnIndex("food_name"));
+                    likedFoods.add(foodName);
+                }
+                likedFoodsCursor.close();
+
+                Intent intent = new Intent(Profile.this, LikeList.class);
+                intent.putStringArrayListExtra("liked_foods", likedFoods);
+                startActivity(intent);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 좋아요 수 업데이트
+        updateLikeCount();
+    }
+
+    private void updateLikeCount() {
+        int likeCount = dbHelper.getLikeCount(userId);
+        loveitCount.setText(String.valueOf(likeCount));
     }
 
     private void openImageChooser() {

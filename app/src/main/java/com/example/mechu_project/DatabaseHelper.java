@@ -41,8 +41,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    // 특정 음식 이름으로 데이터베이스에서 검색하는 메서드
-
 
     // 음식 정보를 가져오는 메서드
     public Cursor getFoodInfo(String searchText) {
@@ -85,7 +83,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS food ( " +
                 "food_num INTEGER PRIMARY KEY AUTOINCREMENT, " +  //자동증가
                 "food_name TEXT NOT NULL UNIQUE, " +
-                "food_img TEXT, " + // BLOB에서 TEXT로 변경
+                "food_img TEXT, " +
                 "calorie REAL NOT NULL, " +
                 "carbs REAL NOT NULL, " +
                 "protein REAL NOT NULL, " +
@@ -116,7 +114,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "height REAL NOT NULL, " +
                 "weight REAL NOT NULL, " +
                 "age INTEGER NOT NULL, " +
-                "profile_img BLOB, " +
+                "profile_img TEXT, " +
                 "target_weight REAL, " +
                 "daily_calorie REAL, " +
                 "daily_carbs REAL, " +
@@ -793,10 +791,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+
     public Cursor getCurrentIntake(String userId) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT current_calorie, current_carbs, current_protein, current_fat FROM user WHERE user_id = ?";
-        return db.rawQuery(query, new String[]{userId});
+        return db.rawQuery(
+                "SELECT current_calorie, current_carbs, current_protein, current_fat, daily_calorie, daily_carbs, daily_protein, daily_fat " +
+                        "FROM user WHERE user_id = ?", new String[]{userId});
     }
 
 
@@ -1057,6 +1057,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         boolean isLiked = cursor.moveToFirst();
         cursor.close();
         return isLiked;
+    }
+
+    // 좋아요 수를 가져오는 메서드
+    public int getLikeCount(String userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT COUNT(*) FROM food_like WHERE user_id = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{userId});
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
+    }
+
+    // 좋아요된 음식 정보를 가져오는 메서드
+    public Cursor getLikedFoods(String userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT f.food_name, f.food_img, f.calorie " +
+                "FROM food f " +
+                "JOIN food_like fl ON f.food_name = fl.food_name " +
+                "WHERE fl.user_id = ?";
+        return db.rawQuery(query, new String[]{userId});
+    }
+
+    public Cursor getNutrientInfo(String userId, String mealTime) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT SUM(f.carbs) as carbs, SUM(f.protein) as protein, SUM(f.fat) as fat " +
+                "FROM meal_log ml " +
+                "JOIN food f ON ml.food_num = f.food_num " +
+                "WHERE ml.user_id = ? AND ml.meal_time = ?";
+        return db.rawQuery(query, new String[]{userId, mealTime});
+    }
+
+    public String getProfileImagePath(String userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT profile_img FROM user WHERE user_id = ?", new String[]{userId});
+        if (cursor != null && cursor.moveToFirst()) {
+            String profileImagePath = cursor.getString(cursor.getColumnIndex("profile_img"));
+            cursor.close();
+            return profileImagePath;
+        }
+        if (cursor != null) {
+            cursor.close();
+        }
+        return null;
     }
 
 }

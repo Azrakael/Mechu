@@ -257,26 +257,23 @@ public class SearchResult extends AppCompatActivity {
             return;
         }
 
-        // Check if a meal already exists for the given date and meal time
         Cursor cursor = dbHelper.getMealLog(userId, mealDate, mealTime);
         if (cursor != null && cursor.moveToFirst()) {
             String existingFoodName = cursor.getString(cursor.getColumnIndex("food_name"));
             cursor.close();
 
-            // Show a dialog to confirm replacement
             new AlertDialog.Builder(this)
                     .setTitle("식단 교체 확인")
                     .setMessage(existingFoodName + "을(를) 삭제하고 " + foodName + "을(를) 추가할까요?")
                     .setPositiveButton("네", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            // Remove the existing meal log
                             dbHelper.deleteMealLog(userId, mealDate, mealTime);
 
-                            // Add the new meal log
                             dbHelper.insertMealLog(db, userId, mealDate, mealTime, foodNum);
                             dbHelper.updateUserIntake(db, userId, calorie, carbs, protein, fat);
 
                             Toast.makeText(SearchResult.this, mealTime + " 식단이 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                            returnToFoodRecord();
                         }
                     })
                     .setNegativeButton("아니요", null)
@@ -285,16 +282,23 @@ public class SearchResult extends AppCompatActivity {
             if (cursor != null) {
                 cursor.close();
             }
-            // No existing meal log, directly add the new one
             dbHelper.insertMealLog(db, userId, mealDate, mealTime, foodNum);
             dbHelper.updateUserIntake(db, userId, calorie, carbs, protein, fat);
 
             Toast.makeText(this, mealTime + " 식단에 추가되었습니다.", Toast.LENGTH_SHORT).show();
+            returnToFoodRecord();
         }
 
         if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
             bottomSheetDialog.dismiss();
         }
+    }
+
+    private void returnToFoodRecord() {
+        Intent intent = new Intent(SearchResult.this, FoodRecord.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private String getUserIdFromSharedPreferences() {

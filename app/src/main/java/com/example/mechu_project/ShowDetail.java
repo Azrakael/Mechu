@@ -244,7 +244,8 @@ public class ShowDetail extends AppCompatActivity {
             }
         });
 
-
+        // 좋아요 버튼 상태 업데이트
+        updateLikeButtonState();
 
     }
 
@@ -494,6 +495,7 @@ public class ShowDetail extends AppCompatActivity {
             heartButton.setChecked(isLiked);
         }
     }
+
 
     private String getUserIdFromSharedPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);

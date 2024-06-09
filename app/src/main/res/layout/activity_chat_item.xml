@@ -110,7 +110,8 @@
                 android:textColor="@color/black"
                 android:textSize="18sp" />
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/userImageView"
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:src="@drawable/user_ic" />
