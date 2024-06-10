@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 //메뉴추천
 public class Description extends AppCompatActivity {
 
-    ImageView backButton;
+    ImageView backButton, logoImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,6 +20,7 @@ public class Description extends AppCompatActivity {
         setContentView(R.layout.activity_description);
 
         backButton = findViewById(R.id.backButton);
+        logoImage = findViewById(R.id.logoImage);
 
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -29,6 +30,14 @@ public class Description extends AppCompatActivity {
             }
         });
 
+
+        logoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(Description.this,MainActivity.class);
+                startActivity(it);
+            }
+        });
 
 
 

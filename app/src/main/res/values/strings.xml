@@ -14,6 +14,12 @@
         <item>힘든 운동 (일주일에 6~7회)</item>
     </string-array>
 
+    <string-array name="nutrients_array">
+        <item>탄수화물</item>
+        <item>단백질</item>
+        <item>지방</item>
+    </string-array>
+
 
     <string name="congratulation">   야호! 메츄의 가족이 되었어요\n
                 건강한 메뉴추천 기대해주세요!</string>

@@ -1,36 +1,37 @@
 package com.example.mechu_project;
 
-import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.Button;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-import android.content.SharedPreferences;
+import android.util.Log;
+import android.widget.Toast;
+
 import java.util.HashSet;
 import java.util.Set;
-import android.util.Log;
 
 public class Search extends AppCompatActivity {
-    ImageView search_search1, backButton23; // 검색 이미지 및 뒤로가기 버튼
-    LinearLayout search_search; // 검색 이미지, EditText 부분을 담는 레이아웃
+    ImageView search_search1, backButton23;
+    LinearLayout search_search;
     View black_line;
     EditText edittext;
-    Button deleteAllButton; // 전체 삭제 버튼
-    ChipGroup chipGroup; // Chip을 추가할 ChipGroup 선언
+    Button deleteAllButton;
+    ChipGroup chipGroup;
     Button cancel;
 
-    private DatabaseHelper dbHelper; // dbHelper 선언
+    private DatabaseHelper dbHelper;
     private static final String KEY_CHIPS = "chips";
     private SharedPreferences sharedPreferences;
 
@@ -46,21 +47,13 @@ public class Search extends AppCompatActivity {
         deleteAllButton = findViewById(R.id.deleteAllButton);
         cancel = findViewById(R.id.cancel);
         backButton23 = findViewById(R.id.backButton23);
-        backButton23.bringToFront();
-
-        // DatabaseHelper 초기화
-        dbHelper = new DatabaseHelper(this);
-
-        // SharedPreferences 초기화 (최근 검색어 저장을 위해)
-        sharedPreferences = getSharedPreferences("SearchPrefs", MODE_PRIVATE);
-
-        // 검색 버튼과 ChipGroup 연결
         chipGroup = findViewById(R.id.chip_group);
 
-        // black_line 초기 상태를 INVISIBLE로 설정
+        dbHelper = new DatabaseHelper(this);
+        sharedPreferences = getSharedPreferences("SearchPrefs", MODE_PRIVATE);
+
         black_line.setVisibility(View.INVISIBLE);
 
-        // 저장된 칩들을 로드
         loadChips();
 
         backButton23.setOnClickListener(new View.OnClickListener() {
@@ -81,146 +74,124 @@ public class Search extends AppCompatActivity {
         });
 
         search_search.setOnClickListener(new View.OnClickListener() {
-            private boolean isClicked = false; // 클릭 상태를 추적하는 변수
+            private boolean isClicked = false;
 
             @Override
             public void onClick(View v) {
                 if (isClicked) {
-                    return; // 이미 클릭되었으면 아무 작업도 하지 않음
+                    return;
                 }
 
-                isClicked = true; // 클릭 상태를 true로 변경
-
-                // 검은 선을 보이게 하기
-                black_line.setVisibility(View.VISIBLE);
-                backButton23.setVisibility(View.VISIBLE);
-
-                // search_search1 이동 애니메이션
-                search_search1.animate()
-                        .translationX(850)
-                        .translationY(30)
-                        .setDuration(500)
-                        .setInterpolator(new AccelerateDecelerateInterpolator())
-                        .start();
-
-                // 취소가 이동
-                cancel.animate()
-                        .translationX(300) // 이동할 거리
-                        .setDuration(500) // 애니메이션 지속 시간
-                        .setInterpolator(new AccelerateDecelerateInterpolator())
-                        .start();
-
-                // 뒤로가기 버튼 생성
-
-                // black_line 초기 위치 설정 및 초기 길이 설정
-                black_line.setTranslationX(-850);
-                ViewGroup.LayoutParams params = black_line.getLayoutParams();
-                params.width = 850; // 최종 길이를 미리 설정
-                black_line.setLayoutParams(params);
-
-                // black_line 이동 애니메이션
-                black_line.animate()
-                        .translationX(0) // 최종 위치로 이동
-                        .setDuration(500)
-                        .setInterpolator(new AccelerateDecelerateInterpolator())
-                        .withEndAction(new Runnable() {
-                            @Override
-                            public void run() {
-                                // 애니메이션 종료 시 검은 선 숨기기
-                                black_line.setVisibility(View.INVISIBLE);
-                                // edittext 보이게 하기
-                                edittext.setVisibility(View.VISIBLE);
-                                // edittext에 포커스 주기
-                                edittext.requestFocus();
-                                // 키보드 표시하기
-                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                if (imm != null) {
-                                    imm.showSoftInput(edittext, InputMethodManager.SHOW_IMPLICIT);
-                                }
-                            }
-                        })
-                        .start();
+                isClicked = true;
+                handleSearchClick();
             }
         });
 
-        // 검색 버튼 클릭 이벤트 리스너 추가
         search_search1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String searchText = edittext.getText().toString().trim();
-                LinearLayout noResult = findViewById(R.id.noresult);
-                DatabaseHelper dbHelper = new DatabaseHelper(Search.this);
-                LinearLayout favoritesearch = findViewById(R.id.favoritesearch);
-
-                // SharedPreferences에서 사용자 ID 가져옴
-                SharedPreferences userPrefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
-                String userId = userPrefs.getString("user_id", null);
-
-                // 데이터베이스에서 음식 정보 가져오기
-                Cursor cursor = dbHelper.getFoodInfo(searchText);
-
-                if (cursor != null && cursor.getCount() > 0) {
-                    // 검색 결과가 있는 경우
-                    addChip(searchText);
-                    saveChips();
-                    edittext.setText("");
-
-                    // 검색 기록 저장
-                    if (userId != null) {
-                        dbHelper.insertOrUpdateSearchRecord(userId, searchText);
-                    }
-
-                    Intent intent = new Intent(Search.this, SearchResult.class);
-                    intent.putExtra("SEARCH_TERM", searchText);
-                    startActivity(intent);
-                } else {
-                    // 검색 결과가 없는 경우
-                    noResult.setVisibility(View.VISIBLE); // 메시지 보이기
-                    favoritesearch.setVisibility(View.INVISIBLE); // 인기 검색어 안보이게
-                }
-
-                // 커서 닫기
-                if (cursor != null) {
-                    cursor.close();
-                }
+                performSearch();
             }
         });
 
-        // 전체 삭제 버튼 클릭 리스너 추가
         deleteAllButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                chipGroup.removeAllViews(); // ChipGroup 내의 모든 뷰(Chip)를 삭제
-                saveChips(); // 빈 상태 저장
+                SharedPreferences userPrefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+                String userId = userPrefs.getString("user_id", null);
+
+                if (userId != null) {
+                    dbHelper.hideAllSearchRecords(userId);
+                }
+
+                chipGroup.removeAllViews();
+                saveChips();
             }
         });
     }
 
-    // 칩을 ChipGroup에 추가
     private void addChip(String text) {
+        if (isChipExists(text)) {
+            return;
+        }
+
         Chip chip = new Chip(this);
         chip.setText(text);
         chip.setCloseIconVisible(true);
         chip.setOnCloseIconClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                chipGroup.removeView(chip); // Chip 삭제
-                saveChips(); // 칩 삭제 후 저장
+                chipGroup.removeView(chip);
+                saveChips();
             }
         });
 
-        // 칩 클릭 리스너 추가
         chip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                edittext.setText(chip.getText().toString()); // 칩 텍스트를 EditText에 설정
+                handleChipClick(chip.getText().toString());
             }
         });
 
-        chipGroup.addView(chip); // ChipGroup에 Chip 추가
+        chipGroup.addView(chip);
     }
 
-    // 칩들을 저장
+    private boolean isChipExists(String text) {
+        for (int i = 0; i < chipGroup.getChildCount(); i++) {
+            Chip chip = (Chip) chipGroup.getChildAt(i);
+            if (chip.getText().toString().equals(text)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void handleChipClick(String chipText) {
+        edittext.setText(chipText);
+        handleSearchClick();
+    }
+
+    private void handleSearchClick() {
+        black_line.setVisibility(View.VISIBLE);
+        backButton23.setVisibility(View.VISIBLE);
+
+        search_search1.animate()
+                .translationX(850)
+                .translationY(30)
+                .setDuration(500)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .start();
+
+        cancel.animate()
+                .translationX(300)
+                .setDuration(500)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .start();
+
+        black_line.setTranslationX(-850);
+        ViewGroup.LayoutParams params = black_line.getLayoutParams();
+        params.width = 850;
+        black_line.setLayoutParams(params);
+
+        black_line.animate()
+                .translationX(0)
+                .setDuration(500)
+                .setInterpolator(new AccelerateDecelerateInterpolator())
+                .withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        black_line.setVisibility(View.INVISIBLE);
+                        edittext.setVisibility(View.VISIBLE);
+                        edittext.requestFocus();
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        if (imm != null) {
+                            imm.showSoftInput(edittext, InputMethodManager.SHOW_IMPLICIT);
+                        }
+                    }
+                })
+                .start();
+    }
+
     private void saveChips() {
         Set<String> chipsSet = new HashSet<>();
         for (int i = 0; i < chipGroup.getChildCount(); i++) {
@@ -230,11 +201,55 @@ public class Search extends AppCompatActivity {
         sharedPreferences.edit().putStringSet(KEY_CHIPS, chipsSet).apply();
     }
 
-    // 저장된 칩들을 로드
     private void loadChips() {
+        chipGroup.removeAllViews();
         Set<String> chipsSet = sharedPreferences.getStringSet(KEY_CHIPS, new HashSet<>());
         for (String chipText : chipsSet) {
             addChip(chipText);
+        }
+    }
+
+    private void performSearch() {
+        String searchText = edittext.getText().toString().trim();
+        Log.d("performSearch", "Search text: " + searchText);
+
+        if (searchText.isEmpty()) {
+            Toast.makeText(this, "메츄가 검색어 입력 안하면 혼내", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        LinearLayout noResult = findViewById(R.id.noresult);
+        LinearLayout favoritesearch = findViewById(R.id.favoritesearch);
+
+        SharedPreferences userPrefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String userId = userPrefs.getString("user_id", null);
+
+        if (userId != null) {
+            dbHelper.insertOrUpdateSearchRecord(userId, searchText);
+            Log.d("performSearch", "Inserted or updated search record for user: " + userId);
+        }
+
+        Cursor cursor = dbHelper.getFoodInfo(searchText);
+
+        if (cursor != null && cursor.getCount() > 0) {
+            Log.d("performSearch", "Search results found: " + cursor.getCount());
+            if (!isChipExists(searchText)) {
+                addChip(searchText);
+                saveChips();
+            }
+            edittext.setText("");
+
+            Intent intent = new Intent(Search.this, SearchResult.class);
+            intent.putExtra("SEARCH_TERM", searchText);
+            startActivity(intent);
+        } else {
+            Log.d("performSearch", "No search results found.");
+            noResult.setVisibility(View.VISIBLE);
+            favoritesearch.setVisibility(View.INVISIBLE);
+        }
+
+        if (cursor != null) {
+            cursor.close();
         }
     }
 }

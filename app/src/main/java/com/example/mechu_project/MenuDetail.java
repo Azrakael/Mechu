@@ -1,9 +1,11 @@
 package com.example.mechu_project;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -23,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -68,9 +71,11 @@ public class MenuDetail extends AppCompatActivity {
     private Handler handler;
     private Runnable updateMessageRunnable;
     private BottomSheetDialog bottomSheetDialog;
+    private ToggleButton heartButton;
+    private ImageView logoImage, backbutton;
 
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    private static final String MY_SECRET_KEY = "ssss";
+    private static final String MY_SECRET_KEY = "sss";
     OkHttpClient client;
 
     @Override
@@ -78,8 +83,28 @@ public class MenuDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu_detail);
 
+        logoImage = findViewById(R.id.logoImage);
+        backbutton = findViewById(R.id.backButton);
+
+        logoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(MenuDetail.this, MainActivity.class);
+                startActivity(it);
+            }
+        });
+
+        backbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         dbHelper = new DatabaseHelper(this);
         db = dbHelper.getWritableDatabase();
+
+        heartButton = findViewById(R.id.love);
 
         client = new OkHttpClient().newBuilder()
                 .connectTimeout(30, TimeUnit.SECONDS)
@@ -207,6 +232,18 @@ public class MenuDetail extends AppCompatActivity {
         scaleAnimation.setDuration(500);
         bounceInterpolator = new BounceInterpolator();
         scaleAnimation.setInterpolator(bounceInterpolator); // 바운스 효과
+
+        // 하트 버튼 클릭 리스너 설정
+        heartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleLikeButton();
+            }
+        });
+
+        // 좋아요 버튼 상태 업데이트
+        updateLikeButtonState();
+
     }
 
     private void callAPIForDetails(String menuName) {
@@ -335,7 +372,13 @@ public class MenuDetail extends AppCompatActivity {
                 break;
         }
 
-        prompt += "\nPlease provide the response in Korean.";
+        prompt += "\nAlways provide the response in the following format without any special characters or markdown:\n";
+        prompt += "1. (메뉴명)의 영양 정보: Provide detailed and friendly nutritional information about the menu item.\n\n";
+        prompt += "2. 섭취방법: Provide very detailed and friendly intake instructions.\n\n";
+        prompt += "3. 같이 먹으면 좋은 음식: Suggest good complementary dishes with detailed and friendly explanations.\n\n";
+        prompt += "4. 같이 먹으면 안좋은 음식: Mention dishes to avoid with detailed and friendly explanations.\n";
+        prompt += "Please provide the response in Korean and make it very friendly and detailed.";
+
         return prompt;
     }
 
@@ -370,22 +413,79 @@ public class MenuDetail extends AppCompatActivity {
             return;
         }
 
-        dbHelper.insertMealLog(db, userId, mealDate, mealTime, foodNum);
+        // Check if a meal already exists for the given date and meal time
+        Cursor cursor = dbHelper.getMealLog(userId, mealDate, mealTime);
+        if (cursor != null && cursor.moveToFirst()) {
+            String existingFoodName = cursor.getString(cursor.getColumnIndex("food_name"));
+            cursor.close();
 
-        // Intent에서 음식의 영양 정보를 가져옴
-        int calorie = getIntent().getIntExtra("CALORIE", 0);
-        int carbs = getIntent().getIntExtra("CARBS", 0);
-        int protein = getIntent().getIntExtra("PROTEIN", 0);
-        int fat = getIntent().getIntExtra("FAT", 0);
+            // Show a dialog to confirm replacement
+            new AlertDialog.Builder(this)
+                    .setTitle("식단 교체 확인")
+                    .setMessage(existingFoodName + "을(를) 삭제하고 " + foodName + "을(를) 추가할까요?")
+                    .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Remove the existing meal log
+                            dbHelper.deleteMealLog(userId, mealDate, mealTime);
 
-        dbHelper.updateUserIntake(db, userId, calorie, carbs, protein, fat);
+                            // Add the new meal log
+                            dbHelper.insertMealLog(db, userId, mealDate, mealTime, foodNum);
+                            dbHelper.updateUserIntake(db, userId, calorie, carbohydrateRatio, proteinRatio, fatRatio);
 
-        Toast.makeText(this, mealTime + " 식단에 추가되었습니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(MenuDetail.this, mealTime + " 식단이 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton("아니요", null)
+                    .show();
+        } else {
+            if (cursor != null) {
+                cursor.close();
+            }
+            // No existing meal log, directly add the new one
+            dbHelper.insertMealLog(db, userId, mealDate, mealTime, foodNum);
+            dbHelper.updateUserIntake(db, userId, calorie, carbohydrateRatio, proteinRatio, fatRatio);
+
+            Toast.makeText(this, mealTime + " 식단에 추가되었습니다.", Toast.LENGTH_SHORT).show();
+        }
 
         if (bottomSheetDialog != null && bottomSheetDialog.isShowing()) {
             bottomSheetDialog.dismiss();
         }
     }
+
+    public void onFavoriteButtonClick(View view) {
+        handleLikeButton();
+    }
+
+    private void handleLikeButton() {
+        String userId = getUserIdFromSharedPreferences();
+        if (userId == null) {
+            Toast.makeText(this, "User ID not found.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        String likeDate = getCurrentDate();
+
+        if (heartButton.isChecked()) {
+            // 좋아요 기록 추가
+            dbHelper.insertLike(db, userId, likeDate, foodName);
+            Toast.makeText(this, foodName + "을(를) 좋아하시군요!", Toast.LENGTH_SHORT).show();
+        } else {
+            // 좋아요 기록 삭제
+            dbHelper.removeLike(db, userId, foodName);
+            Toast.makeText(this, foodName + "을(를) 좋아요에서 뺐어요", Toast.LENGTH_SHORT).show();
+        }
+
+        heartButton.startAnimation(scaleAnimation); // 애니메이션 효과 추가
+    }
+
+    private void updateLikeButtonState() {
+        String userId = getUserIdFromSharedPreferences();
+        if (userId != null) {
+            boolean isLiked = dbHelper.isFoodLiked(dbHelper.getWritableDatabase(), userId, foodName);
+            heartButton.setChecked(isLiked);
+        }
+    }
+
 
     private String getUserIdFromSharedPreferences() {
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
@@ -407,8 +507,4 @@ public class MenuDetail extends AppCompatActivity {
         return foodNum;
     }
 
-    public void onFavoriteButtonClick(View view) {
-        // 클릭한 버튼에 애니메이션 적용
-        view.startAnimation(scaleAnimation);
-    }
 }

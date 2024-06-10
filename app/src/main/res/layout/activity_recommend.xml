@@ -4,15 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:id="@+id/mainLayout"
     android:background="@color/mechu">
-
 
     <!-- 뒤로 가기 버튼 -->
     <ImageView
-        android:id="@+id/backButton"
+        android:id="@+id/backButton33"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:src="@drawable/ic_back"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,10 +21,11 @@
 
     <!-- 로고 이미지 -->
     <ImageView
-        android:id="@+id/logoImage"
+        android:id="@+id/logoImage23"
         android:layout_width="150dp"
         android:layout_height="60dp"
         android:src="@drawable/mechulogo"
+        android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
@@ -35,9 +37,168 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        app:layout_constraintTop_toBottomOf="@+id/logoImage"
+        app:layout_constraintTop_toBottomOf="@+id/logoImage23"
         android:background="@android:color/black"/>
 
+    <!-- 동적 레이아웃 -->
+    <TextView
+        android:id="@+id/option1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/ripple_effect"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="옵션 1"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@+id/logoImage23"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/option2"
+        app:layout_constraintDimensionRatio="1:1"
+        android:layout_marginTop="46dp"
+        android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/option2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/ripple_effect"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="옵션 2"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@+id/logoImage23"
+        app:layout_constraintStart_toEndOf="@+id/option1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        android:layout_marginTop="46dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/option3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/ripple_effect"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="옵션 3"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@+id/option1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/option4"
+        app:layout_constraintDimensionRatio="1:1"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/option4"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/ripple_effect"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="옵션 4"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@+id/option2"
+        app:layout_constraintStart_toEndOf="@+id/option3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintDimensionRatio="1:1"
+        android:visibility="gone" />
+
+    <!-- 기분이 어떠세요?? 박스 -->
+    <TextView
+        android:id="@+id/moodBox"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="46dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/ripple_effect"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="기분이 어떠세요??"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/tellUsContainer"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toStartOf="@+id/weatherBox"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/logoImage23"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <!-- 오늘 날씨는 어때요? 박스 -->
+    <TextView
+        android:id="@+id/weatherBox"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="46dp"
+        android:background="@drawable/ripple_effect"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="오늘 날씨는 어때요?"
+        android:textColor="@android:color/black"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/tellUsContainer"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/moodBox"
+        app:layout_constraintTop_toBottomOf="@id/logoImage23"
+        app:layout_constraintVertical_bias="0.0"
+        android:clickable="true"
+        android:focusable="true" />
+
+    <!-- 우리 메추에게 직접 말해주세요! 맞춤 메뉴를 추천해드릴게요!! 박스와 캐릭터 로고 -->
+    <LinearLayout
+        android:id="@+id/tellUsContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@drawable/ripple_effect"
+        android:padding="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/moodBox"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="50dp"
+        android:gravity="center_vertical"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/characterLogo"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/characterlogo"
+            android:layout_marginEnd="8dp" />
+
+        <TextView
+            android:id="@+id/tellUsBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="우리 메추에게 직접 말해주세요!\n맞춤 메뉴를 추천해드릴게요!!"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/infoText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GPT API가 연동된 메츄가 \n당신에게 꼭 맞는 맞춤 메뉴를 \n 추천해드려요!"
+        android:textColor="#A9A9A9"
+        android:textSize="16sp"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/tellUsContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
