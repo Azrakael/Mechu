@@ -60,7 +60,7 @@ public class SearchResult extends AppCompatActivity {
         food_detail = findViewById(R.id.food_detail);
         buttonFavorite1 = findViewById(R.id.buttonFavorite1);
         noResult = findViewById(R.id.noresult);
-        favoritesearch = findViewById(R.id.favoritesearch);
+       // favoritesearch = findViewById(R.id.favoritesearch);
 
         dbHelper = new DatabaseHelper(this);
         db = dbHelper.getWritableDatabase();

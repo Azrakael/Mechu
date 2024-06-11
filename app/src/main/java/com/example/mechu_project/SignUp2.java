@@ -139,8 +139,7 @@ public class SignUp2 extends AppCompatActivity {
                     return;
                 }
 
-                // Check if the ID already exists in the database
-                DatabaseHelper dbHelper = new DatabaseHelper(SignUp2.this);
+                 DatabaseHelper dbHelper = new DatabaseHelper(SignUp2.this);
                 boolean isUserIdAvailable = checkUserIdAvailability(dbHelper, userId);
 
                 if (isUserIdAvailable) {

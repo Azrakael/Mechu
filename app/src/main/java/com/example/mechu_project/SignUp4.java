@@ -77,7 +77,6 @@ public class SignUp4 extends AppCompatActivity {
                     dailyFat = calculateDailyFat(dailyCalories, 0.3); // 지방 비율 30%
                 }
 
-                // Update user details in database
                 ContentValues values = new ContentValues();
                 values.put("tdee", tdee);
                 values.put("exercise_type", activityLevel);

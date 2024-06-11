@@ -219,7 +219,7 @@ public class Search extends AppCompatActivity {
         }
 
         LinearLayout noResult = findViewById(R.id.noresult);
-        LinearLayout favoritesearch = findViewById(R.id.favoritesearch);
+       // LinearLayout favoritesearch = findViewById(R.id.favoritesearch);
 
         SharedPreferences userPrefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
         String userId = userPrefs.getString("user_id", null);
@@ -245,7 +245,7 @@ public class Search extends AppCompatActivity {
         } else {
             Log.d("performSearch", "No search results found.");
             noResult.setVisibility(View.VISIBLE);
-            favoritesearch.setVisibility(View.INVISIBLE);
+            //favoritesearch.setVisibility(View.INVISIBLE);
         }
 
         if (cursor != null) {
