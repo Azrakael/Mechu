@@ -31,6 +31,7 @@ public class LikeList extends AppCompatActivity {
     ScaleAnimation scaleAnimation;
     BounceInterpolator bounceInterpolator;
     ImageView backbutton, logoImage;
+    TextView noLikesMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +49,14 @@ public class LikeList extends AppCompatActivity {
         bounceInterpolator = new BounceInterpolator();
         scaleAnimation.setInterpolator(bounceInterpolator);
 
-        if (likedFoods != null) {
+        noLikesMessage = findViewById(R.id.no_likes_message); // 좋아요 없는 경우 메시지 TextView
+
+        if (likedFoods != null && !likedFoods.isEmpty()) {
             for (String foodName : likedFoods) {
                 addFoodDetail(foodName);
             }
+        } else {
+            noLikesMessage.setVisibility(View.VISIBLE); // 좋아요한 음식이 없을 경우 메시지 표시
         }
 
         // 뒤로 가기 버튼 및 로고 설정
