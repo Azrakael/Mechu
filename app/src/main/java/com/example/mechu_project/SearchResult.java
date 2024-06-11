@@ -50,7 +50,7 @@ public class SearchResult extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
 
-        // 뷰 초기화
+
         resultText = findViewById(R.id.ResultText);
         search_search1 = findViewById(R.id.search_search1);
         backButton1 = findViewById(R.id.backButton1);
@@ -75,7 +75,7 @@ public class SearchResult extends AppCompatActivity {
             new LoadFoodInfoTask().execute(initialSearchTerm); // AsyncTask 실행
         }
 
-        // 돋보기 이미지 클릭 시
+
         search_search1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,7 +92,7 @@ public class SearchResult extends AppCompatActivity {
         });
     }
 
-    // 검색 수행 메서드
+    // 검색 수행
     private void performSearch() {
         String searchText = resultText.getText().toString().trim();
         if (searchText.isEmpty()) {
@@ -103,20 +103,20 @@ public class SearchResult extends AppCompatActivity {
         updateSearchResult(searchText);
     }
 
-    // 검색어 저장 메서드
+    // 검색어 저장
     private void saveSearchTerm(String searchTerm) {
         Set<String> chipsSet = sharedPreferences.getStringSet(KEY_CHIPS, new HashSet<>());
         chipsSet.add(searchTerm);
         sharedPreferences.edit().putStringSet(KEY_CHIPS, chipsSet).apply();
     }
 
-    // EditText 업데이트 부분
+    // EditText 업데이트
     private void updateSearchResult(String searchTerm) {
         resultText.setText(searchTerm);
         new LoadFoodInfoTask().execute(searchTerm); // AsyncTask 실행
     }
 
-    // 음식 정보를 비동기적으로 가져오는 AsyncTask
+    //AsyncTask
     private class LoadFoodInfoTask extends AsyncTask<String, Void, Cursor> {
         @Override
         protected Cursor doInBackground(String... params) {
@@ -199,7 +199,7 @@ public class SearchResult extends AppCompatActivity {
                         }
                     });
 
-                    // Add button click listeners for meal logging
+                    // 식단에 추가
                     foodItemLayout.findViewById(R.id.buttonBreakfast).setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

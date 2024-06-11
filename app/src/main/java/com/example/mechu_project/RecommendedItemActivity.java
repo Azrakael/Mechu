@@ -80,7 +80,8 @@ public class RecommendedItemActivity extends AppCompatActivity {
 
 
     private void setRecommendationTitle(String tagType, String tagValue) {
-        // SharedPreferences에서 사용자명 가져오기
+
+
         SharedPreferences sharedPreferences = getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         String username = sharedPreferences.getString("user_name", "사용자");
 

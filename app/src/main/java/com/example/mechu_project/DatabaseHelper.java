@@ -342,8 +342,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
 
-
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         println("onUpgrade 호출됨 : " + oldVersion + " -> " + newVersion);

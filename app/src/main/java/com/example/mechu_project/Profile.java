@@ -58,7 +58,7 @@ public class Profile extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         modify_myprofile = findViewById(R.id.modify_myprofile);
-        calender = findViewById(R.id.calender);
+        //calender = findViewById(R.id.calender);
         logout = findViewById(R.id.logout);
         description = findViewById(R.id.description);
         viewLikedFoods = findViewById(R.id.loveit);
@@ -88,11 +88,11 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        // SharedPreferences에서 사용자 ID 가져오기
+        // SharedPreferences에서 사용자 ID
         SharedPreferences preferences = getSharedPreferences("user_prefs", MODE_PRIVATE);
         userId = preferences.getString("user_id", null);
 
-        // SharedPreferences에서 사용자 이름 가져오기
+        // SharedPreferences에서 사용자 이름
         String userName = preferences.getString("user_name", "아아아");
         myname.setText(userName);
 
@@ -123,8 +123,7 @@ public class Profile extends AppCompatActivity {
         }
         cursor.close();
 
-        // 좋아요 수 가져오기 및 설정
-        updateLikeCount();
+         updateLikeCount();
 
         description.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,13 +141,13 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        calender.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent it = new Intent(Profile.this, Calender.class);
-                startActivity(it);
-            }
-        });
+ //       calender.setOnClickListener(new View.OnClickListener() {
+ //                @Override
+ //           public void onClick(View view) {
+ //               Intent it = new Intent(Profile.this, Calender.class);
+ //               startActivity(it);
+ //           }
+ //       });
 
         Button logoutButton = findViewById(R.id.logout);
         logoutButton.setOnClickListener(new View.OnClickListener() {
@@ -168,7 +167,7 @@ public class Profile extends AppCompatActivity {
             }
         });
 
-        // 이미지 클릭 이벤트
+        // 이미지 클릭 시 사진 설정
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

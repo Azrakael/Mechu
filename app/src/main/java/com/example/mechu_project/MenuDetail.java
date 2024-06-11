@@ -51,8 +51,7 @@ import okhttp3.Response;
 
 public class MenuDetail extends AppCompatActivity {
 
-    // 하트 클릭시 색이 채워지는 애니메이션 추가 효과
-    ScaleAnimation scaleAnimation;
+     ScaleAnimation scaleAnimation;
     BounceInterpolator bounceInterpolator;
 
     Button button1;
@@ -112,8 +111,7 @@ public class MenuDetail extends AppCompatActivity {
                 .readTimeout(30, TimeUnit.SECONDS)
                 .build();
 
-        // Intent에서 데이터 가져오기
-        Intent intent = getIntent();
+         Intent intent = getIntent();
         if (intent != null) {
             foodName = intent.getStringExtra("FOOD_NAME");
             calorie = intent.getIntExtra("CALORIE", 0);
@@ -138,7 +136,7 @@ public class MenuDetail extends AppCompatActivity {
             TextView menuCarbohydrate = findViewById(R.id.menuCarbohydrate);
             menuCarbohydrate.setText("탄수화물 함량: " + carbohydrateRatio + "g");
 
-            // 이미지 뷰 설정
+            // 이미지 뷰
             ImageView menuImage = findViewById(R.id.menuImage);
             if (imagePath != null) {
                 File imageFile = new File(imagePath);
@@ -413,22 +411,22 @@ public class MenuDetail extends AppCompatActivity {
             return;
         }
 
-        // Check if a meal already exists for the given date and meal time
+        // 식단이 이미 존재하면 교체
         Cursor cursor = dbHelper.getMealLog(userId, mealDate, mealTime);
         if (cursor != null && cursor.moveToFirst()) {
             String existingFoodName = cursor.getString(cursor.getColumnIndex("food_name"));
             cursor.close();
 
-            // Show a dialog to confirm replacement
+            //  식단 교체 다이얼로그
             new AlertDialog.Builder(this)
                     .setTitle("식단 교체 확인")
                     .setMessage(existingFoodName + "을(를) 삭제하고 " + foodName + "을(를) 추가할까요?")
                     .setPositiveButton("네", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            // Remove the existing meal log
+
                             dbHelper.deleteMealLog(userId, mealDate, mealTime);
 
-                            // Add the new meal log
+
                             dbHelper.insertMealLog(db, userId, mealDate, mealTime, foodNum);
                             dbHelper.updateUserIntake(db, userId, calorie, carbohydrateRatio, proteinRatio, fatRatio);
 
@@ -441,7 +439,7 @@ public class MenuDetail extends AppCompatActivity {
             if (cursor != null) {
                 cursor.close();
             }
-            // No existing meal log, directly add the new one
+
             dbHelper.insertMealLog(db, userId, mealDate, mealTime, foodNum);
             dbHelper.updateUserIntake(db, userId, calorie, carbohydrateRatio, proteinRatio, fatRatio);
 

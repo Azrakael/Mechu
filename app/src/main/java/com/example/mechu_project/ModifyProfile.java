@@ -102,7 +102,7 @@ public class ModifyProfile extends AppCompatActivity {
         goalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         goalSpinner.setAdapter(goalAdapter);
 
-        // Set initial selection for goalSpinner
+
         if (goal != null) {
             int goalPosition = goalAdapter.getPosition(goal);
             goalSpinner.setSelection(goalPosition);
@@ -134,7 +134,6 @@ public class ModifyProfile extends AppCompatActivity {
             }
         });
 
-        // 완료 버튼 클릭 리스너 설정
         completeSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -216,7 +215,6 @@ public class ModifyProfile extends AppCompatActivity {
                 Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
                 profileImage.setImageBitmap(bitmap);
 
-                // 이미지가 추가되었음을 알리는 토스트 메시지
                 Toast.makeText(this, "이미지가 추가되었습니다!", Toast.LENGTH_SHORT).show();
             }
         }

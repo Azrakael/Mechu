@@ -122,7 +122,7 @@ public class ShowDetail extends AppCompatActivity {
 
         handler = new Handler();
 
-        // 인텐트에서 데이터 가져오기
+        //데이터 가져오기
         String menuName = getIntent().getStringExtra("menuName");
         Log.d(TAG, "Received menuName: " + menuName);
 
@@ -137,7 +137,7 @@ public class ShowDetail extends AppCompatActivity {
             proteinRatio = cursor.getInt(cursor.getColumnIndexOrThrow("protein"));
             fatRatio = cursor.getInt(cursor.getColumnIndexOrThrow("fat"));
 
-            // 데이터 설정
+
             menuTitleTextView.setText(foodName);
             menuCalorieTextView.setText(String.format("%s kcal", calorie));
             menuCarbohydrateTextView.setText(String.format("탄수화물: %s g", carbohydrateRatio));
@@ -423,22 +423,22 @@ public class ShowDetail extends AppCompatActivity {
             return;
         }
 
-        // Check if a meal already exists for the given date and meal time
+        //이미 존재하는 식단이면 교체
         Cursor cursor = dbHelper.getMealLog(userId, mealDate, mealTime);
         if (cursor != null && cursor.moveToFirst()) {
             String existingFoodName = cursor.getString(cursor.getColumnIndex("food_name"));
             cursor.close();
 
-            // Show a dialog to confirm replacement
+            // 식단 존재시 교체 다이얼로그
             new AlertDialog.Builder(this)
                     .setTitle("식단 교체 확인")
                     .setMessage(existingFoodName + "을(를) 삭제하고 " + foodName + "을(를) 추가할까요?")
                     .setPositiveButton("네", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            // Remove the existing meal log
+                            //이미 있으면 제거
                             dbHelper.deleteMealLog(userId, mealDate, mealTime);
 
-                            // Add the new meal log
+                           //새로 추가
                             dbHelper.insertMealLog(dbHelper.getWritableDatabase(), userId, mealDate, mealTime, foodNum);
                             dbHelper.updateUserIntake(dbHelper.getWritableDatabase(), userId, calorie, carbohydrateRatio, proteinRatio, fatRatio);
 
@@ -451,7 +451,6 @@ public class ShowDetail extends AppCompatActivity {
             if (cursor != null) {
                 cursor.close();
             }
-            // No existing meal log, directly add the new one
             dbHelper.insertMealLog(dbHelper.getWritableDatabase(), userId, mealDate, mealTime, foodNum);
             dbHelper.updateUserIntake(dbHelper.getWritableDatabase(), userId, calorie, carbohydrateRatio, proteinRatio, fatRatio);
 

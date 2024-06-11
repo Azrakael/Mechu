@@ -22,6 +22,9 @@ public class Description extends AppCompatActivity {
         backButton = findViewById(R.id.backButton);
         logoImage = findViewById(R.id.logoImage);
 
+
+
+        //버튼 클릭시 내 정보로 이동
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -30,7 +33,7 @@ public class Description extends AppCompatActivity {
             }
         });
 
-
+        //버튼 클릭시 메인페이지로 이동
         logoImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
