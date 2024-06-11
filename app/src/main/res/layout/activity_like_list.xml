@@ -51,6 +51,18 @@
                     android:background="@android:color/black" />
             </LinearLayout>
 
+            <!-- 좋아요한 음식이 없는 경우 메시지 -->
+            <TextView
+                android:id="@+id/no_likes_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="좋아하는 음식이 없는거 같아요 ㅜ"
+                android:visibility="gone"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:textColor="@android:color/darker_gray"
+                android:layout_marginTop="20dp" />
+
             <!-- 동적으로 추가될 음식 목록 -->
         </LinearLayout>
     </ScrollView>
