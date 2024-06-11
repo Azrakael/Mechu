@@ -74,7 +74,7 @@ public class MenuDetail extends AppCompatActivity {
     private ImageView logoImage, backbutton;
 
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    private static final String MY_SECRET_KEY = "sss";
+    private static final String MY_SECRET_KEY = "sㄴㄴss";
     OkHttpClient client;
 
     @Override
